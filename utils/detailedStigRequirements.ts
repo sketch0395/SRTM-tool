@@ -261,13 +261,26 @@ export function getDetailedStigRequirements(stigFamilyId: string): DetailedStigR
 }
 
 /**
+ * Database mapping STIG family IDs to their detailed requirements
+ */
+export const stigRequirementsDatabase: Record<string, DetailedStigRequirement[]> = {
+  'application-security-dev': APPLICATION_SECURITY_REQUIREMENTS,
+  'nodejs-security': NODEJS_SECURITY_REQUIREMENTS,
+  'postgresql': POSTGRESQL_REQUIREMENTS,
+  'web-application-security': WEB_APPLICATION_SECURITY_REQUIREMENTS,
+  'secure-coding-practices': SECURE_CODING_REQUIREMENTS
+};
+
+/**
  * Convert detailed STIG requirements to StigRequirement format
  */
 export function convertToStigRequirements(stigFamilyIds: string[]): import('../types/srtm').StigRequirement[] {
+  console.log('Converting STIG families:', stigFamilyIds);
   const allRequirements: import('../types/srtm').StigRequirement[] = [];
   
   stigFamilyIds.forEach(familyId => {
     const detailedRequirements = getDetailedStigRequirements(familyId);
+    console.log(`Found ${detailedRequirements.length} requirements for family: ${familyId}`);
     
     detailedRequirements.forEach((req, index) => {
       allRequirements.push({
@@ -279,5 +292,6 @@ export function convertToStigRequirements(stigFamilyIds: string[]): import('../t
     });
   });
   
+  console.log(`Total converted requirements: ${allRequirements.length}`);
   return allRequirements;
 }

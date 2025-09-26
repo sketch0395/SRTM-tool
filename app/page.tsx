@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData } from '../types/srtm';
-import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers } from 'lucide-react';
+import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData, WorkflowData } from '../types/srtm';
+import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers, Download, Upload } from 'lucide-react';
 import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
 import TestCaseForm from '../components/TestCaseForm';
@@ -40,8 +40,8 @@ export default function Home() {
   const tabs = [
     { id: 'dashboard', name: 'Dashboard', icon: Shield },
     { id: 'categorization', name: 'System Categorization', icon: Layers },
-    { id: 'requirements', name: 'Requirements', icon: FileText },
     { id: 'design', name: 'Design Elements', icon: Settings },
+    { id: 'requirements', name: 'Requirements', icon: FileText },
     { id: 'tests', name: 'Test Cases', icon: TestTube },
     { id: 'stig-families', name: 'STIG Recommendations', icon: Target },
     { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
@@ -74,6 +74,63 @@ export default function Home() {
     setActiveTab('stig');
   };
 
+  const handleSaveWorkflow = () => {
+    const workflowData: WorkflowData = {
+      systemCategorizations: data.systemCategorizations,
+      designElements: data.designElements,
+      exportDate: new Date().toISOString(),
+      version: '1.0'
+    };
+
+    const dataStr = JSON.stringify(workflowData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `workflow-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleUploadWorkflow = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const workflowData: WorkflowData = JSON.parse(e.target?.result as string);
+        
+        // Update the data with uploaded workflow
+        setData(prev => ({
+          ...prev,
+          systemCategorizations: workflowData.systemCategorizations,
+          designElements: workflowData.designElements
+        }));
+
+        // If we have system categorizations, switch to design elements tab
+        // If we have design elements too, switch to requirements tab
+        if (workflowData.systemCategorizations.length > 0) {
+          if (workflowData.designElements.length > 0) {
+            setActiveTab('requirements');
+          } else {
+            setActiveTab('design');
+          }
+        }
+
+        // Reset file input
+        event.target.value = '';
+      } catch (error) {
+        console.error('Error parsing workflow file:', error);
+        alert('Error parsing workflow file. Please ensure it\'s a valid JSON file.');
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
@@ -87,6 +144,25 @@ export default function Home() {
                 </h1>
                 <p className="text-sm text-gray-600">NIST Framework • RMF • STIG Compliance</p>
               </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={handleSaveWorkflow}
+                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Save Workflow
+              </button>
+              <label className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer">
+                <Upload className="h-4 w-4 mr-2" />
+                Upload Workflow
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleUploadWorkflow}
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
         </div>
