@@ -11,6 +11,7 @@ import Dashboard from '../components/Dashboard';
 import StigManagement from '../components/StigManagement';
 import SystemCategorization from '../components/SystemCategorization';
 import StigFamilyRecommendations from '../components/StigFamilyRecommendations';
+import { convertToStigRequirements } from '../utils/detailedStigRequirements';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -42,8 +43,8 @@ export default function Home() {
     { id: 'requirements', name: 'Requirements', icon: FileText },
     { id: 'design', name: 'Design Elements', icon: Settings },
     { id: 'tests', name: 'Test Cases', icon: TestTube },
-    { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
     { id: 'stig-families', name: 'STIG Recommendations', icon: Target },
+    { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
     { id: 'matrix', name: 'Traceability Matrix', icon: Link },
   ];
 
@@ -58,6 +59,19 @@ export default function Home() {
     }));
     // Switch to requirements tab to show the generated requirements
     setActiveTab('requirements');
+  };
+
+  const handleLoadStigFamilies = (selectedStigFamilyIds: string[]) => {
+    // Convert selected STIG families to detailed STIG requirements
+    const newStigRequirements = convertToStigRequirements(selectedStigFamilyIds);
+
+    setData(prev => ({
+      ...prev,
+      stigRequirements: [...prev.stigRequirements, ...newStigRequirements]
+    }));
+
+    // Switch to STIG requirements tab to show loaded families
+    setActiveTab('stig');
   };
 
   return (
@@ -136,6 +150,7 @@ export default function Home() {
             <StigFamilyRecommendations 
               requirements={data.requirements}
               designElements={data.designElements}
+              onLoadStigFamilies={handleLoadStigFamilies}
             />
           )}
           {activeTab === 'matrix' && <TraceabilityMatrix data={data} onUpdate={updateData} />}

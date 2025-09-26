@@ -3,17 +3,20 @@
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
 import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
-import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, ExternalLink, Zap, BarChart3 } from 'lucide-react';
+import { getDetailedStigRequirements } from '../utils/detailedStigRequirements';
+import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, ExternalLink, Zap, BarChart3, Download } from 'lucide-react';
 
 interface StigRecommendationProps {
   requirements: SecurityRequirement[];
   designElements: SystemDesignElement[];
+  onLoadStigFamilies: (selectedIds: string[]) => void;
 }
 
-export default function StigFamilyRecommendations({ requirements, designElements }: StigRecommendationProps) {
+export default function StigFamilyRecommendations({ requirements, designElements, onLoadStigFamilies }: StigRecommendationProps) {
   const [recommendations, setRecommendations] = useState<StigFamilyRecommendation[]>([]);
   const [selectedRecommendation, setSelectedRecommendation] = useState<StigFamilyRecommendation | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [selectedStigIds, setSelectedStigIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (requirements.length > 0 || designElements.length > 0) {
@@ -23,6 +26,33 @@ export default function StigFamilyRecommendations({ requirements, designElements
   }, [requirements, designElements]);
 
   const effort = getImplementationEffort(recommendations);
+
+  const handleStigSelection = (stigId: string, isSelected: boolean) => {
+    setSelectedStigIds(prev => {
+      const newSet = new Set(prev);
+      if (isSelected) {
+        newSet.add(stigId);
+      } else {
+        newSet.delete(stigId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAll = () => {
+    setSelectedStigIds(new Set(recommendations.map(rec => rec.stigFamily.id)));
+  };
+
+  const handleSelectNone = () => {
+    setSelectedStigIds(new Set());
+  };
+
+  const handleLoadSelected = () => {
+    if (selectedStigIds.size > 0) {
+      onLoadStigFamilies(Array.from(selectedStigIds));
+      setSelectedStigIds(new Set()); // Clear selection after loading
+    }
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -64,6 +94,31 @@ export default function StigFamilyRecommendations({ requirements, designElements
           <p className="text-gray-600">Based on {requirements.length} requirements and {designElements.length} design elements</p>
         </div>
         <div className="flex items-center space-x-4">
+          {recommendations.length > 0 && (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleSelectAll}
+                className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+              >
+                Select All
+              </button>
+              <button
+                onClick={handleSelectNone}
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+              >
+                Clear
+              </button>
+              {selectedStigIds.size > 0 && (
+                <button
+                  onClick={handleLoadSelected}
+                  className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Load {selectedStigIds.size} Detailed STIGs
+                </button>
+              )}
+            </div>
+          )}
           <div className="text-right">
             <div className="text-sm text-gray-500">Total Estimated Effort</div>
             <div className="text-lg font-semibold text-blue-600">{effort.estimatedDays} days</div>
@@ -96,7 +151,6 @@ export default function StigFamilyRecommendations({ requirements, designElements
           </div>
         </div>
         
-        {/* Priority Distribution */}
         <div className="mt-4">
           <div className="text-sm font-medium text-blue-900 mb-2">Priority Distribution</div>
           <div className="flex space-x-4 text-xs">
@@ -129,53 +183,71 @@ export default function StigFamilyRecommendations({ requirements, designElements
         {recommendations.map((recommendation) => (
           <div key={recommendation.stigFamily.id} className="bg-white rounded-lg border p-6 hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">
-              <div className="flex-1">
-                <div className="flex items-center mb-2">
-                  <h3 className="text-lg font-semibold text-gray-900">{recommendation.stigFamily.name}</h3>
-                  <span className={`ml-3 px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(recommendation.implementationPriority)}`}>
-                    <span className="flex items-center">
-                      {getPriorityIcon(recommendation.implementationPriority)}
-                      <span className="ml-1">{recommendation.implementationPriority}</span>
-                    </span>
-                  </span>
+              <div className="flex items-start space-x-4 flex-1">
+                {/* Selection Checkbox */}
+                <div className="flex items-center pt-1">
+                  <input
+                    type="checkbox"
+                    id={`stig-${recommendation.stigFamily.id}`}
+                    checked={selectedStigIds.has(recommendation.stigFamily.id)}
+                    onChange={(e) => handleStigSelection(recommendation.stigFamily.id, e.target.checked)}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
                 </div>
-                <p className="text-gray-600 mb-3">{recommendation.stigFamily.description}</p>
                 
-                {/* Relevance Score and Match Info */}
-                <div className="flex items-center space-x-6 text-sm text-gray-500 mb-3">
-                  <span className="flex items-center">
-                    <Target className="h-4 w-4 mr-1" />
-                    Relevance: {recommendation.relevanceScore.toFixed(1)}
-                  </span>
-                  <span className="flex items-center">
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    {recommendation.matchingRequirements.length} Req Matches
-                  </span>
-                  <span className="flex items-center">
-                    <Zap className="h-4 w-4 mr-1" />
-                    {recommendation.matchingDesignElements.length} Design Matches
-                  </span>
-                  <span className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    ~{recommendation.stigFamily.estimatedRequirements} Requirements
-                  </span>
-                </div>
-
-                {/* System Types */}
-                <div className="mb-3">
-                  <span className="text-sm font-medium text-gray-700">Applicable System Types: </span>
-                  <span className="text-sm text-gray-600">{recommendation.stigFamily.applicableSystemTypes.join(', ')}</span>
-                </div>
-
-                {/* Control Families */}
-                <div className="mb-3">
-                  <span className="text-sm font-medium text-gray-700">Control Families: </span>
-                  <div className="inline-flex flex-wrap gap-1 mt-1">
-                    {recommendation.stigFamily.controlFamilies.map(family => (
-                      <span key={family} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
-                        {family}
+                <div className="flex-1">
+                  <div className="flex items-center mb-2">
+                    <label 
+                      htmlFor={`stig-${recommendation.stigFamily.id}`}
+                      className="text-lg font-semibold text-gray-900 cursor-pointer"
+                    >
+                      {recommendation.stigFamily.name}
+                    </label>
+                    <span className={`ml-3 px-2 py-1 text-xs font-medium rounded-full border ${getPriorityColor(recommendation.implementationPriority)}`}>
+                      <span className="flex items-center">
+                        {getPriorityIcon(recommendation.implementationPriority)}
+                        <span className="ml-1">{recommendation.implementationPriority}</span>
                       </span>
-                    ))}
+                    </span>
+                  </div>
+                  <p className="text-gray-600 mb-3">{recommendation.stigFamily.description}</p>
+                  
+                  {/* Relevance Score and Match Info */}
+                  <div className="flex items-center space-x-6 text-sm text-gray-500 mb-3">
+                    <span className="flex items-center">
+                      <Target className="h-4 w-4 mr-1" />
+                      Relevance: {recommendation.relevanceScore.toFixed(1)}
+                    </span>
+                    <span className="flex items-center">
+                      <CheckCircle className="h-4 w-4 mr-1" />
+                      {recommendation.matchingRequirements.length} Req Matches
+                    </span>
+                    <span className="flex items-center">
+                      <Zap className="h-4 w-4 mr-1" />
+                      {recommendation.matchingDesignElements.length} Design Matches
+                    </span>
+                    <span className="flex items-center">
+                      <Clock className="h-4 w-4 mr-1" />
+                      {getDetailedStigRequirements(recommendation.stigFamily.id).length} Detailed Requirements
+                    </span>
+                  </div>
+
+                  {/* System Types */}
+                  <div className="mb-3">
+                    <span className="text-sm font-medium text-gray-700">Applicable System Types: </span>
+                    <span className="text-sm text-gray-600">{recommendation.stigFamily.applicableSystemTypes.join(', ')}</span>
+                  </div>
+
+                  {/* Control Families */}
+                  <div className="mb-3">
+                    <span className="text-sm font-medium text-gray-700">Control Families: </span>
+                    <div className="inline-flex flex-wrap gap-1 mt-1">
+                      {recommendation.stigFamily.controlFamilies.map(family => (
+                        <span key={family} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
+                          {family}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
