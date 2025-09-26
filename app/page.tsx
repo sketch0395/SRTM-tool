@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData } from '../types/srtm';
-import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare } from 'lucide-react';
+import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers } from 'lucide-react';
 import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
 import TestCaseForm from '../components/TestCaseForm';
 import TraceabilityMatrix from '../components/TraceabilityMatrix';
 import Dashboard from '../components/Dashboard';
 import StigManagement from '../components/StigManagement';
+import SystemCategorization from '../components/SystemCategorization';
+import StigFamilyRecommendations from '../components/StigFamilyRecommendations';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,7 +19,8 @@ export default function Home() {
     designElements: [],
     testCases: [],
     traceabilityLinks: [],
-    stigRequirements: []
+    stigRequirements: [],
+    systemCategorizations: []
   });
 
   // Initialize with empty data
@@ -27,22 +30,34 @@ export default function Home() {
       designElements: [],
       testCases: [],
       traceabilityLinks: [],
-      stigRequirements: []
+      stigRequirements: [],
+      systemCategorizations: []
     };
     setData(initialData);
   }, []);
 
   const tabs = [
     { id: 'dashboard', name: 'Dashboard', icon: Shield },
+    { id: 'categorization', name: 'System Categorization', icon: Layers },
     { id: 'requirements', name: 'Requirements', icon: FileText },
     { id: 'design', name: 'Design Elements', icon: Settings },
     { id: 'tests', name: 'Test Cases', icon: TestTube },
     { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
+    { id: 'stig-families', name: 'STIG Recommendations', icon: Target },
     { id: 'matrix', name: 'Traceability Matrix', icon: Link },
   ];
 
   const updateData = (newData: Partial<SRTMData>) => {
     setData(prev => ({ ...prev, ...newData }));
+  };
+
+  const handleGenerateRequirements = (newRequirements: SecurityRequirement[]) => {
+    setData(prev => ({ 
+      ...prev, 
+      requirements: [...prev.requirements, ...newRequirements] 
+    }));
+    // Switch to requirements tab to show the generated requirements
+    setActiveTab('requirements');
   };
 
   return (
@@ -86,6 +101,13 @@ export default function Home() {
 
         <div className="bg-white rounded-lg shadow">
           {activeTab === 'dashboard' && <Dashboard data={data} />}
+          {activeTab === 'categorization' && (
+            <SystemCategorization 
+              systemCategorizations={data.systemCategorizations}
+              onUpdate={(systemCategorizations) => updateData({ systemCategorizations })}
+              onGenerateRequirements={handleGenerateRequirements}
+            />
+          )}
           {activeTab === 'requirements' && (
             <RequirementForm 
               requirements={data.requirements}
@@ -108,6 +130,12 @@ export default function Home() {
             <StigManagement 
               stigRequirements={data.stigRequirements}
               onUpdate={(stigRequirements) => updateData({ stigRequirements })}
+            />
+          )}
+          {activeTab === 'stig-families' && (
+            <StigFamilyRecommendations 
+              requirements={data.requirements}
+              designElements={data.designElements}
             />
           )}
           {activeTab === 'matrix' && <TraceabilityMatrix data={data} onUpdate={updateData} />}
