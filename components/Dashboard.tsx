@@ -13,8 +13,11 @@ export default function Dashboard({ data }: DashboardProps) {
     designElements: data.designElements.length,
     testCases: data.testCases.length,
     traceabilityLinks: data.traceabilityLinks.length,
+    stigRequirements: data.stigRequirements?.length || 0,
     highPriorityReqs: data.requirements.filter(r => r.priority === 'High').length,
     passedTests: data.testCases.filter(t => t.status === 'Passed').length,
+    completedStigs: data.stigRequirements?.filter(s => s.status === 'Completed').length || 0,
+    catIStigs: data.stigRequirements?.filter(s => s.severity === 'CAT I').length || 0,
     coverage: data.traceabilityLinks.length > 0 ? 
       Math.round((data.traceabilityLinks.filter(l => l.status === 'Active').length / data.requirements.length) * 100) : 0
   };
@@ -26,6 +29,13 @@ export default function Dashboard({ data }: DashboardProps) {
       icon: FileText,
       color: 'blue',
       description: `${stats.highPriorityReqs} high priority`
+    },
+    {
+      title: 'STIG Requirements',
+      value: stats.stigRequirements,
+      icon: Shield,
+      color: 'red',
+      description: `${stats.catIStigs} CAT I, ${stats.completedStigs} completed`
     },
     {
       title: 'Design Elements',
@@ -64,14 +74,15 @@ export default function Dashboard({ data }: DashboardProps) {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         {statusCards.map((card, index) => {
           const Icon = card.icon;
           const colorClasses = {
             blue: 'bg-blue-500 text-blue-50',
             green: 'bg-green-500 text-green-50',
             purple: 'bg-purple-500 text-purple-50',
-            orange: 'bg-orange-500 text-orange-50'
+            orange: 'bg-orange-500 text-orange-50',
+            red: 'bg-red-500 text-red-50'
           };
 
           return (

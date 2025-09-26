@@ -18,7 +18,12 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
     source: '',
     category: 'Authentication',
     priority: 'Medium',
-    status: 'Draft'
+    status: 'Draft',
+    nistFunction: undefined,
+    nistSubcategory: '',
+    rmfStep: undefined,
+    controlFamily: '',
+    controlIdentifier: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,7 +75,12 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
       source: '',
       category: 'Authentication',
       priority: 'Medium',
-      status: 'Draft'
+      status: 'Draft',
+      nistFunction: undefined,
+      nistSubcategory: '',
+      rmfStep: undefined,
+      controlFamily: '',
+      controlIdentifier: ''
     });
     setEditingId(null);
     setIsFormOpen(false);
@@ -160,8 +170,116 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
                     <option value="Encryption">Encryption</option>
                     <option value="Audit">Audit</option>
                     <option value="Input Validation">Input Validation</option>
+                    <option value="Access Control">Access Control</option>
+                    <option value="Data Protection">Data Protection</option>
+                    <option value="Network Security">Network Security</option>
+                    <option value="System Integrity">System Integrity</option>
+                    <option value="Incident Response">Incident Response</option>
                     <option value="Other">Other</option>
                   </select>
+                </div>
+              </div>
+
+              {/* NIST and RMF Fields */}
+              <div className="border-t pt-4 mt-4">
+                <h4 className="text-sm font-medium text-gray-900 mb-3">NIST Framework & RMF Mapping</h4>
+                
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      NIST CSF Function
+                    </label>
+                    <select
+                      value={formData.nistFunction || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, nistFunction: e.target.value as any || undefined }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select NIST Function</option>
+                      <option value="Identify">Identify (ID)</option>
+                      <option value="Protect">Protect (PR)</option>
+                      <option value="Detect">Detect (DE)</option>
+                      <option value="Respond">Respond (RS)</option>
+                      <option value="Recover">Recover (RC)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      RMF Step
+                    </label>
+                    <select
+                      value={formData.rmfStep || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, rmfStep: e.target.value as any || undefined }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select RMF Step</option>
+                      <option value="Categorize">1. Categorize</option>
+                      <option value="Select">2. Select</option>
+                      <option value="Implement">3. Implement</option>
+                      <option value="Assess">4. Assess</option>
+                      <option value="Authorize">5. Authorize</option>
+                      <option value="Monitor">6. Monitor</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Control Family
+                    </label>
+                    <select
+                      value={formData.controlFamily || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, controlFamily: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select Control Family</option>
+                      <option value="AC">AC - Access Control</option>
+                      <option value="AT">AT - Awareness and Training</option>
+                      <option value="AU">AU - Audit and Accountability</option>
+                      <option value="CA">CA - Security Assessment and Authorization</option>
+                      <option value="CM">CM - Configuration Management</option>
+                      <option value="CP">CP - Contingency Planning</option>
+                      <option value="IA">IA - Identification and Authentication</option>
+                      <option value="IR">IR - Incident Response</option>
+                      <option value="MA">MA - Maintenance</option>
+                      <option value="MP">MP - Media Protection</option>
+                      <option value="PE">PE - Physical and Environmental Protection</option>
+                      <option value="PL">PL - Planning</option>
+                      <option value="PS">PS - Personnel Security</option>
+                      <option value="RA">RA - Risk Assessment</option>
+                      <option value="SA">SA - System and Services Acquisition</option>
+                      <option value="SC">SC - System and Communications Protection</option>
+                      <option value="SI">SI - System and Information Integrity</option>
+                      <option value="SR">SR - Supply Chain Risk Management</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Control Identifier
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.controlIdentifier || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, controlIdentifier: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g., AC-2, AU-12"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      NIST Subcategory
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.nistSubcategory || ''}
+                      onChange={(e) => setFormData(prev => ({ ...prev, nistSubcategory: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="e.g., ID.AM-1, PR.AC-1"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -233,13 +351,16 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
                   Category
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  NIST/RMF
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Control
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Priority
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Source
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -265,6 +386,33 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
                       {requirement.category}
                     </span>
                   </td>
+                  <td className="px-6 py-4">
+                    <div className="space-y-1">
+                      {requirement.nistFunction && (
+                        <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded inline-block mr-1">
+                          {requirement.nistFunction}
+                        </div>
+                      )}
+                      {requirement.rmfStep && (
+                        <div className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded inline-block">
+                          {requirement.rmfStep}
+                        </div>
+                      )}
+                      {requirement.nistSubcategory && (
+                        <div className="text-xs text-gray-600">{requirement.nistSubcategory}</div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="space-y-1">
+                      {requirement.controlIdentifier && (
+                        <div className="text-sm font-medium text-gray-900">{requirement.controlIdentifier}</div>
+                      )}
+                      {requirement.controlFamily && (
+                        <div className="text-xs text-gray-500">{requirement.controlFamily}</div>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
                       requirement.priority === 'High' ? 'bg-red-100 text-red-800' :
@@ -284,9 +432,6 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
                     }`}>
                       {requirement.status}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {requirement.source}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
@@ -310,7 +455,7 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
               ))}
               {requirements.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                     No security requirements found. Click "Add Requirement" to get started.
                   </td>
                 </tr>

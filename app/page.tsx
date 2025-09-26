@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData } from '../types/srtm';
-import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube } from 'lucide-react';
+import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare } from 'lucide-react';
 import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
 import TestCaseForm from '../components/TestCaseForm';
 import TraceabilityMatrix from '../components/TraceabilityMatrix';
 import Dashboard from '../components/Dashboard';
+import StigManagement from '../components/StigManagement';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -15,7 +16,8 @@ export default function Home() {
     requirements: [],
     designElements: [],
     testCases: [],
-    traceabilityLinks: []
+    traceabilityLinks: [],
+    stigRequirements: []
   });
 
   // Initialize with empty data
@@ -24,7 +26,8 @@ export default function Home() {
       requirements: [],
       designElements: [],
       testCases: [],
-      traceabilityLinks: []
+      traceabilityLinks: [],
+      stigRequirements: []
     };
     setData(initialData);
   }, []);
@@ -34,6 +37,7 @@ export default function Home() {
     { id: 'requirements', name: 'Requirements', icon: FileText },
     { id: 'design', name: 'Design Elements', icon: Settings },
     { id: 'tests', name: 'Test Cases', icon: TestTube },
+    { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
     { id: 'matrix', name: 'Traceability Matrix', icon: Link },
   ];
 
@@ -48,9 +52,12 @@ export default function Home() {
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <Shield className="h-8 w-8 text-blue-600 mr-3" />
-              <h1 className="text-2xl font-bold text-gray-900">
-                Security Requirements Traceability Matrix
-              </h1>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Security Requirements Traceability Matrix
+                </h1>
+                <p className="text-sm text-gray-600">NIST Framework • RMF • STIG Compliance</p>
+              </div>
             </div>
           </div>
         </div>
@@ -95,6 +102,12 @@ export default function Home() {
             <TestCaseForm 
               testCases={data.testCases}
               onUpdate={(testCases) => updateData({ testCases })}
+            />
+          )}
+          {activeTab === 'stig' && (
+            <StigManagement 
+              stigRequirements={data.stigRequirements}
+              onUpdate={(stigRequirements) => updateData({ stigRequirements })}
             />
           )}
           {activeTab === 'matrix' && <TraceabilityMatrix data={data} onUpdate={updateData} />}
