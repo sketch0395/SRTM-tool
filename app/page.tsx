@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData, WorkflowData } from '../types/srtm';
-import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers, Download, Upload } from 'lucide-react';
+import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers, Download, Upload, RotateCcw } from 'lucide-react';
 import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
 import TestCaseForm from '../components/TestCaseForm';
@@ -131,6 +131,24 @@ export default function Home() {
     reader.readAsText(file);
   };
 
+  const handleClearWorkflow = () => {
+    if (window.confirm('Are you sure you want to clear all workflow data? This action cannot be undone.')) {
+      // Reset all data to initial state
+      const initialData: SRTMData = {
+        requirements: [],
+        designElements: [],
+        testCases: [],
+        traceabilityLinks: [],
+        stigRequirements: [],
+        systemCategorizations: []
+      };
+      setData(initialData);
+      
+      // Go back to dashboard
+      setActiveTab('dashboard');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b">
@@ -163,6 +181,13 @@ export default function Home() {
                   className="hidden"
                 />
               </label>
+              <button
+                onClick={handleClearWorkflow}
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                Clear Workflow
+              </button>
             </div>
           </div>
         </div>
