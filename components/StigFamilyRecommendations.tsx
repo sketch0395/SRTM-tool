@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
 import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
 import { stigRequirementsDatabase } from '../utils/detailedStigRequirements';
-import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare } from 'lucide-react';
+import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface StigRecommendationProps {
   requirements: SecurityRequirement[];
@@ -15,6 +15,7 @@ interface StigRecommendationProps {
 export default function StigFamilyRecommendations({ requirements, designElements, onLoadStigFamilies }: StigRecommendationProps) {
   const [recommendations, setRecommendations] = useState<StigFamilyRecommendation[]>([]);
   const [selectedStigIds, setSelectedStigIds] = useState<Set<string>>(new Set());
+  const [expandedAccordions, setExpandedAccordions] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (requirements.length > 0 || designElements.length > 0) {
@@ -47,6 +48,19 @@ export default function StigFamilyRecommendations({ requirements, designElements
     if (selectedStigIds.size > 0) {
       onLoadStigFamilies(Array.from(selectedStigIds));
     }
+  };
+
+  const toggleAccordion = (stigId: string, event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent card selection when clicking accordion
+    setExpandedAccordions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(stigId)) {
+        newSet.delete(stigId);
+      } else {
+        newSet.add(stigId);
+      }
+      return newSet;
+    });
   };
 
   const getRequirementCount = (stigId: string): number => {
@@ -213,13 +227,29 @@ export default function StigFamilyRecommendations({ requirements, designElements
                   </div>
 
                   {recommendation.reasoning.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Why this STIG is recommended:</h4>
-                      <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                        {recommendation.reasoning.map((reason, index) => (
-                          <li key={index}>{reason}</li>
-                        ))}
-                      </ul>
+                    <div className="border-t pt-4">
+                      <button
+                        onClick={(e) => toggleAccordion(recommendation.stigFamily.id, e)}
+                        className="flex items-center justify-between w-full text-left hover:bg-gray-50 rounded p-2 transition-colors"
+                      >
+                        <h4 className="text-sm font-medium text-gray-900">
+                          Why this STIG is recommended ({recommendation.reasoning.length} reasons)
+                        </h4>
+                        {expandedAccordions.has(recommendation.stigFamily.id) ? (
+                          <ChevronDown className="h-4 w-4 text-gray-500" />
+                        ) : (
+                          <ChevronRight className="h-4 w-4 text-gray-500" />
+                        )}
+                      </button>
+                      {expandedAccordions.has(recommendation.stigFamily.id) && (
+                        <div className="mt-2 pl-2">
+                          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                            {recommendation.reasoning.map((reason, index) => (
+                              <li key={index}>{reason}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
