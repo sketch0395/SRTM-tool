@@ -67,6 +67,7 @@ export interface StigRequirement {
   vulnId?: string; // Vulnerability ID
   groupId?: string; // Group ID
   ruleId?: string; // Rule ID
+  family?: string; // STIG family for organization
   severity: 'CAT I' | 'CAT II' | 'CAT III';
   title: string;
   description: string;

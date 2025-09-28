@@ -1,0 +1,16 @@
+services:
+  srtm-tool:
+    image: srtm-tool:latest
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+    restart: unless-stopped
+    container_name: srtm-tool
+    networks:
+      - srtm-network
+
+networks:
+  srtm-network:
+    driver: bridge
