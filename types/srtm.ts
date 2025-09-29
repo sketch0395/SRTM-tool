@@ -115,11 +115,25 @@ export interface InformationType {
   id: string;
   name: string;
   description: string;
-  category: string; // e.g., "C.3.5.1 - Financial Management"
+  category: string; // e.g., "D.1 - Combat Operations" or "D.1.1 - Tactical Operations"
+  parentCategory?: string; // For subtypes, references the parent category
   confidentialityImpact: 'Low' | 'Moderate' | 'High';
   integrityImpact: 'Low' | 'Moderate' | 'High';
   availabilityImpact: 'Low' | 'Moderate' | 'High';
   rationale?: string;
+}
+
+export interface NISTInformationTypeStructure {
+  category: string;
+  name: string;
+  description: string;
+  subtypes?: NISTInformationSubtype[];
+}
+
+export interface NISTInformationSubtype {
+  category: string;
+  name: string;
+  description: string;
 }
 
 export interface SecurityControlBaseline {

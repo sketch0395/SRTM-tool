@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { SecurityControl } from '../types/srtm';
+import { SecurityRequirement } from '../types/srtm';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 
 interface RequirementFormProps {
