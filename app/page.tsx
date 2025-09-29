@@ -245,6 +245,11 @@ export default function Home() {
             <StigManagement 
               stigRequirements={data.stigRequirements}
               onUpdate={(stigRequirements) => updateData({ stigRequirements })}
+              onAutoPopulateRequirements={(newRequirements) => {
+                updateData({ requirements: [...data.requirements, ...newRequirements] });
+                // Switch to requirements tab to show the populated requirements
+                setActiveTab('requirements');
+              }}
             />
           )}
           {activeTab === 'stig-families' && (

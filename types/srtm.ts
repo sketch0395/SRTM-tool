@@ -6,11 +6,15 @@ export interface SecurityRequirement {
   category: 'Authentication' | 'Authorization' | 'Encryption' | 'Audit' | 'Input Validation' | 'Access Control' | 'Data Protection' | 'Network Security' | 'System Integrity' | 'Incident Response' | 'Other';
   priority: 'High' | 'Medium' | 'Low';
   status: 'Draft' | 'Approved' | 'Implemented' | 'Tested' | 'Verified';
+  type?: string;
   nistFunction?: 'Identify' | 'Protect' | 'Detect' | 'Respond' | 'Recover';
   nistSubcategory?: string;
   rmfStep?: 'Categorize' | 'Select' | 'Implement' | 'Assess' | 'Authorize' | 'Monitor';
   controlFamily?: string; // NIST SP 800-53 Control Family (AC, AU, CA, etc.)
   controlIdentifier?: string; // e.g., AC-2, AU-12, CA-7
+  complianceFramework?: string; // Framework source (NIST, STIG, etc.)
+  stigRef?: string; // STIG reference ID
+  cciRef?: string[]; // Control Correlation Identifier references
   createdAt: Date;
   updatedAt: Date;
 }

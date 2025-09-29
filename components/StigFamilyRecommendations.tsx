@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
 import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
-import { stigRequirementsDatabase } from '../utils/detailedStigRequirements';
+import { stigRequirementsDatabase, getStoredStigRequirements } from '../utils/detailedStigRequirements';
 import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface StigRecommendationProps {
@@ -64,6 +64,13 @@ export default function StigFamilyRecommendations({ requirements, designElements
   };
 
   const getRequirementCount = (stigId: string): number => {
+    // Check uploaded STIG requirements first
+    const uploadedRequirements = getStoredStigRequirements(stigId);
+    if (uploadedRequirements.length > 0) {
+      return uploadedRequirements.length;
+    }
+    
+    // Fallback to database (legacy)
     const requirements = stigRequirementsDatabase[stigId];
     return requirements ? requirements.length : 0;
   };

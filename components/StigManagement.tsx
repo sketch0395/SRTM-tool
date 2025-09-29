@@ -8,9 +8,10 @@ import { Upload, Download, Trash2, FileText, CheckCircle, AlertCircle } from 'lu
 interface StigManagementProps {
   stigRequirements: StigRequirement[];
   onUpdate: (stigRequirements: StigRequirement[]) => void;
+  onAutoPopulateRequirements?: (requirements: any[]) => void;
 }
 
-export default function StigManagement({ stigRequirements, onUpdate }: StigManagementProps) {
+export default function StigManagement({ stigRequirements, onUpdate, onAutoPopulateRequirements }: StigManagementProps) {
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isUploading, setIsUploading] = useState(false);
 
@@ -29,7 +30,28 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
         storeStigRequirements(familyId, csvRequirements);
         const allRequirements = getAllStoredStigRequirements();
         onUpdate(allRequirements);
-        setUploadStatus(`✅ Successfully uploaded ${csvRequirements.length} requirements for ${familyId}`);
+        
+        // Auto-populate security requirements
+        if (onAutoPopulateRequirements) {
+          const securityRequirements = allRequirements.map((req, index) => ({
+            id: `req-${Date.now()}-${index}`,
+            title: req.title,
+            description: req.description,
+            type: 'Security Control' as const,
+            priority: req.severity === 'CAT I' ? 'High' as const : 
+                     req.severity === 'CAT II' ? 'Medium' as const : 'Low' as const,
+            source: 'STIG',
+            category: req.family || familyId,
+            complianceFramework: 'STIG',
+            stigRef: req.stigId,
+            cciRef: req.cciRef || [],
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }));
+          onAutoPopulateRequirements(securityRequirements);
+        }
+        
+        setUploadStatus(`✅ Successfully uploaded ${csvRequirements.length} requirements for ${familyId} and auto-populated security requirements`);
       } else {
         setUploadStatus(`⚠️ No requirements found in ${familyId} CSV file`);
       }
