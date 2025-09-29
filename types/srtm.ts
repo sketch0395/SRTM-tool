@@ -127,6 +127,9 @@ export interface NISTInformationTypeStructure {
   category: string;
   name: string;
   description: string;
+  confidentiality?: 'Low' | 'Moderate' | 'High';
+  integrity?: 'Low' | 'Moderate' | 'High';
+  availability?: 'Low' | 'Moderate' | 'High';
   subtypes?: NISTInformationSubtype[];
 }
 
@@ -134,6 +137,9 @@ export interface NISTInformationSubtype {
   category: string;
   name: string;
   description: string;
+  confidentiality?: 'Low' | 'Moderate' | 'High';
+  integrity?: 'Low' | 'Moderate' | 'High';
+  availability?: 'Low' | 'Moderate' | 'High';
 }
 
 export interface SecurityControlBaseline {
