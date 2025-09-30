@@ -1,11 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { SecurityRequirement, SystemDesignElement, TestCase, TraceabilityLink, SRTMData, WorkflowData } from '../types/srtm';
-import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, TestTube, CheckSquare, Target, Layers, Download, Upload, RotateCcw } from 'lucide-react';
+import { SecurityRequirement, SystemDesignElement, TraceabilityLink, SRTMData, WorkflowData } from '../types/srtm';
+import { Shield, Plus, Edit2, Trash2, Link, FileText, Settings, CheckSquare, Target, Layers, Download, Upload, RotateCcw } from 'lucide-react';
 import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
-import TestCaseForm from '../components/TestCaseForm';
 import TraceabilityMatrix from '../components/TraceabilityMatrix';
 import StigManagement from '../components/StigManagement';
 import SystemCategorization from '../components/SystemCategorization';
@@ -17,7 +16,6 @@ export default function Home() {
   const [data, setData] = useState<SRTMData>({
     requirements: [],
     designElements: [],
-    testCases: [],
     traceabilityLinks: [],
     stigRequirements: [],
     systemCategorizations: []
@@ -28,7 +26,6 @@ export default function Home() {
     const initialData: SRTMData = {
       requirements: [],
       designElements: [],
-      testCases: [],
       traceabilityLinks: [],
       stigRequirements: [],
       systemCategorizations: []
@@ -40,7 +37,6 @@ export default function Home() {
     { id: 'design', name: 'Design Elements', icon: Settings },
     { id: 'categorization', name: 'NIST 800-60 Categorization', icon: Layers },
     { id: 'requirements', name: 'NIST 800-53 Requirements', icon: FileText },
-    { id: 'tests', name: 'Test Cases', icon: TestTube },
     { id: 'stig-families', name: 'STIG Recommendations', icon: Target },
     { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
     { id: 'matrix', name: 'Traceability Matrix', icon: Link },
@@ -136,7 +132,6 @@ export default function Home() {
       const initialData: SRTMData = {
         requirements: [],
         designElements: [],
-        testCases: [],
         traceabilityLinks: [],
         stigRequirements: [],
         systemCategorizations: []
@@ -255,12 +250,6 @@ export default function Home() {
             <RequirementForm 
               requirements={data.requirements}
               onUpdate={(requirements) => updateData({ requirements })}
-            />
-          )}
-          {activeTab === 'tests' && (
-            <TestCaseForm 
-              testCases={data.testCases}
-              onUpdate={(testCases) => updateData({ testCases })}
             />
           )}
           {activeTab === 'stig' && (

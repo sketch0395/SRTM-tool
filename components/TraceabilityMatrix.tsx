@@ -16,7 +16,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
   const [formData, setFormData] = useState<Partial<TraceabilityLink>>({
     requirementId: '',
     designElementId: '',
-    testCaseId: '',
     linkType: 'Requirement-Design',
     status: 'Active',
     rationale: ''
@@ -37,7 +36,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
         id: Date.now().toString(),
         requirementId: formData.requirementId!,
         designElementId: formData.designElementId,
-        testCaseId: formData.testCaseId,
         linkType: formData.linkType!,
         status: formData.status!,
         rationale: formData.rationale,
@@ -68,7 +66,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
     setFormData({
       requirementId: '',
       designElementId: '',
-      testCaseId: '',
       linkType: 'Requirement-Design',
       status: 'Active',
       rationale: ''
@@ -86,10 +83,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
       designElements: links
         .filter(link => link.designElementId)
         .map(link => data.designElements.find(elem => elem.id === link.designElementId))
-        .filter(Boolean),
-      testCases: links
-        .filter(link => link.testCaseId)
-        .map(link => data.testCases.find(test => test.id === link.testCaseId))
         .filter(Boolean)
     };
   };
@@ -106,9 +99,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Design Elements
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Test Cases
-              </th>
               <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Coverage
               </th>
@@ -117,7 +107,7 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
           <tbody className="bg-white divide-y divide-gray-200">
             {data.requirements.map((requirement) => {
               const linked = getLinkedElements(requirement.id);
-              const hasCoverage = linked.designElements.length > 0 || linked.testCases.length > 0;
+              const hasCoverage = linked.designElements.length > 0;
               
               return (
                 <tr key={requirement.id} className="hover:bg-gray-50">
@@ -155,27 +145,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="space-y-1">
-                      {linked.testCases.map((testCase: any) => (
-                        <div key={testCase.id} className="text-sm">
-                          <span className="inline-flex px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded">
-                            {testCase.title}
-                          </span>
-                          <div className={`text-xs mt-1 ${
-                            testCase.status === 'Passed' ? 'text-green-600' :
-                            testCase.status === 'Failed' ? 'text-red-600' :
-                            'text-gray-500'
-                          }`}>
-                            {testCase.status}
-                          </div>
-                        </div>
-                      ))}
-                      {linked.testCases.length === 0 && (
-                        <span className="text-xs text-gray-400">No test cases linked</span>
-                      )}
-                    </div>
-                  </td>
                   <td className="px-6 py-4 text-center">
                     <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       hasCoverage ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -205,9 +174,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
                 Design Element
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Test Case
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Link Type
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -223,8 +189,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
               const requirement = data.requirements.find(r => r.id === link.requirementId);
               const designElement = link.designElementId ? 
                 data.designElements.find(d => d.id === link.designElementId) : null;
-              const testCase = link.testCaseId ? 
-                data.testCases.find(t => t.id === link.testCaseId) : null;
 
               return (
                 <tr key={link.id} className="hover:bg-gray-50">
@@ -236,13 +200,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
                   <td className="px-6 py-4">
                     {designElement ? (
                       <div className="text-sm text-gray-900">{designElement.name}</div>
-                    ) : (
-                      <span className="text-sm text-gray-400">N/A</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4">
-                    {testCase ? (
-                      <div className="text-sm text-gray-900">{testCase.title}</div>
                     ) : (
                       <span className="text-sm text-gray-400">N/A</span>
                     )}
@@ -282,7 +239,7 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
             })}
             {data.traceabilityLinks.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
                   No traceability links found. Click "Add Link" to get started.
                 </td>
               </tr>
@@ -298,7 +255,7 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Traceability Matrix</h2>
-          <p className="text-gray-600">Track relationships between requirements, design elements, and test cases</p>
+          <p className="text-gray-600">Track relationships between requirements and design elements</p>
         </div>
         <div className="flex items-center space-x-3">
           <div className="flex items-center bg-gray-100 rounded-lg p-1">
@@ -382,22 +339,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Test Case
-                </label>
-                <select
-                  value={formData.testCaseId || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, testCaseId: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select a test case (optional)</option>
-                  {data.testCases.map(test => (
-                    <option key={test.id} value={test.id}>{test.title}</option>
-                  ))}
-                </select>
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -409,8 +350,6 @@ export default function TraceabilityMatrix({ data, onUpdate }: TraceabilityMatri
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="Requirement-Design">Requirement-Design</option>
-                    <option value="Requirement-Test">Requirement-Test</option>
-                    <option value="Design-Test">Design-Test</option>
                   </select>
                 </div>
 
