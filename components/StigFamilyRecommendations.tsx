@@ -63,21 +63,28 @@ export default function StigFamilyRecommendations({ requirements, designElements
     });
   };
 
-  const getRequirementCount = (stigId: string): number => {
-    // Check uploaded STIG requirements first
-    const uploadedRequirements = getStoredStigRequirements(stigId);
+  const getRequirementCount = (stigFamily: any): number => {
+    // Use validated actualRequirements from STIG family data
+    if (stigFamily.actualRequirements) {
+      return stigFamily.actualRequirements;
+    }
+    
+    // Fallback to uploaded STIG requirements
+    const uploadedRequirements = getStoredStigRequirements(stigFamily.id);
     if (uploadedRequirements.length > 0) {
       return uploadedRequirements.length;
     }
     
     // Fallback to database (legacy)
-    const requirements = stigRequirementsDatabase[stigId];
+    const requirements = stigRequirementsDatabase[stigFamily.id];
     return requirements ? requirements.length : 0;
   };
 
   const getTotalSelectedRequirements = (): number => {
     return Array.from(selectedStigIds).reduce((total, stigId) => {
-      return total + getRequirementCount(stigId);
+      const recommendation = recommendations.find(rec => rec.stigFamily.id === stigId);
+      if (!recommendation) return total;
+      return total + getRequirementCount(recommendation.stigFamily);
     }, 0);
   };
 
@@ -183,7 +190,7 @@ export default function StigFamilyRecommendations({ requirements, designElements
       <div className="space-y-4">
         {recommendations.map((recommendation) => {
           const isSelected = selectedStigIds.has(recommendation.stigFamily.id);
-          const requirementCount = getRequirementCount(recommendation.stigFamily.id);
+          const requirementCount = getRequirementCount(recommendation.stigFamily);
           
           return (
             <div
@@ -222,14 +229,25 @@ export default function StigFamilyRecommendations({ requirements, designElements
                     <div className="bg-gray-50 rounded-lg p-3">
                       <div className="text-sm text-gray-500">Requirements</div>
                       <div className="text-lg font-semibold text-gray-900">{requirementCount}</div>
+                      {recommendation.stigFamily.validated && (
+                        <div className="text-xs text-green-600 mt-1 flex items-center">
+                          <CheckSquare className="h-3 w-3 mr-1" />
+                          Validated
+                        </div>
+                      )}
                     </div>
                     <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500">Relevance Score</div>
-                      <div className="text-lg font-semibold text-gray-900">{recommendation.relevanceScore}/10</div>
+                      <div className="text-sm text-gray-500">Confidence Score</div>
+                      <div className="text-lg font-semibold text-gray-900">{recommendation.confidenceScore || 0}%</div>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-3">
                       <div className="text-sm text-gray-500">Est. Effort</div>
-                      <div className="text-lg font-semibold text-gray-900">{Math.ceil(requirementCount * 0.5)} days</div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        {Math.round(requirementCount * 1.5)} hrs
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        ~{Math.ceil((requirementCount * 1.5) / 8)} days @ 8hrs/day
+                      </div>
                     </div>
                   </div>
 
@@ -250,11 +268,60 @@ export default function StigFamilyRecommendations({ requirements, designElements
                       </button>
                       {expandedAccordions.has(recommendation.stigFamily.id) && (
                         <div className="mt-2 pl-2">
-                          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                          <ul className="list-disc list-inside text-sm text-gray-600 space-y-1 mb-4">
                             {recommendation.reasoning.map((reason, index) => (
                               <li key={index}>{reason}</li>
                             ))}
                           </ul>
+                          
+                          {/* Score Breakdown */}
+                          {recommendation.scoreBreakdown && (
+                            <div className="bg-gray-50 rounded-lg p-3 mt-3">
+                              <h5 className="text-xs font-semibold text-gray-700 mb-2">Score Breakdown</h5>
+                              <div className="space-y-1 text-xs text-gray-600">
+                                {recommendation.scoreBreakdown.keywordMatches > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Keyword Matches:</span>
+                                    <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.keywordMatches.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                {recommendation.scoreBreakdown.controlFamilyMatches > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Control Family Matches:</span>
+                                    <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.controlFamilyMatches.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                {recommendation.scoreBreakdown.designElementMatches > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Design Element Matches:</span>
+                                    <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.designElementMatches.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                {recommendation.scoreBreakdown.technologySpecificBonus > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Technology Bonus:</span>
+                                    <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.technologySpecificBonus.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                {recommendation.scoreBreakdown.environmentBonus > 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Environment Bonus:</span>
+                                    <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.environmentBonus.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                {recommendation.scoreBreakdown.penalties !== 0 && (
+                                  <div className="flex justify-between">
+                                    <span>Penalties:</span>
+                                    <span className="font-medium text-red-600">{recommendation.scoreBreakdown.penalties.toFixed(1)}</span>
+                                  </div>
+                                )}
+                                <div className="flex justify-between pt-1 border-t border-gray-300 font-semibold">
+                                  <span>Confidence Score:</span>
+                                  <span className="text-blue-600">{recommendation.confidenceScore}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>

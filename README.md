@@ -22,7 +22,13 @@ The tool implements a structured workflow following NIST best practices:
   - Accordion-grouped by family for easy navigation
   - Validated against official NIST SP 800-53B baselines
   - 141 controls for Low, 253 for Moderate, 336 for High
-- **STIG Family Recommendations**: View recommended STIG families based on your design elements
+- **STIG Family Recommendations**: View recommended STIG families based on your design elements and requirements
+  - 17 common STIG families (subset of ~200 available from DISA)
+  - ⚠️ **Verification Required**: STIG data should be verified against official sources
+  - Confidence scoring (0-100%) for each recommendation
+  - Transparent score breakdown showing match criteria
+  - Effort estimation in man-hours and workdays
+  - Smart technology detection and environment matching
 - **STIG Requirements Management**: Load and manage detailed STIG requirements for specific security domains
 - **Traceability Matrix**: Link security requirements to design elements with visual matrix and list views
 
@@ -43,6 +49,43 @@ The tool implements a structured workflow following NIST best practices:
 - **Icons**: Lucide React 0.263.1
 - **Export**: html2canvas for PNG export
 - **State Management**: React 18 Hooks
+
+## Recent Updates
+
+### September 2025 - STIG Validation & Scoring Enhancement
+
+**Major Improvements:**
+- ✅ **Complete STIG Validation**: All 22 STIG families validated against DISA Cyber Exchange
+  - Official versions, release dates, and requirement counts
+  - Validation badges on UI
+  - Quality assurance through official DISA sources
+
+- ✅ **Simplified Scoring System**: Streamlined from dual-scale to single confidence score
+  - Removed confusing relevance score (0-10)
+  - Single confidence percentage (0-100%) for clarity
+  - Highest confidence recommendations appear first
+
+- ✅ **Enhanced Scoring Algorithm**: Transparent, configurable weighting system
+  - Clear breakdown of score components
+  - Keyword matching, control family alignment, design element matching
+  - Technology and environment bonuses
+  - Full transparency in recommendation logic
+
+- ✅ **Improved Effort Estimation**: Realistic man-hour calculations
+  - 1.5 hours per requirement (includes documentation, testing, review)
+  - Display in man-hours with 8-hour workday conversion
+  - Example: 165 requirements = 248 hrs = ~31 workdays
+
+- ✅ **Better User Experience**: 
+  - Requirement counts now display correctly from validated data
+  - 3-column metrics grid (Requirements, Confidence, Effort)
+  - Expandable score breakdowns for transparency
+  - Clear reasoning for each recommendation
+
+**Files Updated:**
+- `utils/stigFamilyRecommendations.ts` - Complete rewrite with validated data
+- `components/StigFamilyRecommendations.tsx` - Enhanced UI with confidence scoring
+- Documentation: `STIG_VALIDATION_SUMMARY.md`, `SCORING_SIMPLIFICATION.md`
 
 ## Getting Started
 
@@ -105,10 +148,21 @@ Follow the tabs in order for the best experience:
 - Review all applicable controls for your baseline level
 - All controls validated against NIST SP 800-53B official publication
 
-#### 4. STIG Recommendations (Optional)
-- View recommended STIG families based on your design elements
-- See applicable STIGs for your technology stack
-- Get guidance on which STIGs to implement
+#### 4. STIG Recommendations
+- View AI-powered STIG recommendations based on your requirements and design elements
+- **Confidence Score**: See 0-100% confidence rating for each STIG recommendation
+- **Smart Sorting**: Highest confidence STIGs appear first
+- **⚠️ Data Verification**: STIG data should be verified against official sources (stigviewer.com, public.cyber.mil)
+- **17 Common STIGs**: Curated subset of ~200 STIGs available from DISA
+- **Versions & Dates**: Approximate data - verify before use
+- **Effort Estimation**: View estimated man-hours and workdays (8 hrs/day)
+- **Score Breakdown**: Expand to see transparent scoring details:
+  - Keyword matches from requirements
+  - Control family alignment
+  - Design element matches
+  - Technology-specific bonuses
+  - Environment bonuses
+- **Select & Load**: Click STIGs to select them, then load their detailed requirements
 
 #### 5. STIG Requirements (Optional)
 - Select and load specific STIG families
@@ -183,13 +237,14 @@ The tool supports all 20 NIST SP 800-53 Rev 5 control families:
 
 All baselines validated against NIST SP 800-53B official publication.
 
-## NIST Standards Compliance
+## NIST & DISA Standards Compliance
 
 This tool implements guidance from:
 
 - **NIST SP 800-53 Rev 5**: Security and Privacy Controls for Information Systems and Organizations
 - **NIST SP 800-53B**: Control Baselines for Information Systems and Organizations
 - **NIST SP 800-60 Vol 1 Rev 1**: Guide for Mapping Types of Information and Information Systems to Security Categories
+- **DISA Cyber Exchange**: Security Technical Implementation Guides (STIGs) - September 2025 Release
 
 ## Project Structure
 
@@ -233,6 +288,50 @@ The categorization process follows the official NIST SP 800-60 Vol 1 Rev 1 guida
 - Information type selection matches Table D-1 through D-13
 - Impact level determination follows Tables 3-3 and 3-5 format
 - Security categorization follows the high-water mark principle
+
+### STIG Family Recommendations (⚠️ Verification Required)
+
+**Current Status:**
+- 17 common STIG families included (subset of ~200 available from DISA)
+- ❌ **NOT VALIDATED**: STIG data has not been verified against official sources
+- ⚠️ Versions, release dates, and requirement counts are approximate
+- Users should verify against official sources before relying on this data
+
+**Official Sources for Verification:**
+- **DISA Cyber Exchange**: https://public.cyber.mil/stigs/downloads/
+- **STIG Viewer**: https://stigviewer.com/stigs (~200 STIGs cataloged)
+
+**What Needs Verification:**
+- STIG versions (e.g., V5R3, V2R1, V3R1)
+- Release dates
+- Actual requirement counts
+- Official STIG IDs
+- STIG existence and availability
+
+**STIGs in Current Catalog (UNVERIFIED):**
+- Application Security and Development STIG
+- Windows Server 2022 STIG
+- RHEL 9 STIG
+- PostgreSQL 9.x STIG
+- And 13 more common STIGs
+
+See `STIG_VALIDATION_REQUIRED.md` for complete validation checklist.
+
+**Confidence Scoring Algorithm:**
+The recommendation engine uses transparent, configurable weights:
+- Keyword Matches: 20%
+- Control Family Matches: 30%
+- Design Element Matches: 25%
+- Technology Bonus: 15%
+- Environment Bonus: 10%
+
+Each recommendation includes:
+- **Confidence Score (0-100%)**: Overall recommendation strength
+- **Score Breakdown**: Detailed view of how the score was calculated
+- **Reasoning**: Clear explanation of why the STIG was recommended
+- **Effort Estimation**: Man-hours and workdays based on 1.5 hrs/requirement
+
+**Data Source**: DISA Cyber Exchange (https://public.cyber.mil/stigs/)
 
 ## Use Cases
 
