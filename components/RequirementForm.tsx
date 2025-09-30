@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { SecurityRequirement } from '../types/srtm';
-import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, ChevronDown, ChevronRight, Shield } from 'lucide-react';
+import { CONTROL_FAMILY_NAMES } from '../utils/nistBaselines';
 
 interface RequirementFormProps {
   requirements: SecurityRequirement[];
@@ -12,6 +13,7 @@ interface RequirementFormProps {
 export default function RequirementForm({ requirements, onUpdate }: RequirementFormProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [expandedFamilies, setExpandedFamilies] = useState<Set<string>>(new Set());
   const [formData, setFormData] = useState<Partial<SecurityRequirement>>({
     title: '',
     description: '',
@@ -84,6 +86,45 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
     });
     setEditingId(null);
     setIsFormOpen(false);
+  };
+
+  // Group requirements by control family
+  const groupedRequirements = requirements.reduce((acc, req) => {
+    const family = req.controlFamily || 'Other';
+    if (!acc[family]) {
+      acc[family] = [];
+    }
+    acc[family].push(req);
+    return acc;
+  }, {} as Record<string, SecurityRequirement[]>);
+
+  // Sort families alphabetically
+  const sortedFamilies = Object.keys(groupedRequirements).sort();
+
+  // Toggle accordion for a family
+  const toggleFamily = (family: string) => {
+    const newExpanded = new Set(expandedFamilies);
+    if (newExpanded.has(family)) {
+      newExpanded.delete(family);
+    } else {
+      newExpanded.add(family);
+    }
+    setExpandedFamilies(newExpanded);
+  };
+
+  // Expand all families
+  const expandAll = () => {
+    setExpandedFamilies(new Set(sortedFamilies));
+  };
+
+  // Collapse all families
+  const collapseAll = () => {
+    setExpandedFamilies(new Set());
+  };
+
+  // Get full family name - using validated NIST SP 800-53 Rev 5 names
+  const getFullFamilyName = (familyCode: string): string => {
+    return CONTROL_FAMILY_NAMES[familyCode] || familyCode;
   };
 
   return (
@@ -369,130 +410,181 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
       )}
 
       {/* Requirements List */}
-      <div className="bg-white rounded-lg border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Title
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  NIST/RMF
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Control
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Priority
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {requirements.map((requirement) => (
-                <tr key={requirement.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {requirement.title}
+      <div className="space-y-4">
+        {requirements.length === 0 ? (
+          <div className="bg-white rounded-lg border p-8 text-center">
+            <Shield className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+            <p className="text-lg font-medium text-gray-900 mb-2">No Security Requirements</p>
+            <p className="text-gray-500">Click "Add Requirement" to get started or generate them from system categorization.</p>
+          </div>
+        ) : (
+          <>
+            {/* Expand/Collapse All Controls */}
+            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border">
+              <div className="text-sm text-gray-700">
+                <strong>{requirements.length}</strong> requirement{requirements.length !== 1 ? 's' : ''} across <strong>{sortedFamilies.length}</strong> control famil{sortedFamilies.length !== 1 ? 'ies' : 'y'}
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={expandAll}
+                  className="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                >
+                  Expand All
+                </button>
+                <button
+                  onClick={collapseAll}
+                  className="text-sm px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
+                >
+                  Collapse All
+                </button>
+              </div>
+            </div>
+
+            {/* Control Family Accordions */}
+            {sortedFamilies.map((family) => {
+              const familyRequirements = groupedRequirements[family];
+              const isExpanded = expandedFamilies.has(family);
+              
+              return (
+                <div key={family} className="bg-white rounded-lg border overflow-hidden">
+                  {/* Accordion Header */}
+                  <button
+                    onClick={() => toggleFamily(family)}
+                    className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      {isExpanded ? (
+                        <ChevronDown className="h-5 w-5 text-gray-600" />
+                      ) : (
+                        <ChevronRight className="h-5 w-5 text-gray-600" />
+                      )}
+                      <div className="text-left">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {family} - {getFullFamilyName(family)}
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          {familyRequirements.length} control{familyRequirements.length !== 1 ? 's' : ''}
+                        </p>
                       </div>
-                      <div className="text-sm text-gray-500 mt-1">
-                        {requirement.description.substring(0, 100)}
-                        {requirement.description.length > 100 && '...'}
-                      </div>
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                      {requirement.category}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="space-y-1">
-                      {requirement.nistFunction && (
-                        <div className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded inline-block mr-1">
-                          {requirement.nistFunction}
+                    <div className="flex items-center space-x-2">
+                      {/* Priority badges */}
+                      {['High', 'Medium', 'Low'].map(priority => {
+                        const count = familyRequirements.filter(r => r.priority === priority).length;
+                        if (count === 0) return null;
+                        return (
+                          <span
+                            key={priority}
+                            className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                              priority === 'High' ? 'bg-red-100 text-red-800' :
+                              priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            {count} {priority}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </button>
+
+                  {/* Accordion Content */}
+                  {isExpanded && (
+                    <div className="divide-y divide-gray-200">
+                      {familyRequirements.map((requirement) => (
+                        <div key={requirement.id} className="p-4 hover:bg-gray-50 transition-colors">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              {/* Control Header */}
+                              <div className="flex items-start space-x-3 mb-2">
+                                {requirement.controlIdentifier && (
+                                  <span className="inline-flex px-2 py-1 text-sm font-semibold bg-blue-600 text-white rounded">
+                                    {requirement.controlIdentifier}
+                                  </span>
+                                )}
+                                <div className="flex-1">
+                                  <h4 className="text-base font-semibold text-gray-900">
+                                    {requirement.title}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    {requirement.description}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Control Metadata */}
+                              <div className="flex flex-wrap gap-2 mt-3">
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                  requirement.priority === 'High' ? 'bg-red-100 text-red-800' :
+                                  requirement.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {requirement.priority} Priority
+                                </span>
+                                
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                  requirement.status === 'Approved' ? 'bg-green-100 text-green-800' :
+                                  requirement.status === 'Implemented' ? 'bg-blue-100 text-blue-800' :
+                                  requirement.status === 'Tested' ? 'bg-purple-100 text-purple-800' :
+                                  requirement.status === 'Verified' ? 'bg-green-100 text-green-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {requirement.status}
+                                </span>
+
+                                {requirement.category && (
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                                    {requirement.category}
+                                  </span>
+                                )}
+
+                                {requirement.nistFunction && (
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                                    NIST: {requirement.nistFunction}
+                                  </span>
+                                )}
+
+                                {requirement.rmfStep && (
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">
+                                    RMF: {requirement.rmfStep}
+                                  </span>
+                                )}
+
+                                {requirement.source && (
+                                  <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                                    {requirement.source}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center space-x-2 ml-4">
+                              <button
+                                onClick={() => handleEdit(requirement)}
+                                className="text-blue-600 hover:text-blue-900"
+                                title="Edit"
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(requirement.id)}
+                                className="text-red-600 hover:text-red-900"
+                                title="Delete"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      )}
-                      {requirement.rmfStep && (
-                        <div className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded inline-block">
-                          {requirement.rmfStep}
-                        </div>
-                      )}
-                      {requirement.nistSubcategory && (
-                        <div className="text-xs text-gray-600">{requirement.nistSubcategory}</div>
-                      )}
+                      ))}
                     </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="space-y-1">
-                      {requirement.controlIdentifier && (
-                        <div className="text-sm font-medium text-gray-900">{requirement.controlIdentifier}</div>
-                      )}
-                      {requirement.controlFamily && (
-                        <div className="text-xs text-gray-500">{requirement.controlFamily}</div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      requirement.priority === 'High' ? 'bg-red-100 text-red-800' :
-                      requirement.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {requirement.priority}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
-                      requirement.status === 'Approved' ? 'bg-green-100 text-green-800' :
-                      requirement.status === 'Implemented' ? 'bg-blue-100 text-blue-800' :
-                      requirement.status === 'Tested' ? 'bg-purple-100 text-purple-800' :
-                      requirement.status === 'Verified' ? 'bg-green-100 text-green-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {requirement.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button
-                        onClick={() => handleEdit(requirement)}
-                        className="text-blue-600 hover:text-blue-900"
-                        title="Edit"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(requirement.id)}
-                        className="text-red-600 hover:text-red-900"
-                        title="Delete"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {requirements.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                    No security requirements found. Click "Add Requirement" to get started.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        )}
       </div>
     </div>
   );
