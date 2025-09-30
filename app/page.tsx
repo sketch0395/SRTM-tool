@@ -39,9 +39,9 @@ export default function Home() {
 
   const tabs = [
     { id: 'dashboard', name: 'Dashboard', icon: Shield },
-    { id: 'categorization', name: 'System Categorization', icon: Layers },
     { id: 'design', name: 'Design Elements', icon: Settings },
-    { id: 'requirements', name: 'Requirements', icon: FileText },
+    { id: 'categorization', name: 'NIST 800-60 Categorization', icon: Layers },
+    { id: 'requirements', name: 'NIST 800-53 Requirements', icon: FileText },
     { id: 'tests', name: 'Test Cases', icon: TestTube },
     { id: 'stig-families', name: 'STIG Recommendations', icon: Target },
     { id: 'stig', name: 'STIG Requirements', icon: CheckSquare },
@@ -111,14 +111,15 @@ export default function Home() {
           designElements: workflowData.designElements
         }));
 
-        // If we have system categorizations, switch to design elements tab
-        // If we have design elements too, switch to requirements tab
-        if (workflowData.systemCategorizations.length > 0) {
-          if (workflowData.designElements.length > 0) {
+        // Follow the correct workflow: Design > Categorization > Requirements
+        if (workflowData.designElements.length > 0) {
+          if (workflowData.systemCategorizations.length > 0) {
             setActiveTab('requirements');
           } else {
-            setActiveTab('design');
+            setActiveTab('categorization');
           }
+        } else {
+          setActiveTab('design');
         }
 
         // Reset file input
@@ -194,45 +195,101 @@ export default function Home() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Workflow Guidance */}
+        {data.designElements.length === 0 && data.systemCategorizations.length === 0 && data.requirements.length === 0 && activeTab === 'dashboard' && (
+          <div className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Get Started with Your Security Requirements</h3>
+            <p className="text-gray-600 mb-4">Follow this workflow to build your Security Requirements Traceability Matrix:</p>
+            <div className="flex items-center space-x-4 text-sm">
+              <div className="flex items-center text-blue-600 font-medium">
+                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm mr-3">1</div>
+                <span>Define Design Elements</span>
+              </div>
+              <div className="text-gray-400">→</div>
+              <div className="flex items-center text-gray-400">
+                <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm mr-3">2</div>
+                <span>NIST 800-60 Categorization</span>
+              </div>
+              <div className="text-gray-400">→</div>
+              <div className="flex items-center text-gray-400">
+                <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm mr-3">3</div>
+                <span>NIST 800-53 Requirements</span>
+              </div>
+            </div>
+            <div className="mt-4">
+              <button
+                onClick={() => setActiveTab('design')}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Start with Design Elements
+              </button>
+            </div>
+          </div>
+        )}
+
         <nav className="flex space-x-8 mb-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
+            // Determine if tab should be disabled based on workflow
+            let isDisabled = false;
+            let disabledReason = '';
+            
+            if (tab.id === 'categorization' && data.designElements.length === 0) {
+              isDisabled = true;
+              disabledReason = 'Complete Design Elements first';
+            } else if (tab.id === 'requirements' && (data.designElements.length === 0 || data.systemCategorizations.length === 0)) {
+              isDisabled = true;
+              disabledReason = 'Complete Design Elements and System Categorization first';
+            }
+
             return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                <Icon className="h-4 w-4 mr-2" />
-                {tab.name}
-              </button>
+              <div key={tab.id} className="relative">
+                <button
+                  onClick={() => !isDisabled && setActiveTab(tab.id)}
+                  disabled={isDisabled}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-blue-100 text-blue-700'
+                      : isDisabled
+                      ? 'text-gray-300 cursor-not-allowed'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                  }`}
+                  title={isDisabled ? disabledReason : ''}
+                >
+                  <Icon className="h-4 w-4 mr-2" />
+                  {tab.name}
+                </button>
+                {isDisabled && (
+                  <div className="absolute top-full left-0 mt-1 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity pointer-events-none">
+                    {disabledReason}
+                  </div>
+                )}
+              </div>
             );
           })}
         </nav>
 
         <div className="bg-white rounded-lg shadow">
           {activeTab === 'dashboard' && <Dashboard data={data} />}
+          {activeTab === 'design' && (
+            <DesignElementForm 
+              designElements={data.designElements}
+              onUpdate={(designElements) => updateData({ designElements })}
+              onNavigateToNext={() => setActiveTab('categorization')}
+            />
+          )}
           {activeTab === 'categorization' && (
             <SystemCategorization 
               systemCategorizations={data.systemCategorizations}
               onUpdate={(systemCategorizations) => updateData({ systemCategorizations })}
               onGenerateRequirements={handleGenerateRequirements}
+              onNavigateToNext={() => setActiveTab('requirements')}
             />
           )}
           {activeTab === 'requirements' && (
             <RequirementForm 
               requirements={data.requirements}
               onUpdate={(requirements) => updateData({ requirements })}
-            />
-          )}
-          {activeTab === 'design' && (
-            <DesignElementForm 
-              designElements={data.designElements}
-              onUpdate={(designElements) => updateData({ designElements })}
             />
           )}
           {activeTab === 'tests' && (

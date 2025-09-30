@@ -7,9 +7,10 @@ import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 interface DesignElementFormProps {
   designElements: SystemDesignElement[];
   onUpdate: (designElements: SystemDesignElement[]) => void;
+  onNavigateToNext?: () => void;
 }
 
-export default function DesignElementForm({ designElements, onUpdate }: DesignElementFormProps) {
+export default function DesignElementForm({ designElements, onUpdate, onNavigateToNext }: DesignElementFormProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<SystemDesignElement>>({
@@ -76,7 +77,10 @@ export default function DesignElementForm({ designElements, onUpdate }: DesignEl
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">System Design Elements</h2>
-          <p className="text-gray-600">Manage components, modules, and interfaces</p>
+          <p className="text-gray-600">Define system components, modules, and interfaces</p>
+          <div className="mt-2 text-sm text-blue-600">
+            <strong>Step 1:</strong> Start by defining your system's design elements before categorization
+          </div>
         </div>
         <button
           onClick={() => setIsFormOpen(true)}
@@ -85,6 +89,33 @@ export default function DesignElementForm({ designElements, onUpdate }: DesignEl
           <Plus className="h-4 w-4 mr-2" />
           Add Design Element
         </button>
+      </div>
+
+      {/* Workflow Progress */}
+      <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center text-blue-600 font-medium">
+              <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs mr-2">1</div>
+              Design Elements
+            </div>
+            <div className="text-gray-400">→</div>
+            <div className="flex items-center text-gray-400">
+              <div className="w-6 h-6 bg-gray-300 text-white rounded-full flex items-center justify-center text-xs mr-2">2</div>
+              NIST 800-60 Categorization
+            </div>
+            <div className="text-gray-400">→</div>
+            <div className="flex items-center text-gray-400">
+              <div className="w-6 h-6 bg-gray-300 text-white rounded-full flex items-center justify-center text-xs mr-2">3</div>
+              NIST 800-53 Requirements
+            </div>
+          </div>
+          {designElements.length > 0 && (
+            <div className="text-sm text-green-600 font-medium">
+              ✓ {designElements.length} element{designElements.length !== 1 ? 's' : ''} defined
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Form Modal */}
@@ -272,6 +303,26 @@ export default function DesignElementForm({ designElements, onUpdate }: DesignEl
             </tbody>
           </table>
         </div>
+
+        {/* Next Step Navigation */}
+        {designElements.length > 0 && (
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium text-green-800">Design Elements Complete!</h4>
+                <p className="text-sm text-green-600">Ready to proceed to system categorization</p>
+              </div>
+              {onNavigateToNext && (
+                <button
+                  onClick={onNavigateToNext}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Next: NIST 800-60 Categorization →
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

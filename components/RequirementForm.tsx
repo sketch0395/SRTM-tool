@@ -90,8 +90,11 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Security Requirements</h2>
-          <p className="text-gray-600">Manage and track your security requirements</p>
+          <h2 className="text-2xl font-bold text-gray-900">NIST 800-53 Security Requirements</h2>
+          <p className="text-gray-600">Define security controls based on system categorization</p>
+          <div className="mt-2 text-sm text-blue-600">
+            <strong>Step 3:</strong> Generate security requirements based on your system categorization and design elements
+          </div>
         </div>
         <button
           onClick={() => setIsFormOpen(true)}
@@ -100,6 +103,33 @@ export default function RequirementForm({ requirements, onUpdate }: RequirementF
           <Plus className="h-4 w-4 mr-2" />
           Add Requirement
         </button>
+      </div>
+
+      {/* Workflow Progress */}
+      <div className="mb-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center text-green-600 font-medium">
+              <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-2">✓</div>
+              Design Elements
+            </div>
+            <div className="text-gray-400">→</div>
+            <div className="flex items-center text-green-600 font-medium">
+              <div className="w-6 h-6 bg-green-600 text-white rounded-full flex items-center justify-center text-xs mr-2">✓</div>
+              NIST 800-60 Categorization
+            </div>
+            <div className="text-gray-400">→</div>
+            <div className="flex items-center text-blue-600 font-medium">
+              <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs mr-2">3</div>
+              NIST 800-53 Requirements
+            </div>
+          </div>
+          {requirements.length > 0 && (
+            <div className="text-sm text-green-600 font-medium">
+              ✓ {requirements.length} requirement{requirements.length !== 1 ? 's' : ''} defined
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Form Modal */}
