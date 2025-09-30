@@ -7,14 +7,13 @@ import RequirementForm from '../components/RequirementForm';
 import DesignElementForm from '../components/DesignElementForm';
 import TestCaseForm from '../components/TestCaseForm';
 import TraceabilityMatrix from '../components/TraceabilityMatrix';
-import Dashboard from '../components/Dashboard';
 import StigManagement from '../components/StigManagement';
 import SystemCategorization from '../components/SystemCategorization';
 import StigFamilyRecommendations from '../components/StigFamilyRecommendations';
 import { convertToStigRequirements } from '../utils/detailedStigRequirements';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('design');
   const [data, setData] = useState<SRTMData>({
     requirements: [],
     designElements: [],
@@ -38,7 +37,6 @@ export default function Home() {
   }, []);
 
   const tabs = [
-    { id: 'dashboard', name: 'Dashboard', icon: Shield },
     { id: 'design', name: 'Design Elements', icon: Settings },
     { id: 'categorization', name: 'NIST 800-60 Categorization', icon: Layers },
     { id: 'requirements', name: 'NIST 800-53 Requirements', icon: FileText },
@@ -145,8 +143,8 @@ export default function Home() {
       };
       setData(initialData);
       
-      // Go back to dashboard
-      setActiveTab('dashboard');
+      // Go back to design tab
+      setActiveTab('design');
     }
   };
 
@@ -195,38 +193,6 @@ export default function Home() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Workflow Guidance */}
-        {data.designElements.length === 0 && data.systemCategorizations.length === 0 && data.requirements.length === 0 && activeTab === 'dashboard' && (
-          <div className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Get Started with Your Security Requirements</h3>
-            <p className="text-gray-600 mb-4">Follow this workflow to build your Security Requirements Traceability Matrix:</p>
-            <div className="flex items-center space-x-4 text-sm">
-              <div className="flex items-center text-blue-600 font-medium">
-                <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm mr-3">1</div>
-                <span>Define Design Elements</span>
-              </div>
-              <div className="text-gray-400">→</div>
-              <div className="flex items-center text-gray-400">
-                <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm mr-3">2</div>
-                <span>NIST 800-60 Categorization</span>
-              </div>
-              <div className="text-gray-400">→</div>
-              <div className="flex items-center text-gray-400">
-                <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm mr-3">3</div>
-                <span>NIST 800-53 Requirements</span>
-              </div>
-            </div>
-            <div className="mt-4">
-              <button
-                onClick={() => setActiveTab('design')}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Start with Design Elements
-              </button>
-            </div>
-          </div>
-        )}
-
         <nav className="flex space-x-8 mb-8">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -270,7 +236,6 @@ export default function Home() {
         </nav>
 
         <div className="bg-white rounded-lg shadow">
-          {activeTab === 'dashboard' && <Dashboard data={data} />}
           {activeTab === 'design' && (
             <DesignElementForm 
               designElements={data.designElements}
