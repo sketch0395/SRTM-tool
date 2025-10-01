@@ -1,0 +1,9 @@
+{
+  // Prevent remote schema downloads and disable validation errors for sbom.json
+  "json.schemas": [
+    {
+      "fileMatch": ["sbom.json"],
+      "schema": {}
+    }
+  ]
+}

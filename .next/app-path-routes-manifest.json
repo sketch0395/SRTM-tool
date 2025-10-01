@@ -1,0 +1,5 @@
+{
+  "/api/fetch-stig-csv/route": "/api/fetch-stig-csv",
+  "/_not-found/page": "/_not-found",
+  "/page": "/"
+}
