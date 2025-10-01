@@ -9,9 +9,11 @@ import TraceabilityMatrix from '../components/TraceabilityMatrix';
 import StigManagement from '../components/StigManagement';
 import SystemCategorization from '../components/SystemCategorization';
 import StigFamilyRecommendations from '../components/StigFamilyRecommendations';
-import { convertToStigRequirements } from '../utils/detailedStigRequirements';
+import { convertToStigRequirements, fetchAndConvertStigRequirementsToMatrix } from '../utils/detailedStigRequirements';
 
 export default function Home() {
+  // Track CSV fetch failures for STIG families
+  const [loadCsvFailures, setLoadCsvFailures] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState('design');
   const [data, setData] = useState<SRTMData>({
     requirements: [],
@@ -56,16 +58,23 @@ export default function Home() {
   };
 
   const handleLoadStigFamilies = (selectedStigFamilyIds: string[]) => {
-    // Convert selected STIG families to detailed STIG requirements
-    const newStigRequirements = convertToStigRequirements(selectedStigFamilyIds);
+    // Automatically fetch and convert STIG CSV from stigviewer.com
+    (async () => {
+      // Fetch and convert STIG CSVs to traceability matrix format
+      const newStigRequirements = await fetchAndConvertStigRequirementsToMatrix(selectedStigFamilyIds);
+      // Compute failures where no requirements returned
+      const loadedFamilies = new Set(newStigRequirements.map(req => req.family || ''));
+      const failures = selectedStigFamilyIds.filter(id => !loadedFamilies.has(id));
+      setLoadCsvFailures(failures);
 
-    setData(prev => ({
-      ...prev,
-      stigRequirements: [...prev.stigRequirements, ...newStigRequirements]
-    }));
+      setData(prev => ({
+        ...prev,
+        stigRequirements: [...prev.stigRequirements, ...newStigRequirements]
+      }));
 
-    // Switch to STIG requirements tab to show loaded families
-    setActiveTab('stig');
+      // Switch to STIG requirements tab to show loaded families
+      setActiveTab('stig');
+    })();
   };
 
   const handleSaveWorkflow = () => {
@@ -229,49 +238,47 @@ export default function Home() {
             );
           })}
         </nav>
+        {activeTab === 'stig' && loadCsvFailures.length > 0 && (
+          <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded">
+            Warning: No CSV data returned for the following STIG families: {loadCsvFailures.join(', ')}.
+          </div>
+        )}
 
-        <div className="bg-white rounded-lg shadow">
-          {activeTab === 'design' && (
-            <DesignElementForm 
-              designElements={data.designElements}
-              onUpdate={(designElements) => updateData({ designElements })}
-              onNavigateToNext={() => setActiveTab('categorization')}
-            />
-          )}
-          {activeTab === 'categorization' && (
-            <SystemCategorization 
-              systemCategorizations={data.systemCategorizations}
-              onUpdate={(systemCategorizations) => updateData({ systemCategorizations })}
-              onGenerateRequirements={handleGenerateRequirements}
-              onNavigateToNext={() => setActiveTab('requirements')}
-            />
-          )}
-          {activeTab === 'requirements' && (
-            <RequirementForm 
-              requirements={data.requirements}
-              onUpdate={(requirements) => updateData({ requirements })}
-            />
-          )}
-          {activeTab === 'stig' && (
-            <StigManagement 
-              stigRequirements={data.stigRequirements}
-              onUpdate={(stigRequirements) => updateData({ stigRequirements })}
-              onAutoPopulateRequirements={(newRequirements) => {
-                updateData({ requirements: [...data.requirements, ...newRequirements] });
-                // Switch to requirements tab to show the populated requirements
-                setActiveTab('requirements');
-              }}
-            />
-          )}
-          {activeTab === 'stig-families' && (
-            <StigFamilyRecommendations 
-              requirements={data.requirements}
-              designElements={data.designElements}
-              onLoadStigFamilies={handleLoadStigFamilies}
-            />
-          )}
-          {activeTab === 'matrix' && <TraceabilityMatrix data={data} onUpdate={updateData} />}
-        </div>
+        {activeTab === 'design' && (
+          <DesignElementForm 
+            designElements={data.designElements}
+            onUpdate={(designElements) => updateData({ designElements })}
+            onNavigateToNext={() => setActiveTab('categorization')}
+          />
+        )}
+        {activeTab === 'categorization' && (
+          <SystemCategorization 
+            systemCategorizations={data.systemCategorizations}
+            onUpdate={(systemCategorizations) => updateData({ systemCategorizations })}
+            onGenerateRequirements={handleGenerateRequirements}
+            onNavigateToNext={() => setActiveTab('requirements')}
+          />
+        )}
+        {activeTab === 'requirements' && (
+          <RequirementForm 
+            requirements={data.requirements}
+            onUpdate={(requirements) => updateData({ requirements })}
+          />
+        )}
+        {activeTab === 'stig' && (
+          <StigManagement
+            stigRequirements={data.stigRequirements}
+            onUpdate={(stigRequirements) => updateData({ stigRequirements })}
+          />
+        )}
+        {activeTab === 'stig-families' && (
+          <StigFamilyRecommendations 
+            requirements={data.requirements}
+            designElements={data.designElements}
+            onLoadStigFamilies={handleLoadStigFamilies}
+          />
+        )}
+        {activeTab === 'matrix' && <TraceabilityMatrix data={data} onUpdate={updateData} />}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
 {
+  "/api/fetch-stig-csv/route": "app/api/fetch-stig-csv/route.js",
   "/page": "app/page.js"
 }

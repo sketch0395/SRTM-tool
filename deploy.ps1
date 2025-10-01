@@ -4,11 +4,33 @@
 Write-Host "🚀 Starting SRTM Tool Deployment..." -ForegroundColor Green
 
 # Configuration
-$SERVER_IP = "10.5.1.17"
-$SERVER_USER = "dialtone"
+# Application settings
 $APP_NAME = "srtm-tool"
-$REMOTE_PATH = "/home/dialtone/srtm-tool"
-$PORT = "4000"
+$PORT     = "4000"
+
+# Deployment mode selection: SSH or Local
+$deployMode = Read-Host "Choose deployment mode ('ssh' or 'local') [ssh]"
+if ([string]::IsNullOrWhiteSpace($deployMode)) { $deployMode = 'ssh' }
+if ($deployMode -eq 'local') {
+    Write-Host "⚙️  Local deployment selected" -ForegroundColor Yellow
+    try {
+        Write-Host "📦 Building and deploying locally..." -ForegroundColor Blue
+        docker compose down 2>$null
+        docker compose up -d --build
+        Write-Host "✅ Local deployment completed! Application running on http://localhost:$PORT" -ForegroundColor Green
+        exit 0
+    } catch {
+        Write-Host "❌ Local deployment failed: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
+# SSH branch
+} else {
+    $SERVER_IP = Read-Host "Enter SSH server IP or hostname"
+    $SERVER_USER = Read-Host "Enter SSH username"
+}
+
+# Remote deployment path
+$REMOTE_PATH = "/home/$SERVER_USER/srtm-tool"
 
 try {
     Write-Host "📦 Building Docker image locally..." -ForegroundColor Blue

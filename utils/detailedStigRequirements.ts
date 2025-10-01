@@ -278,6 +278,51 @@ export function convertStigRequirementsToMatrix(stigFamilyIds: string[]): StigRe
   return allRequirements;
 }
 
+// New: Fetch STIG CSV from stigviewer and convert to requirements
+export async function fetchAndConvertStigRequirements(familyIds: string[]): Promise<DetailedStigRequirement[]> {
+  // Use internal API route to fetch multiple STIG CSVs (avoids CORS/network errors)
+  const allRequirements: DetailedStigRequirement[] = [];
+  const param = encodeURIComponent(familyIds.join(','));
+  const apiUrl = (typeof window !== 'undefined'
+    ? `${window.location.origin}/api/fetch-stig-csv?familyIds=${param}`
+    : `/api/fetch-stig-csv?familyIds=${param}`);
+  try {
+    const apiRes = await fetch(apiUrl);
+    if (!apiRes.ok) {
+      console.error(`Failed to fetch STIG CSVs from API: ${apiRes.status}`);
+      return allRequirements;
+    }
+    const csvResults: Record<string, string> = await apiRes.json();
+    for (const familyId of familyIds) {
+      const csvText = csvResults[familyId];
+      if (csvText) {
+        const detailed = parseStigCsv(csvText, familyId);
+        allRequirements.push(...detailed);
+      } else {
+        console.warn(`No CSV data returned for ${familyId}`);
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching STIG CSVs via API:', err);
+  }
+  return allRequirements;
+}
+// New: Fetch and convert STIG CSVs directly to the matrix format (StigRequirement[])
+export async function fetchAndConvertStigRequirementsToMatrix(familyIds: string[]): Promise<StigRequirement[]> {
+  const detailed = await fetchAndConvertStigRequirements(familyIds);
+  const all: StigRequirement[] = [];
+  detailed.forEach((req, index) => {
+    const familyId = req.family || 'unknown';
+    all.push({
+      id: `${familyId}-${Date.now()}-${index}`,
+      ...req,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+  });
+  return all;
+}
+
 // Legacy function name support
 export const convertToStigRequirements = convertStigRequirementsToMatrix;
 
