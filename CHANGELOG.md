@@ -2,6 +2,139 @@
 
 All notable changes to the SRTM Tool project will be documented in this file.
 
+## [3.0.3] - 2025-10-02
+
+### Added
+- **stigviewer.com Integration**: Primary STIG update source now uses stigviewer.com
+  - More reliable than DISA RSS feed
+  - Better SSL certificate handling (no custom CAs needed)
+  - Parses STIG versions, release dates, and requirement counts from HTML
+  - Checks top 5 high-priority STIGs for updates
+  - Rate-limited requests (200ms delay) to be respectful
+  - DISA RSS feed maintained as fallback source
+
+### Changed
+- **Update Check Priority**: stigviewer.com → DISA RSS → Date-based fallback
+- **Console Output**: More detailed logging with progress indicators
+- **Error Handling**: Graceful degradation through multiple sources
+
+### Technical Details
+- `checkStigViewerSource()`: New function to fetch from stigviewer.com
+- HTML parsing with regex for version, date, and requirement extraction
+- Automatic URL conversion (name → lowercase_underscore format)
+- 200ms rate limiting between requests
+- Compatible with both browser and server contexts
+
+## [3.0.2] - 2025-10-02
+
+### Fixed
+- **SSL Certificate Error**: Fixed server-side DISA RSS fetching failing with "UNABLE_TO_VERIFY_LEAF_SIGNATURE"
+  - Changed server-side fetch strategy to use API proxy instead of direct fetch
+  - Government SSL certificates with custom CAs now handled properly
+  - Both browser and server contexts now use the same API proxy for consistency
+  - Eliminates SSL verification issues without compromising security
+
+### Technical Details
+- Server-side fetch now uses `${baseUrl}/api/fetch-disa-rss` instead of direct DISA URL
+- API proxy handles SSL certificate validation properly
+- Maintains same JSON response format for both contexts
+- Automatic fallback to date-based checking if proxy unavailable
+
+## [3.0.1] - 2025-10-02 🔧 **BUGFIX**
+
+### 🐛 Bug Fixes
+
+#### Server-Side Fetch Issue
+- **Fixed**: TypeError when checking for updates from API routes
+  - Root cause: Relative URLs (`/api/...`) don't work in server-side `fetch()`
+  - Solution: Context-aware fetching (browser vs server)
+  - Browser: Uses API proxy with relative URL
+  - Server: Fetches directly from DISA RSS feed
+  - Benefit: Faster and more reliable update checks
+
+#### Enhanced RSS Parsing
+- **Improved**: XML parsing for TypeScript compatibility
+  - Changed from `matchAll()` to `exec()` loop for broader support
+  - Works with all TypeScript compilation targets
+  - More robust regex-based parsing
+
+#### Impact
+- ✅ Automatic update checks now work in all contexts
+- ✅ API route `/api/stig-updates?action=check` fully functional
+- ✅ No more "Failed to parse URL" errors
+- ✅ Better performance (direct DISA fetch server-side)
+
+## [3.0.0] - 2025-10-02 🤖 **FULLY AUTOMATED**
+
+### 🚀 Zero-Touch STIG Updates
+
+#### Fully Automatic Update System
+- **100% Automated**: No developer intervention required for STIG updates
+  - System automatically checks DISA on schedule (weekly by default)
+  - Updates fetched directly from official DISA sources
+  - Updates applied automatically without manual approval
+  - Auto-validated as trusted official data
+  - Backups created automatically before every update
+
+#### New Configuration Options
+- **`autoApply`**: New setting to enable/disable automatic update application
+  - Default: `true` (fully automatic)
+  - When enabled: Updates install automatically
+  - When disabled: Updates require manual approval (legacy behavior)
+  
+- **Zero-Touch Defaults**:
+  - `enabled: true` - Auto-update system ON by default
+  - `requireManualApproval: false` - No approval needed
+  - `autoApply: true` - Automatically install updates
+  - `criticalOnly: false` - Apply all updates (not just critical)
+  - `backupBeforeUpdate: true` - Always create backups
+
+#### Enhanced UI Controls
+- **Auto-Apply Toggle**: New UI control in settings dropdown
+  - Enable/disable automatic update application
+  - Visual indicator when fully automatic mode enabled
+  - Clear messaging about automation status
+  
+#### Smart Auto-Validation
+- **Trusted Source Detection**: Updates from DISA automatically marked as validated
+  - `validated: true` set automatically for official sources
+  - No manual verification needed
+  - Reduces developer workload to ZERO
+
+#### Benefits
+- ⏱️ **Zero developer time** - completely self-maintaining
+- 🚀 **Always current** - stays up-to-date with DISA automatically
+- ✅ **Auto-validated** - official sources trusted by default
+- 🛡️ **Safe** - automatic backups with rollback capability
+- 📊 **Audit trail** - full logging of all automatic updates
+
+## [2.1.0] - 2025-10-02
+
+### 🔄 Auto-Refresh Database Status
+
+#### Real-Time Status Updates
+- **Reactive Database Status**: STIG Database Status now automatically updates in real-time
+  - Converts static calculation to reactive state management
+  - Auto-refreshes after applying STIG updates
+  - Auto-refreshes when recommendations change
+  - Added manual refresh button (🔄 icon) for user control
+  - Instant visual feedback without page reload
+
+#### Smart Refresh Triggers
+- **Automatic After Updates**: Status updates immediately after applying STIG updates
+  - Health score reflects new validation status
+  - Outdated families count updates
+  - Next review date resets appropriately
+- **Automatic on Change**: Refreshes when security requirements or design elements change
+- **Manual Control**: Users can click refresh icon anytime for latest status
+
+#### Enhanced User Experience
+- Real-time health score monitoring (0-100%)
+- Live validation percentage tracking
+- Accurate outdated families count
+- No stale data - always current
+- Better transparency in update process
+
 ## [2.0.0] - 2025-09-30
 
 ### 🎯 Major Features

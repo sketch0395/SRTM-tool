@@ -2,9 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
-import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
+import { 
+  getStigFamilyRecommendations, 
+  getImplementationEffort, 
+  StigFamilyRecommendation, 
+  getStigDatabaseStatus,
+  getPendingUpdates,
+  setAutoUpdateEnabled,
+  AUTO_UPDATE_CONFIG
+} from '../utils/stigFamilyRecommendations';
 import { stigRequirementsDatabase, getStoredStigRequirements, getUniqueStigRequirementCount } from '../utils/detailedStigRequirements';
-import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight, HelpCircle } from 'lucide-react';
+import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight, HelpCircle, Settings, RefreshCw } from 'lucide-react';
 
 interface StigRecommendationProps {
   requirements: SecurityRequirement[];
@@ -23,6 +31,18 @@ export default function StigFamilyRecommendations({ requirements, designElements
   const [showControlFamilyTooltip, setShowControlFamilyTooltip] = useState<string | null>(null);
   const [showDesignElementTooltip, setShowDesignElementTooltip] = useState<string | null>(null);
   const [showEffortTooltip, setShowEffortTooltip] = useState<string | null>(null);
+  const [isCheckingUpdates, setIsCheckingUpdates] = useState(false);
+  const [updateResults, setUpdateResults] = useState<any[]>([]);
+  const [autoUpdateEnabled, setAutoUpdateEnabledState] = useState(AUTO_UPDATE_CONFIG.enabled);
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+  const [selectedUpdates, setSelectedUpdates] = useState<Set<string>>(new Set());
+  const [isApplyingUpdates, setIsApplyingUpdates] = useState(false);
+  const [dbStatus, setDbStatus] = useState(getStigDatabaseStatus());
+
+  // Refresh database status
+  const refreshDbStatus = () => {
+    setDbStatus(getStigDatabaseStatus());
+  };
 
   useEffect(() => {
     if (requirements.length > 0 || designElements.length > 0) {
@@ -30,6 +50,26 @@ export default function StigFamilyRecommendations({ requirements, designElements
       setRecommendations(recs);
     }
   }, [requirements, designElements]);
+
+  // Auto-refresh database status when recommendations change
+  useEffect(() => {
+    refreshDbStatus();
+  }, [recommendations]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.settings-dropdown-container')) {
+        setShowSettingsDropdown(false);
+      }
+    };
+
+    if (showSettingsDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showSettingsDropdown]);
 
   const handleStigToggle = (stigId: string) => {
     setSelectedStigIds(prev => {
@@ -149,6 +189,177 @@ export default function StigFamilyRecommendations({ requirements, designElements
     );
   }
 
+  const handleCheckForUpdates = async () => {
+    setIsCheckingUpdates(true);
+    setUpdateResults([]); // Clear previous results
+    
+    try {
+      console.log('🔍 Checking DISA for STIG updates...');
+      const response = await fetch('/api/stig-updates?action=check');
+      const data = await response.json();
+      
+      if (data.success) {
+        setUpdateResults(data.updates);
+        console.log('✅ Update check complete:', data.updates);
+        
+        if (data.count === 0) {
+          alert('✅ All STIGs are up to date! No updates found.');
+        } else {
+          alert(`📋 Found ${data.count} potential update${data.count > 1 ? 's' : ''}!\n\nCheck the settings dropdown or console for details.`);
+        }
+      } else {
+        console.error('❌ Update check failed:', data.error);
+        alert('⚠️ Could not check for updates. The DISA RSS feed may be unavailable.\n\nUsing fallback date-based checking instead.');
+      }
+    } catch (error) {
+      console.error('❌ Error checking for updates:', error);
+      alert('❌ Error checking for updates. Check console for details and ensure you have internet connectivity.');
+    } finally {
+      setIsCheckingUpdates(false);
+    }
+  };
+
+  const handleToggleAutoUpdate = async () => {
+    try {
+      const response = await fetch('/api/stig-updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'enable', 
+          enabled: !autoUpdateEnabled 
+        })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setAutoUpdateEnabledState(!autoUpdateEnabled);
+        setAutoUpdateEnabled(!autoUpdateEnabled);
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error toggling auto-update:', error);
+      alert('Error updating configuration');
+    }
+  };
+
+  const handleToggleUpdateSelection = (stigId: string) => {
+    setSelectedUpdates(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(stigId)) {
+        newSet.delete(stigId);
+      } else {
+        newSet.add(stigId);
+      }
+      return newSet;
+    });
+  };
+
+  const handleSelectAllUpdates = () => {
+    setSelectedUpdates(new Set(updateResults.map(u => u.stigId)));
+  };
+
+  const handleDeselectAllUpdates = () => {
+    setSelectedUpdates(new Set());
+  };
+
+  const handleApplySelectedUpdates = async () => {
+    if (selectedUpdates.size === 0) {
+      alert('Please select at least one update to apply');
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Are you sure you want to apply ${selectedUpdates.size} update(s)?\n\n` +
+      `This will:\n` +
+      `• Update STIG versions and release dates\n` +
+      `• Create automatic backups (can be rolled back)\n` +
+      `• Mark updated STIGs as unvalidated\n\n` +
+      `Continue?`
+    );
+
+    if (!confirmed) return;
+
+    setIsApplyingUpdates(true);
+    try {
+      const updatesToApply = updateResults.filter(u => selectedUpdates.has(u.stigId));
+      
+      console.log('📝 Applying updates:', updatesToApply);
+      
+      const response = await fetch('/api/stig-updates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'apply-multiple',
+          updates: updatesToApply
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        const { successful, failed } = data.summary;
+        
+        // Show detailed results
+        let message = `✅ Update Complete!\n\n`;
+        message += `Successfully applied: ${successful}\n`;
+        if (failed > 0) {
+          message += `Failed: ${failed}\n`;
+        }
+        message += `\nBackups created for rollback if needed.`;
+        
+        alert(message);
+        
+        // Clear selections and refresh
+        setSelectedUpdates(new Set());
+        
+        // Remove successfully applied updates from results
+        const failedStigIds = data.results
+          .filter((r: any) => !r.success)
+          .map((r: any) => r.stigId);
+        
+        setUpdateResults(prev => prev.filter(u => failedStigIds.includes(u.stigId)));
+        
+        // Refresh database status to reflect updates
+        refreshDbStatus();
+        
+        // Log detailed results
+        console.log('✅ Update Results:', data.results);
+        
+      } else {
+        alert(`❌ Failed to apply updates: ${data.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('❌ Error applying updates:', error);
+      alert('❌ Error applying updates. Check console for details.');
+    } finally {
+      setIsApplyingUpdates(false);
+    }
+  };
+
+  const handleExportDatabase = async () => {
+    try {
+      const response = await fetch('/api/stig-updates?action=export');
+      const data = await response.json();
+      
+      if (data.success) {
+        // Create download link
+        const blob = new Blob([data.data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = data.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        alert('✅ Database exported successfully!');
+      }
+    } catch (error) {
+      console.error('Error exporting database:', error);
+      alert('❌ Error exporting database');
+    }
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -156,6 +367,288 @@ export default function StigFamilyRecommendations({ requirements, designElements
           <h2 className="text-2xl font-bold text-gray-900">STIG Family Recommendations</h2>
           <p className="text-gray-600">Based on {requirements.length} requirements and {designElements.length} design elements</p>
         </div>
+        
+        {/* Settings Dropdown */}
+        <div className="relative settings-dropdown-container">
+          <button
+            onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
+            className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+          >
+            <Settings className="h-5 w-5" />
+            <span className="text-sm font-medium">Auto-Update Settings</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${showSettingsDropdown ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showSettingsDropdown && (
+            <div className="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
+              <div className="space-y-4">
+                <div className="border-b pb-3">
+                  <h3 className="font-semibold text-gray-900 mb-1">Automatic Update Checking</h3>
+                  <p className="text-xs text-gray-600">Automatically check DISA for new STIG releases</p>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <RefreshCw className={`h-4 w-4 ${autoUpdateEnabled ? 'text-green-600' : 'text-gray-400'}`} />
+                    <span className="text-sm font-medium text-gray-700">Auto-Check Status</span>
+                  </div>
+                  <button
+                    onClick={handleToggleAutoUpdate}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                      autoUpdateEnabled 
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {autoUpdateEnabled ? '✓ Enabled' : '✗ Disabled'}
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Download className={`h-4 w-4 ${AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply ? 'text-blue-600' : 'text-gray-400'}`} />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-700">Auto-Apply Updates</span>
+                      <span className="text-xs text-gray-500">Automatically install updates from DISA</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply = !AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply;
+                      alert(`Auto-apply ${AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply ? 'enabled' : 'disabled'}. Updates will ${AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply ? 'automatically install' : 'require manual approval'}.`);
+                      setShowSettingsDropdown(false);
+                    }}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                      AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply
+                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply ? '✓ Enabled' : '✗ Disabled'}
+                  </button>
+                </div>
+                
+                {AUTO_UPDATE_CONFIG.autoUpdatePreferences.autoApply && (
+                  <div className="bg-green-50 border border-green-200 rounded p-2 text-xs text-green-800">
+                    <strong>🤖 Fully Automatic:</strong> Updates from DISA will be applied automatically without manual approval.
+                  </div>
+                )}
+                
+                {autoUpdateEnabled && (
+                  <div className="bg-blue-50 border border-blue-200 rounded p-3 text-xs">
+                    <div className="space-y-1">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Frequency:</span>
+                        <span className="font-medium text-gray-900">{AUTO_UPDATE_CONFIG.checkFrequency}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Last Check:</span>
+                        <span className="font-medium text-gray-900">{AUTO_UPDATE_CONFIG.lastCheck}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Next Check:</span>
+                        <span className="font-medium text-gray-900">
+                          {(() => {
+                            const lastCheck = new Date(AUTO_UPDATE_CONFIG.lastCheck);
+                            const nextCheck = new Date(lastCheck);
+                            switch (AUTO_UPDATE_CONFIG.checkFrequency) {
+                              case 'daily': nextCheck.setDate(nextCheck.getDate() + 1); break;
+                              case 'weekly': nextCheck.setDate(nextCheck.getDate() + 7); break;
+                              case 'monthly': nextCheck.setMonth(nextCheck.getMonth() + 1); break;
+                            }
+                            return nextCheck.toLocaleDateString();
+                          })()}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="border-t pt-3">
+                  <button
+                    onClick={() => {
+                      handleCheckForUpdates();
+                      setShowSettingsDropdown(false);
+                    }}
+                    disabled={isCheckingUpdates}
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <RefreshCw className={`h-4 w-4 ${isCheckingUpdates ? 'animate-spin' : ''}`} />
+                    <span className="text-sm font-medium">
+                      {isCheckingUpdates ? 'Checking DISA...' : 'Check for Updates Now'}
+                    </span>
+                  </button>
+                </div>
+                
+                {updateResults.length > 0 && (
+                  <div className="border-t pt-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-sm font-medium text-gray-900">
+                        {updateResults.length} Update{updateResults.length > 1 ? 's' : ''} Found:
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {selectedUpdates.size > 0 && (
+                          <button
+                            onClick={handleDeselectAllUpdates}
+                            className="text-xs text-gray-600 hover:text-gray-800"
+                          >
+                            Clear
+                          </button>
+                        )}
+                        <button
+                          onClick={handleSelectAllUpdates}
+                          className="text-xs text-blue-600 hover:text-blue-800"
+                        >
+                          Select All
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2 max-h-64 overflow-y-auto mb-3">
+                      {updateResults.map((update, index) => {
+                        const isSelected = selectedUpdates.has(update.stigId);
+                        return (
+                          <div
+                            key={index}
+                            onClick={() => handleToggleUpdateSelection(update.stigId)}
+                            className={`cursor-pointer border rounded p-2 text-xs transition-colors ${
+                              isSelected 
+                                ? 'bg-blue-50 border-blue-300' 
+                                : 'bg-yellow-50 border-yellow-200 hover:border-yellow-300'
+                            }`}
+                          >
+                            <div className="flex items-start space-x-2">
+                              <div className={`mt-0.5 w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                                isSelected 
+                                  ? 'bg-blue-600 border-blue-600' 
+                                  : 'border-gray-300'
+                              }`}>
+                                {isSelected && (
+                                  <CheckSquare className="h-3 w-3 text-white" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-gray-900 truncate">{update.stigId}</div>
+                                <div className="text-gray-600">{update.updateNotes || 'Update available'}</div>
+                                {update.latestVersion && (
+                                  <div className={`font-medium mt-1 ${
+                                    isSelected ? 'text-blue-700' : 'text-yellow-700'
+                                  }`}>
+                                    {update.currentVersion} → {update.latestVersion}
+                                  </div>
+                                )}
+                                {update.severity && (
+                                  <div className="mt-1">
+                                    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                                      update.severity === 'critical' ? 'bg-red-100 text-red-800' :
+                                      update.severity === 'high' ? 'bg-orange-100 text-orange-800' :
+                                      update.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                                      'bg-green-100 text-green-800'
+                                    }`}>
+                                      {update.severity.toUpperCase()}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {selectedUpdates.size > 0 && (
+                      <div className="border-t pt-3 space-y-2">
+                        <button
+                          onClick={handleApplySelectedUpdates}
+                          disabled={isApplyingUpdates}
+                          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <Download className={`h-4 w-4 ${isApplyingUpdates ? 'animate-bounce' : ''}`} />
+                          <span className="text-sm font-medium">
+                            {isApplyingUpdates 
+                              ? 'Applying Updates...' 
+                              : `Apply ${selectedUpdates.size} Selected Update${selectedUpdates.size > 1 ? 's' : ''}`
+                            }
+                          </span>
+                        </button>
+                        <div className="text-xs text-gray-600 text-center">
+                          Backups will be created automatically
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="border-t pt-2 mt-2">
+                      <button
+                        onClick={handleExportDatabase}
+                        className="w-full text-xs text-gray-600 hover:text-gray-800 py-1"
+                      >
+                        💾 Export Database Backup
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* STIG Database Status */}
+      <div className={`border rounded-lg p-4 mb-6 ${
+        dbStatus.healthScore >= 80 ? 'bg-green-50 border-green-200' :
+        dbStatus.healthScore >= 60 ? 'bg-yellow-50 border-yellow-200' :
+        'bg-red-50 border-red-200'
+      }`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <Shield className="h-5 w-5 text-gray-600 mr-2" />
+              <div>
+                <div className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  STIG Database Status
+                  <button
+                    onClick={refreshDbStatus}
+                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                    title="Refresh database status"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="text-xs text-gray-600">
+                  {dbStatus.validatedFamilies}/{dbStatus.totalStigFamilies} families validated ({dbStatus.validationPercentage}%)
+                  {dbStatus.outdatedFamilies > 0 && ` • ${dbStatus.outdatedFamilies} may need updates`}
+                </div>
+              </div>
+            </div>
+            <div className={`px-2 py-1 rounded text-xs font-medium ${
+              dbStatus.healthScore >= 80 ? 'bg-green-100 text-green-800' :
+              dbStatus.healthScore >= 60 ? 'bg-yellow-100 text-yellow-800' :
+              'bg-red-100 text-red-800'
+            }`}>
+              Health: {dbStatus.healthScore}%
+            </div>
+          </div>
+          <div className="text-xs text-gray-500">
+            {dbStatus.isReviewOverdue ? (
+              <span className="text-red-600 font-medium">Review Overdue</span>
+            ) : (
+              `Next review: ${dbStatus.daysUntilReview} days`
+            )}
+          </div>
+        </div>
+        {(dbStatus.isReviewOverdue || dbStatus.healthScore < 70) && (
+          <div className="mt-2 pt-2 border-t border-current border-opacity-20">
+            <div className="text-xs text-gray-700">
+              <strong>⚠️ Action Needed:</strong> STIG data requires manual updates. 
+              Last validated: {dbStatus.lastValidated}
+              {dbStatus.criticalUpdatesNeeded.length > 0 && (
+                <div className="mt-1">
+                  Critical updates: {dbStatus.criticalUpdatesNeeded.join(', ')}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Selection Summary and Actions */}

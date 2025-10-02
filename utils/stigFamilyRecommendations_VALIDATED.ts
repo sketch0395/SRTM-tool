@@ -53,7 +53,7 @@ export const STIG_FAMILIES: StigFamily[] = [
   // Application Security STIGs (Priority for development environments)
   {
     id: 'application-security-dev',
-    name: 'Application Security and Development STIG',
+    name: 'Application dsfasdfadf Security and Development STIG',
     version: 'V5R3',
     releaseDate: '2024-07-26',
     description: 'Security Technical Implementation Guide for Application Security and Development practices',

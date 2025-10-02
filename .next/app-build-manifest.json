@@ -11,10 +11,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/api/fetch-stig-csv/route": [
+    "/api/stig-updates/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/fetch-stig-csv/route.js"
+      "static/chunks/app/api/stig-updates/route.js"
+    ],
+    "/api/fetch-disa-rss/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/fetch-disa-rss/route.js"
     ]
   }
 }
