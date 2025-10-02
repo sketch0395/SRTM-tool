@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
 import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
 import { stigRequirementsDatabase, getStoredStigRequirements, getUniqueStigRequirementCount } from '../utils/detailedStigRequirements';
-import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight } from 'lucide-react';
+import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight, HelpCircle } from 'lucide-react';
 
 interface StigRecommendationProps {
   requirements: SecurityRequirement[];
@@ -16,6 +16,13 @@ export default function StigFamilyRecommendations({ requirements, designElements
   const [recommendations, setRecommendations] = useState<StigFamilyRecommendation[]>([]);
   const [selectedStigIds, setSelectedStigIds] = useState<Set<string>>(new Set());
   const [expandedAccordions, setExpandedAccordions] = useState<Set<string>>(new Set());
+  const [showTechBonusTooltip, setShowTechBonusTooltip] = useState<string | null>(null);
+  const [showEnvBonusTooltip, setShowEnvBonusTooltip] = useState<string | null>(null);
+  const [showPenaltiesTooltip, setShowPenaltiesTooltip] = useState<string | null>(null);
+  const [showKeywordTooltip, setShowKeywordTooltip] = useState<string | null>(null);
+  const [showControlFamilyTooltip, setShowControlFamilyTooltip] = useState<string | null>(null);
+  const [showDesignElementTooltip, setShowDesignElementTooltip] = useState<string | null>(null);
+  const [showEffortTooltip, setShowEffortTooltip] = useState<string | null>(null);
 
   useEffect(() => {
     if (requirements.length > 0 || designElements.length > 0) {
@@ -278,7 +285,26 @@ export default function StigFamilyRecommendations({ requirements, designElements
                       <div className="text-lg font-semibold text-gray-900">{recommendation.confidenceScore || 0}%</div>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-3">
-                      <div className="text-sm text-gray-500">Est. Effort</div>
+                      <div className="flex items-center text-sm text-gray-500">
+                        Est. Effort
+                        <div className="relative ml-1">
+                          <Info
+                            className="h-3 w-3 cursor-help text-gray-400 hover:text-gray-600"
+                            onMouseEnter={() => setShowEffortTooltip(recommendation.stigFamily.id)}
+                            onMouseLeave={() => setShowEffortTooltip(null)}
+                          />
+                          {showEffortTooltip === recommendation.stigFamily.id && (
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-10 bg-gray-900 text-white text-xs rounded-lg py-2 px-3 shadow-lg whitespace-nowrap">
+                              <div className="font-medium mb-1">Effort Estimation</div>
+                              <div>• 1.5 hours per requirement (avg)</div>
+                              <div>• Includes implementation, documentation,</div>
+                              <div>&nbsp;&nbsp;testing, and review</div>
+                              <div>• Days calculated @ 8 hours/day</div>
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                       <div className="text-lg font-semibold text-gray-900">
                         {Math.round(requirementCount * 1.5)} hrs
                       </div>
@@ -317,38 +343,194 @@ export default function StigFamilyRecommendations({ requirements, designElements
                               <h5 className="text-xs font-semibold text-gray-700 mb-2">Score Breakdown</h5>
                               <div className="space-y-1 text-xs text-gray-600">
                                 {recommendation.scoreBreakdown.keywordMatches > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Keyword Matches:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Keyword Matches:</span>
+                                      <button
+                                        onMouseEnter={() => setShowKeywordTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowKeywordTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showKeywordTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Keyword Matches Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> +2 points per keyword match (or +3 for application security STIGs). Keywords from your requirements/design elements match this STIG's trigger words.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Higher keyword matches indicate stronger alignment between your stated requirements and this STIG's security controls.
+                                            </div>
+                                            <div>
+                                              <strong>Examples:</strong> Terms like "authentication", "encryption", "database", "web application" in your requirements match relevant STIG families.
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.keywordMatches.toFixed(1)}</span>
                                   </div>
                                 )}
                                 {recommendation.scoreBreakdown.controlFamilyMatches > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Control Family Matches:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Control Family Matches:</span>
+                                      <button
+                                        onMouseEnter={() => setShowControlFamilyTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowControlFamilyTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showControlFamilyTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Control Family Matches Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> +3 points per NIST SP 800-53 control family match between your requirements and this STIG's applicable families.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Control family alignment ensures this STIG addresses the same security domains as your existing requirements.
+                                            </div>
+                                            <div>
+                                              <strong>Examples:</strong> AC (Access Control), AU (Audit), IA (Identification & Authentication), SC (System & Communications Protection).
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.controlFamilyMatches.toFixed(1)}</span>
                                   </div>
                                 )}
                                 {recommendation.scoreBreakdown.designElementMatches > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Design Element Matches:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Design Element Matches:</span>
+                                      <button
+                                        onMouseEnter={() => setShowDesignElementTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowDesignElementTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showDesignElementTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Design Element Matches Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> +2 points per keyword match and +3 points per system type match in your design elements.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Your system architecture and components directly determine which security controls are applicable and necessary.
+                                            </div>
+                                            <div>
+                                              <strong>Examples:</strong> A "PostgreSQL Database" design element matches database STIGs; "Apache Web Server" matches web server STIGs.
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.designElementMatches.toFixed(1)}</span>
                                   </div>
                                 )}
                                 {recommendation.scoreBreakdown.technologySpecificBonus > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Technology Bonus:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Technology Bonus:</span>
+                                      <button
+                                        onMouseEnter={() => setShowTechBonusTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowTechBonusTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showTechBonusTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Technology Bonus Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> +6 points awarded when your system design elements contain technologies that exactly match this STIG's requirements.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Direct technology matches indicate this STIG is highly relevant to your specific technology stack, ensuring security controls are tailored to your actual infrastructure.
+                                            </div>
+                                            <div>
+                                              <strong>Detected matches:</strong> Technologies like PostgreSQL, Docker, Kubernetes, or Apache in your design elements trigger specific STIG recommendations.
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.technologySpecificBonus.toFixed(1)}</span>
                                   </div>
                                 )}
                                 {recommendation.scoreBreakdown.environmentBonus > 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Environment Bonus:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Environment Bonus:</span>
+                                      <button
+                                        onMouseEnter={() => setShowEnvBonusTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowEnvBonusTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showEnvBonusTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Environment Bonus Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> +5 points awarded when application security STIGs are recommended for development environments.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Development environments with applications, APIs, databases, and web services require stronger application security controls to protect against common development-related vulnerabilities.
+                                            </div>
+                                            <div>
+                                              <strong>Detection criteria:</strong> System contains elements like Node.js, JavaScript, PostgreSQL, APIs, web servers, or application components.
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-green-600">+{recommendation.scoreBreakdown.environmentBonus.toFixed(1)}</span>
                                   </div>
                                 )}
                                 {recommendation.scoreBreakdown.penalties !== 0 && (
-                                  <div className="flex justify-between">
-                                    <span>Penalties:</span>
+                                  <div className="flex justify-between items-center relative">
+                                    <div className="flex items-center">
+                                      <span>Penalties:</span>
+                                      <button
+                                        onMouseEnter={() => setShowPenaltiesTooltip(recommendation.stigFamily.id)}
+                                        onMouseLeave={() => setShowPenaltiesTooltip(null)}
+                                        className="ml-1 text-gray-400 hover:text-gray-600 transition-colors"
+                                      >
+                                        <HelpCircle className="h-3 w-3" />
+                                      </button>
+                                      {showPenaltiesTooltip === recommendation.stigFamily.id && (
+                                        <div className="absolute z-10 bottom-full left-0 mb-2 w-80 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg">
+                                          <div className="font-semibold mb-2">Infrastructure Penalty Explanation</div>
+                                          <div className="space-y-2">
+                                            <div>
+                                              <strong>How it's calculated:</strong> -3 points applied to infrastructure STIGs when detected in development environments.
+                                            </div>
+                                            <div>
+                                              <strong>Why it matters:</strong> Infrastructure STIGs (like Windows Server, Cisco, VMware) are typically lower priority for application development projects, which focus more on application security.
+                                            </div>
+                                            <div>
+                                              <strong>When applied:</strong> System is detected as a development environment but matches infrastructure-focused STIG families.
+                                            </div>
+                                          </div>
+                                          <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                                        </div>
+                                      )}
+                                    </div>
                                     <span className="font-medium text-red-600">{recommendation.scoreBreakdown.penalties.toFixed(1)}</span>
                                   </div>
                                 )}
