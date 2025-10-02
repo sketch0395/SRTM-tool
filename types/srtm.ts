@@ -73,6 +73,20 @@ export interface StigRequirement {
   updatedAt: Date;
 }
 
+export interface GroupedStigRequirement {
+  title: string;
+  count: number;
+  family?: string;
+  severity: 'CAT I' | 'CAT II' | 'CAT III';
+  description: string;
+  checkText: string;
+  fixText: string;
+  stigIds: string[]; // Array of STIG IDs that have this title
+  requirements: StigRequirement[]; // Full requirement objects for detailed view
+  status: 'Not Started' | 'In Progress' | 'Completed' | 'Exception Requested';
+  implementationStatus: 'Open' | 'NotAFinding' | 'Not_Applicable';
+}
+
 export interface StigImportResult {
   success: boolean;
   imported: number;

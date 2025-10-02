@@ -3,7 +3,7 @@
  * Handles parsing and processing of STIG CSV files
  */
 
-import { StigRequirement } from '../types/srtm';
+import { StigRequirement, GroupedStigRequirement } from '../types/srtm';
 
 export interface DetailedStigRequirement extends Omit<StigRequirement, 'id' | 'createdAt' | 'updatedAt'> {
   // All other fields from StigRequirement interface
@@ -328,3 +328,69 @@ export const convertToStigRequirements = convertStigRequirementsToMatrix;
 
 // Empty database for backward compatibility
 export const stigRequirementsDatabase: { [familyId: string]: DetailedStigRequirement[] } = {};
+
+/**
+ * Group STIG requirements by title to avoid duplicate display
+ * Requirements with the same title are grouped together with a count
+ */
+export function groupStigRequirementsByTitle(requirements: StigRequirement[]): GroupedStigRequirement[] {
+  const groupedMap = new Map<string, GroupedStigRequirement>();
+
+  requirements.forEach(req => {
+    const key = req.title.trim();
+    
+    if (groupedMap.has(key)) {
+      const existing = groupedMap.get(key)!;
+      existing.count += 1;
+      existing.stigIds.push(req.stigId);
+      existing.requirements.push(req);
+      
+      // Update status to highest priority status
+      if (req.status === 'Completed' && existing.status !== 'Completed') {
+        existing.status = 'Completed';
+      } else if (req.status === 'In Progress' && existing.status === 'Not Started') {
+        existing.status = 'In Progress';
+      } else if (req.status === 'Exception Requested') {
+        existing.status = 'Exception Requested';
+      }
+      
+      // Update implementation status to most severe
+      if (req.implementationStatus === 'Open' && existing.implementationStatus !== 'Open') {
+        existing.implementationStatus = 'Open';
+      } else if (req.implementationStatus === 'NotAFinding' && existing.implementationStatus === 'Not_Applicable') {
+        existing.implementationStatus = 'NotAFinding';
+      }
+    } else {
+      groupedMap.set(key, {
+        title: req.title,
+        count: 1,
+        family: req.family,
+        severity: req.severity,
+        description: req.description,
+        checkText: req.checkText,
+        fixText: req.fixText,
+        stigIds: [req.stigId],
+        requirements: [req],
+        status: req.status,
+        implementationStatus: req.implementationStatus
+      });
+    }
+  });
+
+  return Array.from(groupedMap.values()).sort((a, b) => {
+    // Sort by severity first (CAT I > CAT II > CAT III), then by title
+    const severityOrder = { 'CAT I': 1, 'CAT II': 2, 'CAT III': 3 };
+    const severityDiff = severityOrder[a.severity] - severityOrder[b.severity];
+    if (severityDiff !== 0) return severityDiff;
+    return a.title.localeCompare(b.title);
+  });
+}
+
+/**
+ * Get unique count of STIG requirements by title for a family
+ */
+export function getUniqueStigRequirementCount(familyId: string): number {
+  const requirements = getStoredStigRequirements(familyId);
+  const titleSet = new Set(requirements.map(req => req.title?.trim()).filter(Boolean));
+  return titleSet.size;
+}

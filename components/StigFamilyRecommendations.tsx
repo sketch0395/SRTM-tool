@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
 import { getStigFamilyRecommendations, getImplementationEffort, StigFamilyRecommendation } from '../utils/stigFamilyRecommendations';
-import { stigRequirementsDatabase, getStoredStigRequirements } from '../utils/detailedStigRequirements';
+import { stigRequirementsDatabase, getStoredStigRequirements, getUniqueStigRequirementCount } from '../utils/detailedStigRequirements';
 import { Shield, Target, Clock, AlertTriangle, CheckCircle, Info, Download, CheckSquare, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface StigRecommendationProps {
@@ -69,23 +69,45 @@ export default function StigFamilyRecommendations({ requirements, designElements
       return stigFamily.actualRequirements;
     }
     
-    // Fallback to uploaded STIG requirements
+    // Fallback to uploaded STIG requirements (unique count by title)
     const uploadedRequirements = getStoredStigRequirements(stigFamily.id);
     if (uploadedRequirements.length > 0) {
-      return uploadedRequirements.length;
+      // Count unique titles instead of total requirements
+      const uniqueTitles = new Set(uploadedRequirements.map(req => req.title?.trim()).filter(Boolean));
+      return uniqueTitles.size;
     }
     
     // Fallback to database (legacy)
     const requirements = stigRequirementsDatabase[stigFamily.id];
-    return requirements ? requirements.length : 0;
+    if (requirements) {
+      const uniqueTitles = new Set(requirements.map(req => req.title?.trim()).filter(Boolean));
+      return uniqueTitles.size;
+    }
+    return 0;
   };
 
-  const getTotalSelectedRequirements = (): number => {
-    return Array.from(selectedStigIds).reduce((total, stigId) => {
+  const getTotalSelectedRequirements = (): { unique: number; total: number } => {
+    let uniqueCount = 0;
+    let totalCount = 0;
+    
+    Array.from(selectedStigIds).forEach(stigId => {
       const recommendation = recommendations.find(rec => rec.stigFamily.id === stigId);
-      if (!recommendation) return total;
-      return total + getRequirementCount(recommendation.stigFamily);
-    }, 0);
+      if (!recommendation) return;
+      
+      // Get unique count (by title)
+      uniqueCount += getRequirementCount(recommendation.stigFamily);
+      
+      // Get total count (all individual requirements)
+      const uploadedRequirements = getStoredStigRequirements(stigId);
+      if (uploadedRequirements.length > 0) {
+        totalCount += uploadedRequirements.length;
+      } else {
+        // Fallback to actualRequirements if no uploaded data
+        totalCount += recommendation.stigFamily.actualRequirements || 0;
+      }
+    });
+    
+    return { unique: uniqueCount, total: totalCount };
   };
 
   const getPriorityColor = (priority: string) => {
@@ -141,7 +163,10 @@ export default function StigFamilyRecommendations({ requirements, designElements
                     {selectedStigIds.size} of {recommendations.length} STIG families selected
                   </div>
                   <div className="text-sm text-blue-700">
-                    {getTotalSelectedRequirements()} detailed requirements ready to load
+                    {(() => {
+                      const counts = getTotalSelectedRequirements();
+                      return `${counts.unique} unique requirements (${counts.total} total instances) ready to load`;
+                    })()}
                   </div>
                 </div>
               </div>
@@ -166,7 +191,10 @@ export default function StigFamilyRecommendations({ requirements, designElements
                 className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
                 <Download className="h-4 w-4 mr-2" />
-                Load {selectedStigIds.size} STIG Families ({getTotalSelectedRequirements()} Requirements)
+                {(() => {
+                  const counts = getTotalSelectedRequirements();
+                  return `Load ${selectedStigIds.size} STIG Families (${counts.unique} Unique Requirements)`;
+                })()}
               </button>
             )}
           </div>
@@ -229,6 +257,15 @@ export default function StigFamilyRecommendations({ requirements, designElements
                     <div className="bg-gray-50 rounded-lg p-3">
                       <div className="text-sm text-gray-500">Requirements</div>
                       <div className="text-lg font-semibold text-gray-900">{requirementCount}</div>
+                      <div className="text-xs text-gray-500 mt-1">unique titles</div>
+                      {(() => {
+                        const uploadedRequirements = getStoredStigRequirements(recommendation.stigFamily.id);
+                        const totalCount = uploadedRequirements.length || recommendation.stigFamily.actualRequirements || 0;
+                        if (totalCount > requirementCount) {
+                          return <div className="text-xs text-gray-400 mt-1">({totalCount} total instances)</div>;
+                        }
+                        return null;
+                      })()}
                       {recommendation.stigFamily.validated && (
                         <div className="text-xs text-green-600 mt-1 flex items-center">
                           <CheckSquare className="h-3 w-3 mr-1" />
@@ -343,7 +380,10 @@ export default function StigFamilyRecommendations({ requirements, designElements
                   Ready to load {selectedStigIds.size} STIG families
                 </div>
                 <div className="text-sm text-green-700">
-                  This will add {getTotalSelectedRequirements()} detailed security requirements to your project
+                  {(() => {
+                    const counts = getTotalSelectedRequirements();
+                    return `This will add ${counts.unique} unique security requirements (${counts.total} total instances) to your project`;
+                  })()}
                 </div>
               </div>
             </div>
