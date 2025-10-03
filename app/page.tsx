@@ -78,6 +78,18 @@ export default function Home() {
   };
 
   const handleSaveWorkflow = () => {
+    // Prompt user for workflow name
+    const workflowName = window.prompt(
+      'Enter a name for this workflow:',
+      'my-workflow'
+    );
+    
+    // If user cancels, don't save
+    if (!workflowName) return;
+    
+    // Sanitize filename (remove invalid characters)
+    const sanitizedName = workflowName.replace(/[^a-z0-9_-]/gi, '-').toLowerCase();
+    
     const workflowData: WorkflowData = {
       systemCategorizations: data.systemCategorizations,
       designElements: data.designElements,
@@ -91,7 +103,7 @@ export default function Home() {
     
     const link = document.createElement('a');
     link.href = url;
-    link.download = `workflow-${new Date().toISOString().split('T')[0]}.json`;
+    link.download = `${sanitizedName}-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
