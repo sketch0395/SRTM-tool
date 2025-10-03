@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RH_OpenShift_Container_Platform_4-12_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.4543020-05:00",
+  "stigId": "rh_openshift_container_platform_4_12_stig",
+  "name": "Red Hat OpenShift Container Platform 4.x Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_BMC_MAINVIEW_for_zOS_for_ACF2_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.0058817-05:00",
+  "stigId": "zos_bmc_mainview_for_zos_for_acf2_stig",
+  "name": "z/OS BMC  MAINVIEW for z/OS for ACF2 Security Technical Implementation Guide"
+}

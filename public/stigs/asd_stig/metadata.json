@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_ASD_STIG_V6R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "6",
+  "extractedAt": "2025-10-03T10:13:34.0387162-05:00",
+  "stigId": "asd_stig",
+  "name": "Application Security and Development Security Technical Implementation Guide"
+}

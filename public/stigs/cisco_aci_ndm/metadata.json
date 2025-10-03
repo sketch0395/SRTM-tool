@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_ACI_NDM_V1R1_STIG_Manual-xccdf.xml",
+  "releaseDate": "2025-05-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.1728647-05:00",
+  "stigId": "cisco_aci_ndm",
+  "name": "Cisco ACI NDM Security Technical Implementation Guide"
+}

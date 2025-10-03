@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_8-0_VCSA_EAM_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.9232780-05:00",
+  "stigId": "vmw_vsphere_8_0_vcsa_eam_stig",
+  "name": "VMware vSphere 8.0 vCenter Appliance ESX Agent Manager (EAM) Security Technical Implementation Guide"
+}

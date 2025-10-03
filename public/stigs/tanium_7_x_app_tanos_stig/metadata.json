@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Tanium_7-x_App_TanOS_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.6552754-05:00",
+  "stigId": "tanium_7_x_app_tanos_stig",
+  "name": "Tanium 7.x Application on TanOS Security Technical Implementation Guide"
+}

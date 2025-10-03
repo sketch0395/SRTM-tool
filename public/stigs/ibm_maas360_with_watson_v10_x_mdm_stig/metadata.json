@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_MaaS360_with_Watson_v10-x_MDM_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2019-04-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6728148-05:00",
+  "stigId": "ibm_maas360_with_watson_v10_x_mdm_stig",
+  "name": "IBM MaaS360 with Watson v10.x MDM Security Technical Implementation Guide"
+}

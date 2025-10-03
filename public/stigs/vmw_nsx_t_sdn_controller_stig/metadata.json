@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX-T_SDN_Controller_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2022-03-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7270723-05:00",
+  "stigId": "vmw_nsx_t_sdn_controller_stig",
+  "name": "VMware NSX-T SDN Controller Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HP_FlexFabric_Switch_L2S_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2020-07-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.5875419-05:00",
+  "stigId": "hp_flexfabric_switch_l2s_stig",
+  "name": "HP FlexFabric Switch L2S Security Technical Implementation Guide"
+}

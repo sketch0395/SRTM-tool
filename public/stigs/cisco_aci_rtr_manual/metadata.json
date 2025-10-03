@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_ACI_RTR_Manual_V1R1_STIG_Manual-xccdf.xml",
+  "releaseDate": "2025-05-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.1787756-05:00",
+  "stigId": "cisco_aci_rtr_manual",
+  "name": "Cisco ACI Router Security Technical Implementation Guide"
+}

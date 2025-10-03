@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_zSecure_Suite_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.7304275-05:00",
+  "stigId": "ibm_zsecure_suite_stig",
+  "name": "IBM zSecure Suite Security Technical Implementation Guide"
+}

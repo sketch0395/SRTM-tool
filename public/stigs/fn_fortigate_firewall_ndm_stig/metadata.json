@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_FN_FortiGate_Firewall_NDM_STIG_V1R4_Manual-xccdf.xml",
+  "releaseDate": "2023-07-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.4308964-05:00",
+  "stigId": "fn_fortigate_firewall_ndm_stig",
+  "name": "Fortinet FortiGate Firewall NDM Security Technical Implementation Guide"
+}

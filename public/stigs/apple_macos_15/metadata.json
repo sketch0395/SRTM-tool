@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Apple_macOS_15_V1R4_STIG_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.9794911-05:00",
+  "stigId": "apple_macos_15",
+  "name": "Apple macOS 15 (Sequoia) Security Technical Implementation Guide"
+}

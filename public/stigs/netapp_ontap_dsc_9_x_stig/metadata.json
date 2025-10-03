@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_NetApp_ONTAP_DSC_9-x_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.2256826-05:00",
+  "stigId": "netapp_ontap_dsc_9_x_stig",
+  "name": "NetApp ONTAP DSC 9.x Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_JBoss_EAP_6-3_STIG_V2R6_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.7895843-05:00",
+  "stigId": "jboss_eap_6_3_stig",
+  "name": "JBoss Enterprise Application Platform 6.3 Security Technical Implementation Guide"
+}

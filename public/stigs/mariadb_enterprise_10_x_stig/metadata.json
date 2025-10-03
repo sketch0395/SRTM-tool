@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MariaDB_Enterprise_10-x_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.9189033-05:00",
+  "stigId": "mariadb_enterprise_10_x_stig",
+  "name": "MariaDB Enterprise 10.x Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_IIS_10-0_Site_STIG_V2R12_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0826568-05:00",
+  "stigId": "ms_iis_10_0_site_stig",
+  "name": "Microsoft IIS 10.0 Site Security Technical Implementation Guide"
+}

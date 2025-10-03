@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Redis_Enterprise_6-x_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3882380-05:00",
+  "stigId": "redis_enterprise_6_x_stig",
+  "name": "Redis Enterprise 6.x Security Technical Implementation Guide"
+}

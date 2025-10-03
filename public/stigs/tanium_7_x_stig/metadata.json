@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Tanium_7-x_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.6678621-05:00",
+  "stigId": "tanium_7_x_stig",
+  "name": "Tanium 7.x Security Technical Implementation Guide"
+}

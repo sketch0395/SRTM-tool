@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_CL_AlmaLinux_OS_9_STIG_V1R3_Manual_xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.3475763-05:00",
+  "stigId": "cl_almalinux_os_9_stig",
+  "name": "CloudLinux AlmaLinux OS 9 Security Technical Implementation Guide"
+}

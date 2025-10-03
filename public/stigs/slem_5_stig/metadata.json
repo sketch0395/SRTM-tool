@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SLEM_5_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.4986051-05:00",
+  "stigId": "slem_5_stig",
+  "name": "SUSE Linux Enterprise Micro (SLEM) 5 Security Technical Implementation Guide"
+}

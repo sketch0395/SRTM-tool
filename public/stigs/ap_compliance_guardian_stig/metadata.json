@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_AP_Compliance_Guardian_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2023-03-15",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.9849775-05:00",
+  "stigId": "ap_compliance_guardian_stig",
+  "name": "AvePoint Compliance Guardian Security Technical Implementation Guide"
+}

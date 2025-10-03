@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Anduril_NixOS_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.8862500-05:00",
+  "stigId": "anduril_nixos_stig",
+  "name": "Anduril NixOS Security Technical Implementation Guide"
+}

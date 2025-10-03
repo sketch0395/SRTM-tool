@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Arista_MLS_EOS_4-X_Router_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.0032372-05:00",
+  "stigId": "arista_mls_eos_4_x_router_stig",
+  "name": "Arista MLS EOS 4.X Router Security Technical Implementation Guide"
+}

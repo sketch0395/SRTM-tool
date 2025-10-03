@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_NX-OS_Switch_NDM_STIG_V3R4_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.3145667-05:00",
+  "stigId": "cisco_nx_os_switch_ndm_stig",
+  "name": "Cisco NX OS Switch NDM Security Technical Implementation Guide"
+}

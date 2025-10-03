@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_PAN_Prisma_Cloud_Compute_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3436928-05:00",
+  "stigId": "pan_prisma_cloud_compute_stig",
+  "name": "Palo Alto Networks Prisma Cloud Compute Security Technical Implementation Guide"
+}

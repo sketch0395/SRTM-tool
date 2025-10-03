@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Defender_Antivirus_STIG_V2R4_Manual-xccdf.xml",
+  "releaseDate": "2022-05-31",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0009306-05:00",
+  "stigId": "ms_defender_antivirus_stig",
+  "name": "Microsoft Defender Antivirus Security Technical Implementation Guide"
+}

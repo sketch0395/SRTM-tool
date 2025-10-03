@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_IOS_Switch_RTR_STIG_V3R1_Manual-xccdf.xml",
+  "releaseDate": "2024-07-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.2904904-05:00",
+  "stigId": "cisco_ios_switch_rtr_stig",
+  "name": "Cisco IOS Switch RTR Security Technical Implementation Guide"
+}

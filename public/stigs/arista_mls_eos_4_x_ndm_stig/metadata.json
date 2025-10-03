@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Arista_MLS_EOS_4-X_NDM_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:33.9947211-05:00",
+  "stigId": "arista_mls_eos_4_x_ndm_stig",
+  "name": "Arista MLS EOS 4.X NDM Security Technical Implementation Guide"
+}

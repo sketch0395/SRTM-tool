@@ -1,0 +1,9 @@
+{
+  "extractedAt": "2025-10-03T10:12:19.7458653-05:00",
+  "format": "xml",
+  "name": "EnterpriseDB Postgres Advanced Server (EPAS) Security Technical Implementation Guide",
+  "version": "2",
+  "stigId": "edb_postgres_advanced_server",
+  "filename": "EDB_Postgres_Advanced_Server_STIG.xml",
+  "releaseDate": "2024-07-24"
+}

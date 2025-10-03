@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_7-0_vCA_Photon_OS_STIG_V1R4_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.8053843-05:00",
+  "stigId": "vmw_vsphere_7_0_vca_photon_os_stig",
+  "name": "VMware vSphere 7.0 vCenter Appliance Photon OS Security Technical Implementation Guide"
+}

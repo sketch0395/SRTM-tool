@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IB_8-x_DNS_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.7443768-05:00",
+  "stigId": "ib_8_x_dns_stig",
+  "name": "Infoblox 8.x DNS Security Technical Implementation Guide"
+}

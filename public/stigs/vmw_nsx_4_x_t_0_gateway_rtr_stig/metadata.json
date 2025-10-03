@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX_4-x_T-0_Gateway_RTR_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7627486-05:00",
+  "stigId": "vmw_nsx_4_x_t_0_gateway_rtr_stig",
+  "name": "VMware NSX 4.x Tier-0 Gateway Router Security Technical Implementation Guide"
+}

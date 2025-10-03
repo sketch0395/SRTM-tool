@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_FS_NAC_STIG_V2R4_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.4420848-05:00",
+  "stigId": "fs_nac_stig",
+  "name": "Forescout Network Access Control Security Technical Implementation Guide"
+}

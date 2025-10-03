@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Adobe_Acrobat_Reader_DC_Continuous_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2021-07-23",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:33.8663779-05:00",
+  "stigId": "adobe_acrobat_reader_dc_continuous_stig",
+  "name": "Adobe Acrobat Reader DC Continuous Track Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RGS_RKE2_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3973808-05:00",
+  "stigId": "rgs_rke2_stig",
+  "name": "Rancher Government Solutions RKE2 Security Technical Implementation Guide"
+}

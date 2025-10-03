@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_PAN_IDPS_STIG_V3R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.3698869-05:00",
+  "stigId": "pan_idps_stig",
+  "name": "Palo Alto Networks IDPS Security Technical Implementation Guide"
+}

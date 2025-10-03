@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_SharePointDesigner_2013_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2018-04-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.1146986-05:00",
+  "stigId": "ms_sharepointdesigner_2013_stig",
+  "name": "MS SharePoint Designer 2013 Security Technical Implementation Guide"
+}

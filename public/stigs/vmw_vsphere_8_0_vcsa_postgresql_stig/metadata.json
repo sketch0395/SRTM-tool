@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_8-0_VCSA_PostgreSQL_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.9427257-05:00",
+  "stigId": "vmw_vsphere_8_0_vcsa_postgresql_stig",
+  "name": "VMware vSphere 8.0 vCenter Appliance PostgreSQL Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_8-0_VCSA_Perfcharts_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-08-01",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.9383362-05:00",
+  "stigId": "vmw_vsphere_8_0_vcsa_perfcharts_stig",
+  "name": "VMware vSphere 8.0 vCenter Appliance Perfcharts Security Technical Implementation Guide"
+}

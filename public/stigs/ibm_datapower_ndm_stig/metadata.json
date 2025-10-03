@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_DataPower_NDM_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2017-10-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6553477-05:00",
+  "stigId": "ibm_datapower_ndm_stig",
+  "name": "IBM DataPower Network Device Management Security Technical Implementation Guide"
+}

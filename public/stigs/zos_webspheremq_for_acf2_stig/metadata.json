@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_WebsphereMQ_for_ACF2_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.1088690-05:00",
+  "stigId": "zos_webspheremq_for_acf2_stig",
+  "name": "zOS WebsphereMQ for ACF2 Security Technical Implementation Guide"
+}

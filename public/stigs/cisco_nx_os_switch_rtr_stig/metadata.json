@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_NX-OS_Switch_RTR_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.3240098-05:00",
+  "stigId": "cisco_nx_os_switch_rtr_stig",
+  "name": "Cisco NX OS Switch RTR Security Technical Implementation Guide"
+}

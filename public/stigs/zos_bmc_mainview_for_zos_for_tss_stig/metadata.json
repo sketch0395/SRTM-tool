@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_BMC_MAINVIEW_for_zOS_for_TSS_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.2804325-05:00",
+  "stigId": "zos_bmc_mainview_for_zos_for_tss_stig",
+  "name": "z/OS BMC MAINVIEW for z/OS for TSS Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_IBM_CICS_Transaction_Server_TSS_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.3365624-05:00",
+  "stigId": "zos_ibm_cics_transaction_server_tss_stig",
+  "name": "z/OS IBM CICS Transaction Server for TSS Security Technical Implementation Guide"
+}

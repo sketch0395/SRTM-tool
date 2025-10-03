@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Microsoft_Visio_2016_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2016-11-14",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.9547767-05:00",
+  "stigId": "microsoft_visio_2016_stig",
+  "name": "Microsoft Visio 2016 Security Technical Implementation Guide"
+}

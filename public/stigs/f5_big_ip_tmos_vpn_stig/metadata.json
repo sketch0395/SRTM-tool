@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_F5_BIG-IP_TMOS_VPN_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-09-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.4233273-05:00",
+  "stigId": "f5_big_ip_tmos_vpn_stig",
+  "name": "F5 BIG-IP TMOS VPN Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Dell_OS10_Switch_RTR_STIG-V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-12-10",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.3828243-05:00",
+  "stigId": "dell_os10_switch_rtr_stig_v1r1_manual_xccdf",
+  "name": "Dell OS10 Switch Router Security Technical Implementation Guide"
+}

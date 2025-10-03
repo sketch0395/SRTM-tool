@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_PAN_NDM_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.3760439-05:00",
+  "stigId": "pan_ndm_stig",
+  "name": "Palo Alto Networks NDM Security Technical Implementation Guide"
+}

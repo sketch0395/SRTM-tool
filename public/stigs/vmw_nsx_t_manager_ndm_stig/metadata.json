@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX-T_Manager_NDM_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2023-07-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7222217-05:00",
+  "stigId": "vmw_nsx_t_manager_ndm_stig",
+  "name": "VMware NSX-T Manager NDM Security Technical Implementation Guide"
+}

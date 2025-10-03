@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_PAN_ALG_STIG_V3R4_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.3642582-05:00",
+  "stigId": "pan_alg_stig",
+  "name": "Palo Alto Networks ALG Security Technical Implementation Guide"
+}

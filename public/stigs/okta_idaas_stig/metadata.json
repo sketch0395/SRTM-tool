@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Okta_IDaaS_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.2692837-05:00",
+  "stigId": "okta_idaas_stig",
+  "name": "Okta Identity as a Service (IDaaS) Security Technical Implementation Guide"
+}

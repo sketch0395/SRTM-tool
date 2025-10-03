@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Office_System_2016_STIG_V2R4_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.1002979-05:00",
+  "stigId": "ms_office_system_2016_stig",
+  "name": "Microsoft Office System 2016 Security Technical Implementation Guide"
+}

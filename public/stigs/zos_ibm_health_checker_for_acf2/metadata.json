@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_IBM_Health_Checker_for_ACF2_V7R1_STIG_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.0690817-05:00",
+  "stigId": "zos_ibm_health_checker_for_acf2",
+  "name": "z/OS IBM Health Checker for ACF2 Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_CA_IDMS_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.1288052-05:00",
+  "stigId": "ca_idms_stig",
+  "name": "CA IDMS Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Akamai_KSD_Service_IL2_ALG_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2017-09-12",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.8726099-05:00",
+  "stigId": "akamai_ksd_service_il2_alg_stig",
+  "name": "Akamai KSD Service Impact Level 2 ALG Security Technical Implementation Guide"
+}

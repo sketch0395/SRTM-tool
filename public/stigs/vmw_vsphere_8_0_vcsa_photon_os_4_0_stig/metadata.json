@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_8-0_VCSA_Photon_OS_4-0_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2023-10-31",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.8848389-05:00",
+  "stigId": "vmw_vsphere_8_0_vcsa_photon_os_4_0_stig",
+  "name": "VMware vSphere 8.0 vCenter Appliance Photon OS 4.0 Security Technical Implementation Guide"
+}

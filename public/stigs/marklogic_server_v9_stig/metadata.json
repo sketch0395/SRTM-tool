@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MarkLogic_Server_v9_STIG_V3R2_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.9265386-05:00",
+  "stigId": "marklogic_server_v9_stig",
+  "name": "MarkLogic Server v9 Security Technical Implementation Guide"
+}

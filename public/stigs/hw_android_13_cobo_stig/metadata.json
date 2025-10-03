@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HW_Android_13_COBO_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6055911-05:00",
+  "stigId": "hw_android_13_cobo_stig",
+  "name": "Honeywell Android 13 COBO Security Technical Implementation Guide"
+}

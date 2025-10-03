@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Microsoft_Project_2016_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2016-11-14",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.9448287-05:00",
+  "stigId": "microsoft_project_2016_stig",
+  "name": "Microsoft Project 2016 Security Technical Implementation Guide"
+}

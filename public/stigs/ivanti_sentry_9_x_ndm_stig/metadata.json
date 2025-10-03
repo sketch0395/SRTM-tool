@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Ivanti_Sentry_9-x_NDM_STIG_V3R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.7790744-05:00",
+  "stigId": "ivanti_sentry_9_x_ndm_stig",
+  "name": "Ivanti Sentry 9.x NDM Security Technical Implementation Guide"
+}

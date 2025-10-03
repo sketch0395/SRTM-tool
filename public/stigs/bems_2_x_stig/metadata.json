@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_BEMS_2-x_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2020-07-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.0628524-05:00",
+  "stigId": "bems_2_x_stig",
+  "name": "BlackBerry Enterprise Mobility Server 2.x Security Technical Implementation Guide"
+}

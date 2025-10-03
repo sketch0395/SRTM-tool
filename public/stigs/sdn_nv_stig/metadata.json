@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SDN_NV_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2017-02-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.4787444-05:00",
+  "stigId": "sdn_nv_stig",
+  "name": "SDN Using NV Security Technical Implementation Guide"
+}

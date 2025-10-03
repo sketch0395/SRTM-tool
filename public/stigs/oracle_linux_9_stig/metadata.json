@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Oracle_Linux_9_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.3279814-05:00",
+  "stigId": "oracle_linux_9_stig",
+  "name": "Oracle Linux 9 Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SEL-2740S_L2S_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2019-05-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.4838089-05:00",
+  "stigId": "sel_2740s_l2s_stig",
+  "name": "SEL-2740S L2S Security Technical Implementation Guide"
+}

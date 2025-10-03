@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Akamai_KSD_Service_IL2_NDM_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2017-09-12",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.8775102-05:00",
+  "stigId": "akamai_ksd_service_il2_ndm_stig",
+  "name": "Akamai KSD Service Impact Level 2 NDM Security Technical Implementation Guide"
+}

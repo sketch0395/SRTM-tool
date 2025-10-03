@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import https from 'https';
+import { hasLocalStig, getLocalStigContent, getLocalStigMetadata } from '@/utils/localStigLibrary';
 
 /**
  * STIG Import API
- * Fetches STIG requirements from stigviewer.com or accepts manual upload
+ * Priority order:
+ * 1. Check local STIG library (/public/stigs/)
+ * 2. Fallback to stigviewer.com
+ * 3. Accept manual upload
  * 
  * Note: stigviewer.com has SSL certificate issues, so we bypass cert validation
  */
@@ -28,13 +32,13 @@ interface StigImportResult {
   releaseDate: string;
   requirements: StigRequirement[];
   totalRequirements: number;
-  source: 'stigviewer' | 'manual' | 'cache';
+  source: 'stigviewer' | 'manual' | 'cache' | 'local';
   message?: string;
   error?: string;
 }
 
 /**
- * GET - Fetch STIG from stigviewer.com
+ * GET - Fetch STIG from local library or stigviewer.com
  * Query params: stigId (e.g., 'apache_server_2.4_unix')
  */
 export async function GET(request: NextRequest) {
@@ -49,6 +53,62 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // 🎯 PRIORITY 1: Check local STIG library first
+    console.log(`🔍 Checking local STIG library for: ${stigId}`);
+    
+    if (hasLocalStig(stigId)) {
+      console.log(`✅ Found STIG in local library: ${stigId}`);
+      
+      try {
+        const metadata = getLocalStigMetadata(stigId);
+        const content = getLocalStigContent(stigId);
+        
+        if (content && metadata) {
+          console.log(`📄 Reading local STIG file: ${metadata.filename}`);
+          
+          // Determine format and parse accordingly
+          const isXml = metadata.format === 'xml' || metadata.filename.toLowerCase().endsWith('.xml');
+          
+          if (isXml) {
+            console.log(`🔄 Parsing local XML file...`);
+            const stigData = parseXccdfXml(content, stigId);
+            
+            if (stigData.requirements.length > 0) {
+              return NextResponse.json({
+                success: true,
+                ...stigData,
+                version: metadata.version,
+                releaseDate: metadata.releaseDate,
+                source: 'local',
+                message: `✅ Successfully imported ${stigData.requirements.length} requirements from local library (${metadata.filename})`
+              } as StigImportResult);
+            }
+          } else {
+            console.log(`🔄 Parsing local CSV file...`);
+            const stigData = parseStigCsv(content, stigId);
+            
+            if (stigData.requirements.length > 0) {
+              return NextResponse.json({
+                success: true,
+                ...stigData,
+                stigName: metadata.name,
+                version: metadata.version,
+                releaseDate: metadata.releaseDate,
+                source: 'local',
+                message: `✅ Successfully imported ${stigData.requirements.length} requirements from local library (${metadata.filename})`
+              } as StigImportResult);
+            }
+          }
+        }
+      } catch (localError: any) {
+        console.error(`❌ Error reading local STIG: ${localError.message}`);
+        // Continue to stigviewer.com fallback
+      }
+    } else {
+      console.log(`ℹ️ STIG not found in local library, will try stigviewer.com`);
+    }
+
+    // 🌐 FALLBACK: Try stigviewer.com
     console.log(`🔍 Fetching STIG from stigviewer.com: ${stigId}`);
 
     // Try JSON API first (has complete severity data)

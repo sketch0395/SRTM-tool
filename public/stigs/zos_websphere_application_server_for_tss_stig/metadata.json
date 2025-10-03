@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_Websphere_Application_Server_for_TSS_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.3876161-05:00",
+  "stigId": "zos_websphere_application_server_for_tss_stig",
+  "name": "zOS Websphere Application Server for TSS Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_8-0_Virtual_Machine_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-08-01",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.9611644-05:00",
+  "stigId": "vmw_vsphere_8_0_virtual_machine_stig",
+  "name": "VMware vSphere 8.0 Virtual Machine Security Technical Implementation Guide"
+}

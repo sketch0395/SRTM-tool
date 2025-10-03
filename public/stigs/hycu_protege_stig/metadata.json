@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HYCU_Protege_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6186925-05:00",
+  "stigId": "hycu_protege_stig",
+  "name": "HYCU Protege Security Technical Implementation Guide"
+}

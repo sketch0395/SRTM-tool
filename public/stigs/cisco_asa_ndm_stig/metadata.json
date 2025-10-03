@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_ASA_NDM_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.1969012-05:00",
+  "stigId": "cisco_asa_ndm_stig",
+  "name": "Cisco ASA NDM Security Technical Implementation Guide"
+}

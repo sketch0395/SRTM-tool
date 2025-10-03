@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SS_Android_15_KPE_3-x_COBO_STIG_V1R1_Manual_xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.5938025-05:00",
+  "stigId": "ss_android_15_kpe_3_x_cobo_stig",
+  "name": "Samsung Android OS 15 with Knox 3.x COBO Security Technical Implementation Guide"
+}

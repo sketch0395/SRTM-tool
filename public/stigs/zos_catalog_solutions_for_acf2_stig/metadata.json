@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_Catalog_Solutions_for_ACF2_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.0137570-05:00",
+  "stigId": "zos_catalog_solutions_for_acf2_stig",
+  "name": "z/OS Catalog Solutions for ACF2 Security Technical Implementation Guide"
+}

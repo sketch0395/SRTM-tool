@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_BMC_CONTROL-M_for_TSS_STIG_V7R1_Manual_xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.2629746-05:00",
+  "stigId": "zos_bmc_control_m_for_tss_stig",
+  "name": "zOS BMC CONTROL-M for TSS Security Technical Implementation Guide"
+}

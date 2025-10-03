@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX-T_T-0_Gateway_FW_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2023-07-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7323253-05:00",
+  "stigId": "vmw_nsx_t_t_0_gateway_fw_stig",
+  "name": "VMware NSX-T Tier-0 Gateway Firewall Security Technical Implementation Guide"
+}

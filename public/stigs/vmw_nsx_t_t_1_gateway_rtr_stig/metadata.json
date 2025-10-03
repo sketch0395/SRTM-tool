@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX-T_T-1_Gateway_RTR_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2022-03-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7457899-05:00",
+  "stigId": "vmw_nsx_t_t_1_gateway_rtr_stig",
+  "name": "VMware NSX-T Tier 1 Gateway RTR Security Technical Implementation Guide"
+}

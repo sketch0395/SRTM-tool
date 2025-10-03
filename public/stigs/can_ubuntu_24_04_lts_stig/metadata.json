@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_CAN_Ubuntu_24-04_LTS_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.1217570-05:00",
+  "stigId": "can_ubuntu_24_04_lts_stig",
+  "name": "Canonical Ubuntu 24.04 LTS Security Technical Implementation Guide"
+}

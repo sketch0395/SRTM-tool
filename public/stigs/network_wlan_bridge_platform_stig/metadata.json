@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Network_WLAN_Bridge_Platform_STIG_V7R2_Manual-xccdf.xml",
+  "releaseDate": "2023-04-27",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:35.2561695-05:00",
+  "stigId": "network_wlan_bridge_platform_stig",
+  "name": "Network WLAN Bridge Platform Security Technical Implementation Guide"
+}

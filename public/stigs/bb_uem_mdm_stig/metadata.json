@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_BB_UEM_MDM_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2021-01-22",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.0576385-05:00",
+  "stigId": "bb_uem_mdm_stig",
+  "name": "BlackBerry UEM Security Technical Implementation Guide"
+}

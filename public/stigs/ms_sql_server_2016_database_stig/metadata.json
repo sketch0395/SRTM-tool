@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_SQL_Server_2016_Database_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.1255161-05:00",
+  "stigId": "ms_sql_server_2016_database_stig",
+  "name": "MS SQL Server 2016 Database Security Technical Implementation Guide"
+}

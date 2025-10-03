@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_BMC_CONTROL-M_for_ACF2_STIG_V7R1_Manual_xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:35.9887669-05:00",
+  "stigId": "zos_bmc_control_m_for_acf2_stig",
+  "name": "z/OS BMC CONTROL-M for ACF2 Security Technical Implementation Guide"
+}

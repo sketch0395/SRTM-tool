@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_AvePoint_DocAve_6_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2022-08-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.0435996-05:00",
+  "stigId": "avepoint_docave_6_stig",
+  "name": "AvePoint DocAve 6 Security Technical Implementation Guide"
+}

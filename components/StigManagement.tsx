@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { StigRequirement, GroupedStigRequirement } from '../types/srtm';
 import { STIG_FAMILIES } from '../utils/stigFamilyRecommendations';
 import { groupStigRequirementsByTitle } from '../utils/detailedStigRequirements';
-import { ChevronDown, ChevronRight, Trash2, Hash, Eye, EyeOff, Upload } from 'lucide-react';
+import { ChevronDown, ChevronRight, Trash2, Hash, Eye, EyeOff, Upload, Database } from 'lucide-react';
+import LocalStigBrowser from './LocalStigBrowser';
 
 interface StigManagementProps {
   stigRequirements: StigRequirement[];
@@ -16,10 +17,53 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
   const [expandedRequirements, setExpandedRequirements] = useState<Set<string>>(new Set());
   const [showIndividualRequirements, setShowIndividualRequirements] = useState<Set<string>>(new Set());
   const [isUploading, setIsUploading] = useState(false);
+  const [showLocalBrowser, setShowLocalBrowser] = useState(false);
 
   const clearAllStigs = () => {
     if (window.confirm('Are you sure you want to clear all STIG requirements?')) {
       onUpdate([]);
+    }
+  };
+
+  const handleLocalStigImport = async (stigId: string) => {
+    try {
+      const response = await fetch(`/api/import-stig?stigId=${encodeURIComponent(stigId)}`);
+      const result = await response.json();
+
+      if (result.success) {
+        // Convert the imported requirements to match our format
+        const newRequirements: StigRequirement[] = result.requirements.map((req: any) => ({
+          id: req.vulnId || req.id,
+          stigId: req.vulnId || req.stigId || req.id,
+          stigRef: result.stigId || req.stigRef || stigId,
+          family: result.stigName || req.family || 'Imported STIG',
+          vulnId: req.vulnId,
+          ruleId: req.ruleId,
+          severity: req.severity === 'high' ? 'CAT I' : req.severity === 'low' ? 'CAT III' : 'CAT II',
+          title: req.title,
+          description: req.description,
+          checkText: req.checkText,
+          fixText: req.fixText,
+          cci: req.cci || [],
+          nistControls: req.nistControls || [],
+          applicability: 'Not Reviewed' as const,
+          status: 'Not Started' as const,
+          implementationStatus: 'Open' as const,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }));
+
+        // Add to existing requirements
+        onUpdate([...stigRequirements, ...newRequirements]);
+        
+        const source = result.source === 'local' ? 'local library' : 'stigviewer.com';
+        alert(`✅ Successfully imported ${newRequirements.length} requirements from ${source}`);
+      } else {
+        alert(`❌ Failed to import STIG: ${result.message || result.error}`);
+      }
+    } catch (error) {
+      console.error('Error importing STIG:', error);
+      alert('❌ Error importing STIG. Please try again.');
     }
   };
 
@@ -151,6 +195,13 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
           </p>
         </div>
         <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowLocalBrowser(!showLocalBrowser)}
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+          >
+            <Database className="h-4 w-4" />
+            <span>Local Library</span>
+          </button>
           <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer flex items-center space-x-2">
             <Upload className="h-4 w-4" />
             <span>{isUploading ? 'Uploading...' : 'Upload STIG'}</span>
@@ -172,6 +223,13 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
           </button>
         </div>
       </div>
+
+      {/* Local STIG Browser */}
+      {showLocalBrowser && (
+        <div className="mb-6">
+          <LocalStigBrowser onImport={handleLocalStigImport} />
+        </div>
+      )}
       
       {stigRequirements.length === 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
@@ -180,8 +238,9 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
             You can either:
           </p>
           <ul className="text-sm text-gray-600 mt-2 space-y-1">
+            <li>• Click <strong>Local Library</strong> to browse local STIGs</li>
+            <li>• Use <strong>Upload STIG</strong> to import a CSV or XML file</li>
             <li>• Go to the <strong>STIG Recommendations</strong> tab to select from available STIGs</li>
-            <li>• Or use the <strong>Upload STIG</strong> button above to import a CSV or XML file</li>
           </ul>
         </div>
       )}

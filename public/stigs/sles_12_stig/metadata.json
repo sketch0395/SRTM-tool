@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SLES_12_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.5241018-05:00",
+  "stigId": "sles_12_stig",
+  "name": "SUSE Linux Enterprise Server 12 Security Technical Implementation Guide"
+}

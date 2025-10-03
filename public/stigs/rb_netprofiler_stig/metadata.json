@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RB_NetProfiler_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-07-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3816316-05:00",
+  "stigId": "rb_netprofiler_stig",
+  "name": "Riverbed NetProfiler Security Technical Implementation Guide"
+}

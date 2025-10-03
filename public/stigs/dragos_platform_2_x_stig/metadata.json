@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Dragos_Platform_2-x_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.3981666-05:00",
+  "stigId": "dragos_platform_2_x_stig",
+  "name": "Dragos Platform 2.x Security Technical Implementation Guide"
+}

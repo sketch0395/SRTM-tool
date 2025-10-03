@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HP_FlexFabric_Switch_RTR_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2020-07-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6002558-05:00",
+  "stigId": "hp_flexfabric_switch_rtr_stig",
+  "name": "HP FlexFabric Switch RTR Security Technical Implementation Guide"
+}

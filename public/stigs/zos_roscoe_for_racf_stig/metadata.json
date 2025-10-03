@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_ROSCOE_for_RACF_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.2131593-05:00",
+  "stigId": "zos_roscoe_for_racf_stig",
+  "name": "z/OS ROSCOE for RACF Security Technical Implementation Guide"
+}

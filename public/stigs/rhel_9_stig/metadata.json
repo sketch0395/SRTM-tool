@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RHEL_9_STIG_V2R5_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.4351161-05:00",
+  "stigId": "rhel_9_stig",
+  "name": "Red Hat Enterprise Linux 9 Security Technical Implementation Guide"
+}

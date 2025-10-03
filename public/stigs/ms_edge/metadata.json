@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Edge_V2R3_STIG_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0140212-05:00",
+  "stigId": "ms_edge",
+  "name": "Microsoft Edge Security Technical Implementation Guide"
+}

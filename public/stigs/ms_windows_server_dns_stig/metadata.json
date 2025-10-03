@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Windows_Server_DNS_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.2189699-05:00",
+  "stigId": "ms_windows_server_dns_stig",
+  "name": "Microsoft Windows Server Domain Name System (DNS) Security Technical Implementation Guide"
+}

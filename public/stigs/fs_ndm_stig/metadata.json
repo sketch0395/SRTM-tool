@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_FS_NDM_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.4479969-05:00",
+  "stigId": "fs_ndm_stig",
+  "name": "Forescout Network Device Management Security Technical Implementation Guide"
+}

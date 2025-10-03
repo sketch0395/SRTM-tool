@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_BMC_CONTROL-M_Restart_for_TSS_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.2665599-05:00",
+  "stigId": "zos_bmc_control_m_restart_for_tss_stig",
+  "name": "z/OS BMC CONTROL-M/Restart for TSS Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Active_Directory_Domain_STIG_V3R5_Manual-xccdf.xml",
+  "releaseDate": "2024-09-13",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:33.8412236-05:00",
+  "stigId": "active_directory_domain_stig",
+  "name": "Active Directory Domain Security Technical Implementation Guide"
+}

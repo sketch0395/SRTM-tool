@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_ASA_Firewall_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-07-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.1848039-05:00",
+  "stigId": "cisco_asa_firewall_stig",
+  "name": "Cisco ASA Firewall Security Technical Implementation Guide"
+}

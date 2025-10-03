@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SOL_11_SPARC_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.5482688-05:00",
+  "stigId": "sol_11_sparc_stig",
+  "name": "Solaris 11 SPARC Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_WebSphere_Traditional_V9-x_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2018-08-23",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.6840934-05:00",
+  "stigId": "ibm_websphere_traditional_v9_x_stig",
+  "name": "IBM WebSphere Traditional V9.x Security Technical Implementation Guide"
+}

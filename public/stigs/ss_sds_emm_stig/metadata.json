@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SS_SDS_EMM_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2022-07-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.6328574-05:00",
+  "stigId": "ss_sds_emm_stig",
+  "name": "Samsung SDS EMM Security Technical Implementation Guide"
+}

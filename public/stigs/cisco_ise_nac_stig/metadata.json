@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_ISE_NAC_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.2963012-05:00",
+  "stigId": "cisco_ise_nac_stig",
+  "name": "Cisco ISE NAC Security Technical Implementation Guide"
+}

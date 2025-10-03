@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HPE_3PAR_StoreServ_3.2.x_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2022-01-27",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.5426880-05:00",
+  "stigId": "hpe_3par_storeserv_3_2_x_stig",
+  "name": "HPE 3PAR StoreServ 3.2.x Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_DB2_V10-5_LUW_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2023-07-26",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.6622968-05:00",
+  "stigId": "ibm_db2_v10_5_luw_stig",
+  "name": "IBM DB2 V10.5 LUW Security Technical Implementation Guide"
+}

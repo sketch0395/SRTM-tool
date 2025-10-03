@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Jamf_Pro_v10-x_EMM_STIG_V3R1_Manual-xccdf.xml",
+  "releaseDate": "2024-07-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.7837316-05:00",
+  "stigId": "jamf_pro_v10_x_emm_stig",
+  "name": "Jamf Pro v10.x EMM Security Technical Implementation Guide"
+}

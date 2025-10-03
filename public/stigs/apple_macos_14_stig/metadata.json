@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Apple_macOS_14_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:33.9694765-05:00",
+  "stigId": "apple_macos_14_stig",
+  "name": "Apple macOS 14 (Sonoma) Security Technical Implementation Guide"
+}

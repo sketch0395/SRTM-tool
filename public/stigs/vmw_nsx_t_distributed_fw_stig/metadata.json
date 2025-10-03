@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_NSX-T_Distributed_FW_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2023-07-26",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.7176951-05:00",
+  "stigId": "vmw_nsx_t_distributed_fw_stig",
+  "name": "VMware NSX-T Distributed Firewall Security Technical Implementation Guide"
+}

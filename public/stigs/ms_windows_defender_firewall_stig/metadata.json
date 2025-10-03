@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Windows_Defender_Firewall_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2023-11-09",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.1724011-05:00",
+  "stigId": "ms_windows_defender_firewall_stig",
+  "name": "Microsoft Windows Defender Firewall with Advanced Security Security Technical Implementation Guide"
+}

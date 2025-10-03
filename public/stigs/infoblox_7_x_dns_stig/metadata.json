@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Infoblox_7-x_DNS_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2021-01-22",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.7502230-05:00",
+  "stigId": "infoblox_7_x_dns_stig",
+  "name": "Infoblox 7.x DNS Security Technical Implementation Guide"
+}

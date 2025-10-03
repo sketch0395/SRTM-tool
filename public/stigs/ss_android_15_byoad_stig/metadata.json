@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SS_Android_15_BYOAD_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.5805110-05:00",
+  "stigId": "ss_android_15_byoad_stig",
+  "name": "Samsung Android 15 BYOAD Security Technical Implementation Guide"
+}

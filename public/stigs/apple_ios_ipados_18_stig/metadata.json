@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Apple_iOS-iPadOS_18_STIG_V1R4_Manual-xccdf.xml",
+  "releaseDate": "2025-06-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.9567707-05:00",
+  "stigId": "apple_ios_ipados_18_stig",
+  "name": "Apple iOS/iPadOS 18 Security Technical Implementation Guide"
+}

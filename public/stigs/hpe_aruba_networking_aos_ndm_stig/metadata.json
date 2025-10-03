@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HPE_Aruba_Networking_AOS_NDM_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.5638861-05:00",
+  "stigId": "hpe_aruba_networking_aos_ndm_stig",
+  "name": "HPE Aruba Networking AOS NDM Security Technical Implementation Guide"
+}

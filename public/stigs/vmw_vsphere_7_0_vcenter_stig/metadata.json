@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_VMW_vSphere_7-0_vCenter_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2024-01-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.8305904-05:00",
+  "stigId": "vmw_vsphere_7_0_vcenter_stig",
+  "name": "VMware vSphere 7.0 vCenter Security Technical Implementation Guide"
+}

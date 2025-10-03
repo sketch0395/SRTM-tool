@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_CA_Common_Services_for_ACF2_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.0221758-05:00",
+  "stigId": "zos_ca_common_services_for_acf2_stig",
+  "name": "z/OS CA Common Services for ACF2 Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Ivanti_Sentry_9-x_ALG_STIG_V3R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.7744851-05:00",
+  "stigId": "ivanti_sentry_9_x_alg_stig",
+  "name": "Ivanti Sentry 9.x ALG Security Technical Implementation Guide"
+}

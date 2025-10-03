@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_HP_FlexFabric_Switch_NDM_STIG_V1R4_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.5955756-05:00",
+  "stigId": "hp_flexfabric_switch_ndm_stig",
+  "name": "HP FlexFabric Switch NDM Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Oracle_Database_19c_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.2779460-05:00",
+  "stigId": "oracle_database_19c_stig",
+  "name": "Oracle Database 19c Security Technical Implementation Guide"
+}

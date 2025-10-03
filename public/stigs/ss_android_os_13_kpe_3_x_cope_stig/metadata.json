@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SS_Android_OS_13_KPE_3-x_COPE_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.6138249-05:00",
+  "stigId": "ss_android_os_13_kpe_3_x_cope_stig",
+  "name": "Samsung Android OS 13 with Knox 3.x COPE Security Technical Implementation Guide"
+}

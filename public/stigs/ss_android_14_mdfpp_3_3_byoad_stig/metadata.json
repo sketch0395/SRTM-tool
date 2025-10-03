@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SS_Android_14_MDFPP_3-3_BYOAD_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-03-13",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.5755087-05:00",
+  "stigId": "ss_android_14_mdfpp_3_3_byoad_stig",
+  "name": "Samsung Android 14 MDFPP 3.3 BYOAD Security Technical Implementation Guide"
+}

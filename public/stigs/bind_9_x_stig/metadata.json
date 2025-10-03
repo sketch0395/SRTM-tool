@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_BIND_9-x_STIG_V2R3_Manual-xccdf.xml",
+  "releaseDate": "2024-05-15",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.0770392-05:00",
+  "stigId": "bind_9_x_stig",
+  "name": "BIND 9.x Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SYM_ProxySG_NDM_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2020-01-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.6477019-05:00",
+  "stigId": "sym_proxysg_ndm_stig",
+  "name": "Symantec ProxySG NDM Security Technical Implementation Guide"
+}

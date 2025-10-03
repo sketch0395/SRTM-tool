@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Zebra_Android_13_COPE_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-12-10",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.9786729-05:00",
+  "stigId": "zebra_android_13_cope_stig",
+  "name": "Zebra Android 13 COPE Security Technical Implementation Guide"
+}

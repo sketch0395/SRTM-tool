@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Apache_2-2_Server_UNIX_STIG_V1R11_Manual-xccdf.xml",
+  "releaseDate": "2019-01-25",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:33.8926482-05:00",
+  "stigId": "apache_2_2_server_unix_stig",
+  "name": "APACHE 2.2 Server for UNIX Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Exchange_2016_Mailbox_Server_STIG_V2R6_Manual-xccdf.xml",
+  "releaseDate": "2024-01-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0402873-05:00",
+  "stigId": "ms_exchange_2016_mailbox_server_stig",
+  "name": "Microsoft Exchange 2016 Mailbox Server Security Technical Implementation Guide"
+}

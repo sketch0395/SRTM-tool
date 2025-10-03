@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Windows_PAW_STIG_V3R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.1772559-05:00",
+  "stigId": "ms_windows_paw_stig",
+  "name": "Microsoft Windows PAW Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Google_Android_13_COBO_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.4665695-05:00",
+  "stigId": "google_android_13_cobo_stig",
+  "name": "Google Android 13 COBO Security Technical Implementation Guide"
+}

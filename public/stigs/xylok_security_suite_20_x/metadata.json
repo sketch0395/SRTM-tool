@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Xylok_Security_Suite_20-x_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2024-12-10",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.9654895-05:00",
+  "stigId": "xylok_security_suite_20_x",
+  "name": "Xylok Security Suite 20.x Security Technical Implementation Guide"
+}

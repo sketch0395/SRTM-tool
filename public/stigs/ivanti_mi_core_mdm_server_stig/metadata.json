@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Ivanti_MI_Core_MDM_Server_STIG_V3R1_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.7699920-05:00",
+  "stigId": "ivanti_mi_core_mdm_server_stig",
+  "name": "Ivanti EPMM Server Security Technical Implementation Guide"
+}

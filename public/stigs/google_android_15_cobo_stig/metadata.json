@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Google_Android_15_COBO_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-01-30",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.5259313-05:00",
+  "stigId": "google_android_15_cobo_stig",
+  "name": "Google Android 15 COBO Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RH_Ansible_Automation_Controller_AS_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.4400198-05:00",
+  "stigId": "rh_ansible_automation_controller_as_stig",
+  "name": "Red Hat Ansible Automation Controller Application Server Security Technical Implementation Guide"
+}

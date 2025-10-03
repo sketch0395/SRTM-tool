@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Windows_10_STIG_V3R4_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.1576335-05:00",
+  "stigId": "ms_windows_10_stig",
+  "name": "Microsoft Windows 10 Security Technical Implementation Guide"
+}

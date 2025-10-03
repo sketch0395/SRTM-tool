@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Active_Directory_Forest_STIG_V3R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:33.8538437-05:00",
+  "stigId": "active_directory_forest_stig",
+  "name": "Active Directory Forest Security Technical Implementation Guide"
+}

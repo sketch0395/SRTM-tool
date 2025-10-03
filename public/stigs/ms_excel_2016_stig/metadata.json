@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Excel_2016_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-04-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0252794-05:00",
+  "stigId": "ms_excel_2016_stig",
+  "name": "Microsoft Excel 2016 Security Technical Implementation Guide"
+}

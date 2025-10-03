@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Network_Infrastructure_Policy_STIG_V10R7_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "10",
+  "extractedAt": "2025-10-03T10:13:35.2312993-05:00",
+  "stigId": "network_infrastructure_policy_stig",
+  "name": "Network Infrastructure Policy Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_DotNet_Framework_4-0_STIG_V2R7_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.0073845-05:00",
+  "stigId": "ms_dotnet_framework_4_0_stig",
+  "name": "Microsoft DotNet Framework 4.0 Security Technical Implementation Guide"
+}

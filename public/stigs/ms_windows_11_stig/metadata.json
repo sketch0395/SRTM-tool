@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Windows_11_STIG_V2R4_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.1679151-05:00",
+  "stigId": "ms_windows_11_stig",
+  "name": "Microsoft Windows 11 Security Technical Implementation Guide"
+}

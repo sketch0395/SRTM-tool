@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_TOSS_4_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.6919315-05:00",
+  "stigId": "toss_4_stig",
+  "name": "Tri-Lab Operating System Stack (TOSS) 4 Security Technical Implementation Guide"
+}

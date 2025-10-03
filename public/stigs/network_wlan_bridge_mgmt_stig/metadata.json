@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Network_WLAN_Bridge_Mgmt_STIG_V7R2_Manual-xccdf.xml",
+  "releaseDate": "2023-10-25",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:35.2517977-05:00",
+  "stigId": "network_wlan_bridge_mgmt_stig",
+  "name": "Network WLAN Bridge Management Security Technical Implementation Guide"
+}

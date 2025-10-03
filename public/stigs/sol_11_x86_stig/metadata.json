@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SOL_11_x86_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.5604115-05:00",
+  "stigId": "sol_11_x86_stig",
+  "name": "Solaris 11 X86 Security Technical Implementation Guide"
+}

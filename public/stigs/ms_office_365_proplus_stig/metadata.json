@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Office_365_ProPlus_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:35.0961968-05:00",
+  "stigId": "ms_office_365_proplus_stig",
+  "name": "Microsoft Office 365 ProPlus Security Technical Implementation Guide"
+}

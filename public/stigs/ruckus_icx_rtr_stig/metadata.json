@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RUCKUS_ICX_RTR_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-05-27",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.4732503-05:00",
+  "stigId": "ruckus_icx_rtr_stig",
+  "name": "RUCKUS ICX Router Security Technical Implementation Guide"
+}

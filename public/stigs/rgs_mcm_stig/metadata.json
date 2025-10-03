@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_RGS_MCM_STIG_V2R1_Manual-xccdf.xml",
+  "releaseDate": "2024-07-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3928037-05:00",
+  "stigId": "rgs_mcm_stig",
+  "name": "Rancher Government Solutions Multi-Cluster Manager Security Technical Implementation Guide"
+}

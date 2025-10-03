@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Cisco_IOS-XE_Switch_NDM_STIG_V3R4_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:34.2297624-05:00",
+  "stigId": "cisco_ios_xe_switch_ndm_stig",
+  "name": "Cisco IOS XE Switch NDM Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_zOS_ACF2_STIG_V9R5_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "9",
+  "extractedAt": "2025-10-03T10:13:34.6966242-05:00",
+  "stigId": "ibm_zos_acf2_stig",
+  "name": "IBM z/OS ACF2 Security Technical Implementation Guide"
+}

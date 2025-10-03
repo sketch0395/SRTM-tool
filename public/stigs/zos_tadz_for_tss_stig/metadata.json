@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_zOS_TADz_for_TSS_STIG_V7R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "7",
+  "extractedAt": "2025-10-03T10:13:36.3723536-05:00",
+  "stigId": "zos_tadz_for_tss_stig",
+  "name": "z/OS TADz for TSS Security Technical Implementation Guide"
+}

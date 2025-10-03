@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_SYM_ProxySG_ALG_STIG_V1R3_Manual-xccdf.xml",
+  "releaseDate": "2020-04-24",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.6403100-05:00",
+  "stigId": "sym_proxysg_alg_stig",
+  "name": "Symantec ProxySG ALG Security Technical Implementation Guide"
+}

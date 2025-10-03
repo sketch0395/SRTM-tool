@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_F5_BIG-IP_TMOS_ALG_STIG_V1R2_Manual-xccdf.xml",
+  "releaseDate": "2025-07-02",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:34.4040667-05:00",
+  "stigId": "f5_big_ip_tmos_alg_stig",
+  "name": "F5 BIG-IP TMOS ALG Security Technical Implementation Guide"
+}

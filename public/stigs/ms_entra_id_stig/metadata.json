@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Entra_ID_STIG_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-02-28",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.0189285-05:00",
+  "stigId": "ms_entra_id_stig",
+  "name": "Microsoft Entra ID Security Technical Implementation Guide"
+}

@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Oracle_MySQL_8-0_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2024-10-24",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:35.3373319-05:00",
+  "stigId": "oracle_mysql_8_0_stig",
+  "name": "Oracle MySQL 8.0 Security Technical Implementation Guide"
+}

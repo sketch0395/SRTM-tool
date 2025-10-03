@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_Apache_Server_2-4_Windows_Server_STIG_V3R3_Manual-xccdf.xml",
+  "releaseDate": "2025-04-02",
+  "version": "3",
+  "extractedAt": "2025-10-03T10:13:33.9312529-05:00",
+  "stigId": "apache_server_2_4_windows_server_stig",
+  "name": "Apache Server 2.4 Windows Server Security Technical Implementation Guide"
+}

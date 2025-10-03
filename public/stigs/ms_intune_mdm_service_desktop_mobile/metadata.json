@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_MS_Intune_MDM_Service_Desktop_Mobile_V1R1_Manual-xccdf.xml",
+  "releaseDate": "2025-04-22",
+  "version": "1",
+  "extractedAt": "2025-10-03T10:13:35.0875005-05:00",
+  "stigId": "ms_intune_mdm_service_desktop_mobile",
+  "name": "Microsoft Intune MDM Service Desktop & Mobile Security Technical Implementation Guide"
+}

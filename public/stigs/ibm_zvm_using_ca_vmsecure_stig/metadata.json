@@ -1,0 +1,9 @@
+{
+  "format": "xml",
+  "filename": "U_IBM_zVM_Using_CA_VMSecure_STIG_V2R2_Manual-xccdf.xml",
+  "releaseDate": "2022-10-27",
+  "version": "2",
+  "extractedAt": "2025-10-03T10:13:34.7377828-05:00",
+  "stigId": "ibm_zvm_using_ca_vmsecure_stig",
+  "name": "IBM zVM Using CA VM:Secure Security Technical Implementation Guide"
+}
