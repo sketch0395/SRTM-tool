@@ -1,10 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * Proxy endpoint to fetch DISA STIG RSS feed
- * This avoids CORS issues when fetching directly from the browser
+ * DEPRECATED: External DISA RSS fetching is disabled
+ * All STIGs must be loaded from local library (/public/stigs/)
  */
 export async function GET(request: NextRequest) {
+  // 🚫 EXTERNAL API CALLS DISABLED
+  return NextResponse.json({
+    success: false,
+    error: 'External DISA RSS fetching is disabled',
+    message: 'This endpoint no longer fetches from external sources (public.cyber.mil)',
+    releases: [],
+    instructions: {
+      step1: 'Use local STIG library in /public/stigs/',
+      step2: 'Run extract-stigs.ps1 to extract STIGs from DISA ZIP files',
+      step3: 'Use "Local Library" button to browse available STIGs',
+      note: 'External API calls are disabled for security'
+    }
+  }, { status: 410 }); // 410 Gone
+
+  // Dead code below - kept for reference only
   try {
     const disaRssUrl = 'https://public.cyber.mil/stigs/rss/';
     

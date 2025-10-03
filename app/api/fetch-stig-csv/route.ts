@@ -1,45 +1,20 @@
 import { NextResponse } from 'next/server';
 
-import { STIG_FAMILIES } from '../../../utils/stigFamilyRecommendations';
+/**
+ * DEPRECATED: External STIG fetching is disabled
+ * All STIGs must be loaded from local library (/public/stigs/)
+ * Use /api/import-stig instead which reads from local library
+ */
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const familyIdsParam = searchParams.get('familyIds');
-  if (!familyIdsParam) {
-    return NextResponse.json({ error: 'Missing familyIds parameter' }, { status: 400 });
-  }
-  const familyIds = familyIdsParam.split(',').map(id => id.trim()).filter(id => id);
-  const csvResults: Record<string, string> = {};
-
-  for (const familyId of familyIds) {
-    // Determine official STIG ID for download
-    const family = STIG_FAMILIES.find(f => f.id === familyId);
-    const stigId = family?.stigId || familyId;
-    try {
-      // Attempt fetch from STIG Viewer
-      const viewerUrl = `https://stigviewer.com/stigs/download/${stigId}.csv`;
-      let res = await fetch(viewerUrl);
-      let text: string | null = null;
-      if (res.ok) {
-        text = await res.text();
-      }
-      // Fallback to DISA public cyber.mil if no data
-      if (!text) {
-        const disaUrl = `https://public.cyber.mil/stigs/download/${stigId}.csv`;
-        res = await fetch(disaUrl);
-        if (res.ok) {
-          text = await res.text();
-          console.info(`Fetched CSV for ${familyId} from DISA fallback`);
-        }
-      }
-      if (text) {
-        csvResults[familyId] = text;
-      } else {
-        console.error(`No CSV data returned for ${familyId} from any source`);
-      }
-    } catch (err) {
-      console.error(`Error fetching CSV for ${familyId}:`, err);
+  // 🚫 EXTERNAL API CALLS DISABLED
+  return NextResponse.json({
+    error: 'External STIG fetching is disabled',
+    message: 'This endpoint no longer fetches from external sources (stigviewer.com or public.cyber.mil)',
+    instructions: {
+      step1: 'Use /api/import-stig?stigId=<stig_id> to load from local library',
+      step2: 'Or use the "Local Library" button in the UI to browse available STIGs',
+      step3: 'All STIGs must be extracted to /public/stigs/ first using extract-stigs.ps1',
+      note: 'External API calls are disabled for security and reliability'
     }
-  }
-
-  return NextResponse.json(csvResults);
+  }, { status: 410 }); // 410 Gone - endpoint permanently disabled
 }

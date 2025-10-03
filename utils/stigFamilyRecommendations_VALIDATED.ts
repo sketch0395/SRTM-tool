@@ -1,16 +1,17 @@
 /**
- * STIG Family Recommendation Engine - VALIDATED VERSION
+ * STIG Family Recommendation Engine - LOCAL LIBRARY VERSION
  * Analyzes security requirements and design elements to recommend applicable STIG families
  * 
- * VALIDATION: All STIG families validated against DISA Cyber Exchange as of September 2025
- * Source: https://public.cyber.mil/stigs/downloads/
+ * SOURCE: Local STIG Library (372 STIGs extracted from DISA STIG Library July 2025)
+ * Location: /public/stigs/
+ * All recommendations now use local STIGs - no stigviewer.com dependency!
  * 
- * KEY IMPROVEMENTS:
- * 1. All STIGs validated with official versions, release dates, and actual requirement counts
- * 2. Added confidence scoring (0-100) for each recommendation
+ * KEY FEATURES:
+ * 1. All STIGs use actual local directory IDs (e.g., "ms_windows_server_2022_stig")
+ * 2. Confidence scoring (0-100) for each recommendation
  * 3. Transparent score breakdown showing how each recommendation was calculated
  * 4. Improved technology detection and matching algorithms
- * 5. Clear reasoning for each recommendation with visual indicators
+ * 5. Fast, offline imports directly from local library
  */
 
 import { SecurityRequirement, SystemDesignElement } from '../types/srtm';
@@ -52,17 +53,17 @@ export interface StigFamilyRecommendation {
 export const STIG_FAMILIES: StigFamily[] = [
   // Application Security STIGs (Priority for development environments)
   {
-    id: 'application-security-dev',
-    name: 'Application dsfasdfadf Security and Development STIG',
-    version: 'V5R3',
-    releaseDate: '2024-07-26',
+    id: 'asd_stig',
+    name: 'Application Security and Development STIG',
+    version: 'V6R2',
+    releaseDate: '2025-07-25',
     description: 'Security Technical Implementation Guide for Application Security and Development practices',
     applicableSystemTypes: ['Application', 'Development', 'Web Application', 'API', 'Software'],
     triggerKeywords: ['node.js', 'nodejs', 'javascript', 'web app', 'api', 'application', 'development', 'software', 'code', 'programming', 'react', 'angular', 'vue', 'express', 'frontend', 'backend'],
     controlFamilies: ['AC', 'AU', 'CM', 'IA', 'SC', 'SI', 'SA'],
     priority: 'High',
-    actualRequirements: 165,
-    stigId: 'APSC-DV-003270',
+    actualRequirements: 286,
+    stigId: 'asd_stig',
     validated: true
   },
   {
@@ -81,23 +82,23 @@ export const STIG_FAMILIES: StigFamily[] = [
   },
   // Operating System STIGs
   {
-    id: 'windows-server-2022',
-    name: 'Windows Server 2022 STIG',
-    version: 'V2R1',
-    releaseDate: '2024-09-20',
-    description: 'Security Technical Implementation Guide for Windows Server 2022',
+    id: 'ms_windows_server_2022_stig',
+    name: 'MS Windows Server 2022 STIG',
+    version: 'V2R3',
+    releaseDate: '2025-07-25',
+    description: 'Security Technical Implementation Guide for Microsoft Windows Server 2022',
     applicableSystemTypes: ['Windows', 'Server', 'Domain Controller', 'File Server'],
     triggerKeywords: ['windows', 'server 2022', 'windows server', 'active directory', 'domain', 'ntfs', 'registry', 'powershell'],
     controlFamilies: ['AC', 'AU', 'CM', 'IA', 'SC', 'SI'],
     priority: 'High',
-    actualRequirements: 292,
-    stigId: 'WN22-00-000010',
+    actualRequirements: 294,
+    stigId: 'ms_windows_server_2022_stig',
     validated: true
   },
   {
-    id: 'windows-11',
-    name: 'Windows 11 STIG',
-    version: 'V2R2',
+    id: 'ms_windows_11_stig',
+    name: 'MS Windows 11 STIG',
+    version: 'V2R8',
     releaseDate: '2024-08-15',
     description: 'Security Technical Implementation Guide for Windows 11',
     applicableSystemTypes: ['Windows', 'Workstation', 'Desktop', 'Laptop'],
@@ -105,13 +106,13 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'IA', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 204,
-    stigId: 'WN11-00-000010',
+    stigId: 'ms_windows_11_stig',
     validated: true
   },
   {
-    id: 'rhel-9',
+    id: 'rhel_9_stig',
     name: 'Red Hat Enterprise Linux 9 STIG',
-    version: 'V2R1',
+    version: 'V2R2',
     releaseDate: '2024-09-01',
     description: 'Security Technical Implementation Guide for RHEL 9',
     applicableSystemTypes: ['Linux', 'RHEL', 'Red Hat', 'Unix'],
@@ -119,13 +120,13 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'IA', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 280,
-    stigId: 'RHEL-09-010001',
+    stigId: 'rhel_9_stig',
     validated: true
   },
   {
-    id: 'ubuntu-22-04',
+    id: 'can_ubuntu_22_04_lts_stig',
     name: 'Canonical Ubuntu 22.04 LTS STIG',
-    version: 'V2R1',
+    version: 'V2R3',
     releaseDate: '2024-07-01',
     description: 'Security Technical Implementation Guide for Ubuntu 22.04 LTS',
     applicableSystemTypes: ['Linux', 'Ubuntu', 'Debian'],
@@ -133,7 +134,7 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'IA', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 267,
-    stigId: 'UBTU-22-010001',
+    stigId: 'can_ubuntu_22_04_lts_stig',
     validated: true
   },
   // Network Device STIGs
@@ -195,9 +196,9 @@ export const STIG_FAMILIES: StigFamily[] = [
     validated: true
   },
   {
-    id: 'kubernetes',
+    id: 'kubernetes_stig',
     name: 'Kubernetes STIG',
-    version: 'V2R1',
+    version: 'V2R3',
     releaseDate: '2024-05-10',
     description: 'Security Technical Implementation Guide for Kubernetes',
     applicableSystemTypes: ['Container', 'Kubernetes', 'Orchestration', 'Cloud'],
@@ -205,7 +206,7 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 97,
-    stigId: 'CNTR-K8-000110',
+    stigId: 'kubernetes_stig',
     validated: true
   },
   // Web Server STIGs
@@ -220,7 +221,7 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 93,
-    stigId: 'AS24-U1-000010',
+    stigId: 'apache_server_2_4_unix_server_stig',
     validated: true
   },
   {
@@ -248,14 +249,14 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 107,
-    stigId: 'IIST-SV-000101',
+    stigId: 'ms_iis_10_0_server_stig',
     validated: true
   },
   // Database STIGs
   {
-    id: 'microsoft-sql-server-2022',
+    id: 'ms_sql_server_2022_instance_stig',
     name: 'MS SQL Server 2022 Instance STIG',
-    version: 'V1R1',
+    version: 'V1R4',
     releaseDate: '2024-06-21',
     description: 'Security Technical Implementation Guide for Microsoft SQL Server 2022',
     applicableSystemTypes: ['Database', 'SQL Server', 'Microsoft', 'RDBMS'],
@@ -263,13 +264,13 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 138,
-    stigId: 'SQL6-D0-000100',
+    stigId: 'ms_sql_server_2022_instance_stig',
     validated: true
   },
   {
-    id: 'oracle-database-19c',
+    id: 'oracle_database_19c_stig',
     name: 'Oracle Database 19c STIG',
-    version: 'V3R1',
+    version: 'V3R3',
     releaseDate: '2024-06-21',
     description: 'Security Technical Implementation Guide for Oracle Database 19c',
     applicableSystemTypes: ['Database', 'Oracle', 'RDBMS'],
@@ -277,27 +278,27 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
     actualRequirements: 156,
-    stigId: 'O121-C2-000100',
+    stigId: 'oracle_database_19c_stig',
     validated: true
   },
   {
-    id: 'postgresql-9x',
-    name: 'PostgreSQL 9.x STIG',
-    version: 'V2R5',
-    releaseDate: '2023-09-12',
-    description: 'Security Technical Implementation Guide for PostgreSQL Database 9.x',
+    id: 'cd_postgres_16_stig',
+    name: 'Crunchy Data PostgreSQL 16 STIG',
+    version: 'V1R1',
+    releaseDate: '2025-01-24',
+    description: 'Security Technical Implementation Guide for Crunchy Data PostgreSQL Database 16',
     applicableSystemTypes: ['Database', 'PostgreSQL', 'RDBMS', 'Open Source'],
-    triggerKeywords: ['postgresql', 'postgres', 'database', 'rdbms', 'sql', 'db', 'psql'],
+    triggerKeywords: ['postgresql', 'postgres', 'database', 'rdbms', 'sql', 'db', 'psql', 'crunchy'],
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'High',
-    actualRequirements: 122,
-    stigId: 'PGS9-00-000100',
+    actualRequirements: 158,
+    stigId: 'cd_postgres_16_stig',
     validated: true
   },
   {
-    id: 'mongodb-enterprise',
-    name: 'MongoDB Enterprise Advanced 4.x STIG',
-    version: 'V1R4',
+    id: 'mongodb_enterprise_advanced_7_x_stig',
+    name: 'MongoDB Enterprise Advanced 7.x STIG',
+    version: 'V1R2',
     releaseDate: '2023-06-09',
     description: 'Security Technical Implementation Guide for MongoDB Enterprise',
     applicableSystemTypes: ['Database', 'MongoDB', 'NoSQL', 'Document Database'],
@@ -305,51 +306,7 @@ export const STIG_FAMILIES: StigFamily[] = [
     controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI'],
     priority: 'Medium',
     actualRequirements: 91,
-    stigId: 'MD4X-00-000100',
-    validated: true
-  },
-  // Cloud Platform STIGs
-  {
-    id: 'aws-govcloud',
-    name: 'Amazon Web Services (AWS) GovCloud STIG',
-    version: 'V1R1',
-    releaseDate: '2024-01-26',
-    description: 'Security Technical Implementation Guide for Amazon Web Services GovCloud',
-    applicableSystemTypes: ['Cloud', 'AWS', 'Amazon', 'Infrastructure'],
-    triggerKeywords: ['aws', 'amazon', 'cloud', 'ec2', 's3', 'iam', 'vpc', 'cloudtrail', 'govcloud'],
-    controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI', 'CP'],
-    priority: 'High',
-    actualRequirements: 168,
-    stigId: 'AWSG-000001',
-    validated: true
-  },
-  {
-    id: 'microsoft-azure',
-    name: 'Microsoft Azure Government Cloud STIG',
-    version: 'V1R1',
-    releaseDate: '2023-09-22',
-    description: 'Security Technical Implementation Guide for Microsoft Azure Government',
-    applicableSystemTypes: ['Cloud', 'Azure', 'Microsoft', 'Infrastructure'],
-    triggerKeywords: ['azure', 'microsoft cloud', 'cloud', 'azure ad', 'resource group', 'subscription'],
-    controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI', 'CP'],
-    priority: 'High',
-    actualRequirements: 145,
-    stigId: 'AZRG-000001',
-    validated: true
-  },
-  // Development-Specific STIGs
-  {
-    id: 'nodejs-security',
-    name: 'Node.js Application Security Guide',
-    version: 'V1R1',
-    releaseDate: '2024-01-15',
-    description: 'Security guidance for Node.js applications and runtime environments',
-    applicableSystemTypes: ['Node.js', 'JavaScript', 'Runtime', 'API', 'Backend'],
-    triggerKeywords: ['node.js', 'nodejs', 'node', 'javascript', 'npm', 'express', 'backend', 'server-side', 'runtime', 'v8'],
-    controlFamilies: ['AC', 'AU', 'CM', 'SC', 'SI', 'SA'],
-    priority: 'High',
-    actualRequirements: 87,
-    stigId: 'NODE-APP-000001',
+    stigId: 'mongodb_enterprise_advanced_7_x_stig',
     validated: true
   }
 ];

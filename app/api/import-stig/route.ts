@@ -102,137 +102,30 @@ export async function GET(request: NextRequest) {
         }
       } catch (localError: any) {
         console.error(`❌ Error reading local STIG: ${localError.message}`);
-        // Continue to stigviewer.com fallback
+        // STIG not found in local library
       }
     } else {
-      console.log(`ℹ️ STIG not found in local library, will try stigviewer.com`);
+      console.log(`❌ STIG not found in local library: ${stigId}`);
     }
 
-    // 🌐 FALLBACK: Try stigviewer.com
-    console.log(`🔍 Fetching STIG from stigviewer.com: ${stigId}`);
-
-    // Try JSON API first (has complete severity data)
-    const jsonUrl = `https://stigviewer.com/stigs/${stigId}/json`;
-    const htmlUrl = `https://stigviewer.com/stigs/${stigId}/`;
+    // 🚫 EXTERNAL API DISABLED: No stigviewer.com fallback
+    // All STIGs must be in local library (/public/stigs/)
+    console.log(`❌ STIG "${stigId}" not found in local library`);
     
-    // Create custom agent to bypass SSL certificate validation
-    const agent = new https.Agent({
-      rejectUnauthorized: false
-    });
-    
-    try {
-      // Attempt JSON API first
-      console.log(`📥 Attempting JSON API...`);
-      const jsonResponse = await fetch(jsonUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'application/json, text/html, */*',
-          'Accept-Language': 'en-US,en;q=0.9',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Referer': 'https://stigviewer.com/',
-          'Connection': 'keep-alive',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-        },
-        // @ts-ignore
-        agent,
-        signal: AbortSignal.timeout(15000),
-      });
-
-      if (jsonResponse.ok) {
-        const jsonData = await jsonResponse.json();
-        console.log(`✅ JSON API successful`);
-        
-        const stigData = parseStigViewerJson(jsonData, stigId);
-        
-        if (stigData.requirements.length > 0) {
-          return NextResponse.json({
-            success: true,
-            ...stigData,
-            source: 'stigviewer',
-            message: `Successfully imported ${stigData.requirements.length} requirements from JSON API`
-          } as StigImportResult);
-        }
-      } else {
-        console.log(`⚠️ JSON API returned ${jsonResponse.status}: ${jsonResponse.statusText}`);
+    // Return error with instructions for manual upload or local library extraction
+    return NextResponse.json({
+      success: false,
+      stigId,
+      error: 'STIG not found in local library',
+      message: `STIG "${stigId}" not found in local library. All external API calls are disabled for security.`,
+      instructions: {
+        step1: 'Check available STIGs: Run list-stigs.ps1 to see what\'s in your local library',
+        step2: 'Browse local library: Use the "Local Library" button in the STIG Requirements tab',
+        step3: 'Extract more STIGs: Run extract-stigs.ps1 with the DISA STIG Library ZIP',
+        step4: 'Manual upload: Use the "Upload STIG" button to upload XML/CSV files directly',
+        note: 'External API calls to stigviewer.com and DISA websites are disabled'
       }
-    } catch (jsonError: any) {
-      console.log(`⚠️ JSON API failed: ${jsonError.message}, trying HTML...`);
-    }
-    
-    // Fallback to HTML parsing
-    try {
-      console.log(`📥 Attempting HTML parsing...`);
-      
-      // Add a small delay to avoid rate limiting
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      const response = await fetch(htmlUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.9',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Referer': 'https://stigviewer.com/',
-          'Connection': 'keep-alive',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-          'Sec-Fetch-Dest': 'document',
-          'Sec-Fetch-Mode': 'navigate',
-          'Sec-Fetch-Site': 'same-origin',
-          'Upgrade-Insecure-Requests': '1',
-        },
-        // @ts-ignore
-        agent,
-        signal: AbortSignal.timeout(15000),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const html = await response.text();
-
-      // Parse STIG information from HTML
-      const stigData = await parseStigViewerHtml(html, stigId);
-
-      if (stigData.requirements.length === 0) {
-        throw new Error('No requirements found in STIG data');
-      }
-
-      console.log(`✅ Successfully fetched ${stigData.requirements.length} requirements from stigviewer.com`);
-
-      return NextResponse.json({
-        success: true,
-        ...stigData,
-        source: 'stigviewer',
-        message: `Successfully imported ${stigData.requirements.length} requirements from stigviewer.com`
-      } as StigImportResult);
-
-    } catch (fetchError: any) {
-      console.error('❌ Error fetching from stigviewer.com:', fetchError.message);
-
-      // Provide specific guidance based on error type
-      let errorGuidance = 'Failed to fetch from stigviewer.com. Please try again or upload STIG manually.';
-      if (fetchError.message.includes('403') || fetchError.message.includes('Forbidden')) {
-        errorGuidance = 'stigviewer.com is blocking automated requests (403 Forbidden). This may be due to rate limiting or access restrictions. Please wait a few minutes and try again, or download and upload the STIG manually.';
-      } else if (fetchError.message.includes('timeout')) {
-        errorGuidance = 'Request timed out. The server may be slow or unavailable. Please try again.';
-      }
-
-      // Return error with instructions for manual upload
-      return NextResponse.json({
-        success: false,
-        stigId,
-        error: fetchError.message,
-        message: errorGuidance,
-        instructions: {
-          step1: 'Download STIG XML from DISA Cyber Exchange: https://public.cyber.mil/stigs/downloads/',
-          step2: 'Or download from STIGViewer: https://stigviewer.com/stigs',
-          step3: 'Upload the XCCDF XML file using the manual upload option'
-        }
-      }, { status: 503 });
-    }
+    }, { status: 404 });
 
   } catch (error: any) {
     console.error('❌ Error in STIG import:', error);

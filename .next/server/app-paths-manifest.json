@@ -1,4 +1,5 @@
 {
+  "/api/local-stigs/route": "app/api/local-stigs/route.js",
   "/api/import-stig/route": "app/api/import-stig/route.js",
   "/page": "app/page.js"
 }
