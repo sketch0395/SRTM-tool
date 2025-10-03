@@ -65,8 +65,14 @@ export async function GET(request: NextRequest) {
       console.log(`📥 Attempting JSON API...`);
       const jsonResponse = await fetch(jsonUrl, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'application/json, text/html, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Referer': 'https://stigviewer.com/',
+          'Connection': 'keep-alive',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
         },
         // @ts-ignore
         agent,
@@ -87,6 +93,8 @@ export async function GET(request: NextRequest) {
             message: `Successfully imported ${stigData.requirements.length} requirements from JSON API`
           } as StigImportResult);
         }
+      } else {
+        console.log(`⚠️ JSON API returned ${jsonResponse.status}: ${jsonResponse.statusText}`);
       }
     } catch (jsonError: any) {
       console.log(`⚠️ JSON API failed: ${jsonError.message}, trying HTML...`);
@@ -95,10 +103,24 @@ export async function GET(request: NextRequest) {
     // Fallback to HTML parsing
     try {
       console.log(`📥 Attempting HTML parsing...`);
+      
+      // Add a small delay to avoid rate limiting
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const response = await fetch(htmlUrl, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept': 'text/html',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Referer': 'https://stigviewer.com/',
+          'Connection': 'keep-alive',
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Sec-Fetch-Dest': 'document',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-Site': 'same-origin',
+          'Upgrade-Insecure-Requests': '1',
         },
         // @ts-ignore
         agent,
@@ -130,12 +152,20 @@ export async function GET(request: NextRequest) {
     } catch (fetchError: any) {
       console.error('❌ Error fetching from stigviewer.com:', fetchError.message);
 
+      // Provide specific guidance based on error type
+      let errorGuidance = 'Failed to fetch from stigviewer.com. Please try again or upload STIG manually.';
+      if (fetchError.message.includes('403') || fetchError.message.includes('Forbidden')) {
+        errorGuidance = 'stigviewer.com is blocking automated requests (403 Forbidden). This may be due to rate limiting or access restrictions. Please wait a few minutes and try again, or download and upload the STIG manually.';
+      } else if (fetchError.message.includes('timeout')) {
+        errorGuidance = 'Request timed out. The server may be slow or unavailable. Please try again.';
+      }
+
       // Return error with instructions for manual upload
       return NextResponse.json({
         success: false,
         stigId,
         error: fetchError.message,
-        message: 'Failed to fetch from stigviewer.com. Please upload STIG manually.',
+        message: errorGuidance,
         instructions: {
           step1: 'Download STIG XML from DISA Cyber Exchange: https://public.cyber.mil/stigs/downloads/',
           step2: 'Or download from STIGViewer: https://stigviewer.com/stigs',
@@ -158,8 +188,253 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * POST - Manual STIG upload (XML file)
- * Body: FormData with 'file' field containing XCCDF XML
+ * Parse DISA STIG CSV file
+ * CSV format from DISA Cyber Exchange
+ */
+function parseStigCsv(csvContent: string, fileName: string): Omit<StigImportResult, 'success' | 'source' | 'message'> {
+  const requirements: StigRequirement[] = [];
+  
+  // Properly split CSV content into lines, handling multi-line quoted fields
+  const lines: string[] = [];
+  let currentLine = '';
+  let insideQuotes = false;
+  
+  for (let i = 0; i < csvContent.length; i++) {
+    const char = csvContent[i];
+    const nextChar = csvContent[i + 1];
+    
+    if (char === '"') {
+      // Check if it's an escaped quote
+      if (nextChar === '"') {
+        currentLine += char + nextChar;
+        i++; // Skip next quote
+      } else {
+        insideQuotes = !insideQuotes;
+        currentLine += char;
+      }
+    } else if (char === '\n' && !insideQuotes) {
+      if (currentLine.trim()) {
+        lines.push(currentLine);
+      }
+      currentLine = '';
+    } else if (char === '\r') {
+      // Skip carriage returns
+      continue;
+    } else {
+      currentLine += char;
+    }
+  }
+  
+  // Add the last line if not empty
+  if (currentLine.trim()) {
+    lines.push(currentLine);
+  }
+  
+  console.log(`📄 Split CSV into ${lines.length} lines`);
+  
+  if (lines.length < 2) {
+    return {
+      stigId: fileName.replace(/\.csv$/i, ''),
+      stigName: 'Imported STIG',
+      version: 'Unknown',
+      releaseDate: new Date().toISOString().split('T')[0],
+      requirements: [],
+      totalRequirements: 0
+    };
+  }
+
+  // Parse header row - handle quoted CSV fields
+  const parseCSVLine = (line: string): string[] => {
+    const result: string[] = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          // Escaped quote
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  };
+
+  // Find the header row (skip classification banners like "~~~~~~~ Unclassified ~~~~~~")
+  let headerLineIndex = 0;
+  let headers: string[] = [];
+  
+  for (let i = 0; i < Math.min(5, lines.length); i++) {
+    const parsedLine = parseCSVLine(lines[i]);
+    const lineText = parsedLine.join('').toLowerCase();
+    
+    // Skip classification banners and empty lines
+    if (lineText.includes('unclassified') || lineText.includes('~~~~~') || parsedLine.length < 5) {
+      continue;
+    }
+    
+    // Check if this looks like a header row (has common STIG column names)
+    if (lineText.includes('stig') || lineText.includes('severity') || lineText.includes('rule')) {
+      headerLineIndex = i;
+      headers = parsedLine.map(h => h.toLowerCase().trim());
+      console.log(`📋 Found header row at line ${i + 1}`);
+      break;
+    }
+  }
+  
+  if (headers.length === 0) {
+    console.error('❌ Could not find valid header row in CSV');
+    return {
+      stigId: fileName.replace(/\.csv$/i, ''),
+      stigName: 'Imported STIG',
+      version: 'Unknown',
+      releaseDate: new Date().toISOString().split('T')[0],
+      requirements: [],
+      totalRequirements: 0
+    };
+  }
+
+  console.log(`📋 CSV Headers found: ${headers.slice(0, 10).join(', ')}...`);
+  console.log(`📋 All headers (first 15):`, headers.slice(0, 15));
+  
+  // Find column indices
+  const getIndex = (names: string[]) => {
+    for (const name of names) {
+      const idx = headers.findIndex(h => h.includes(name));
+      if (idx !== -1) {
+        console.log(`✅ Found "${name}" at index ${idx}: "${headers[idx]}"`);
+        return idx;
+      }
+    }
+    console.log(`❌ Could not find any of: ${names.join(', ')}`);
+    return -1;
+  };
+
+  const stigIdIdx = getIndex(['stig id', 'stigid']);
+  const severityIdx = getIndex(['severity']);
+  const titleIdx = getIndex(['rule title', 'ruletitle']);
+  const discussionIdx = getIndex(['discussion']);
+  const checkIdx = getIndex(['check content', 'checkcontent']);
+  const fixIdx = getIndex(['fix text', 'fixtext']);
+  const cciIdx = getIndex(['ccis', 'cci']);
+  const ruleIdIdx = getIndex(['rule id', 'ruleid']);
+  
+  console.log(`📊 Column indices:`, {
+    stigId: stigIdIdx,
+    severity: severityIdx,
+    title: titleIdx,
+    discussion: discussionIdx,
+    check: checkIdx,
+    fix: fixIdx,
+    cci: cciIdx,
+    ruleId: ruleIdIdx
+  });
+
+  let stigName = 'Imported STIG';
+  let version = 'Unknown';
+  
+  console.log(`📄 Processing ${lines.length - headerLineIndex - 1} data rows from CSV`);
+  
+  // Parse data rows (start after header row)
+  for (let i = headerLineIndex + 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    const values = parseCSVLine(line);
+    
+    if (i === headerLineIndex + 1) {
+      console.log(`📝 First data row has ${values.length} values`);
+    }
+    
+    // Extract STIG name from first data row if available
+    if (i === headerLineIndex + 1 && values.length > 0) {
+      const benchmarkIdx = headers.findIndex(h => h.includes('benchmark'));
+      if (benchmarkIdx !== -1 && values[benchmarkIdx]) {
+        stigName = values[benchmarkIdx];
+      }
+      const versionIdx = headers.findIndex(h => h.includes('version') || h.includes('release'));
+      if (versionIdx !== -1 && values[versionIdx]) {
+        version = values[versionIdx];
+      }
+    }
+
+    const vulnId = stigIdIdx !== -1 ? values[stigIdIdx] : '';
+    const ruleId = ruleIdIdx !== -1 ? values[ruleIdIdx] : vulnId;
+    
+    if (!vulnId) {
+      if (i <= headerLineIndex + 3) {
+        console.log(`⚠️ Line ${i}: No STIG ID found`);
+      }
+      continue;
+    }
+    
+    if (i === headerLineIndex + 1) {
+      console.log(`✅ First requirement found: ${vulnId}`);
+    }
+
+    // Parse severity - handle multiple formats
+    const severityValue = severityIdx !== -1 ? values[severityIdx].toLowerCase().trim() : 'medium';
+    let severity: 'high' | 'medium' | 'low' = 'medium';
+    
+    // Direct severity values
+    if (severityValue === 'high' || severityValue.includes('cat i') || severityValue.includes('cat 1') || severityValue.includes('cati')) {
+      severity = 'high';
+    } else if (severityValue === 'low' || severityValue.includes('cat iii') || severityValue.includes('cat 3') || severityValue.includes('catiii')) {
+      severity = 'low';
+    } else if (severityValue === 'medium' || severityValue.includes('cat ii') || severityValue.includes('cat 2') || severityValue.includes('catii')) {
+      severity = 'medium';
+    }
+    
+    // Log first few for debugging
+    if (i <= headerLineIndex + 3) {
+      console.log(`📊 Row ${i - headerLineIndex}: vulnId="${vulnId}", severity="${severityValue}" → ${severity}`);
+    }
+
+    // Extract CCI references
+    const cciText = cciIdx !== -1 ? values[cciIdx] : '';
+    const cciMatches = cciText.match(/CCI-\d+/g);
+    const cci = cciMatches || ['CCI-000366'];
+
+    requirements.push({
+      vulnId,
+      ruleId,
+      severity,
+      title: titleIdx !== -1 ? values[titleIdx] : `Requirement ${vulnId}`,
+      description: discussionIdx !== -1 ? values[discussionIdx] : 'No description provided',
+      checkText: checkIdx !== -1 ? values[checkIdx] : 'Review system configuration per STIG guidance.',
+      fixText: fixIdx !== -1 ? values[fixIdx] : 'Configure system per STIG guidance.',
+      cci,
+      nistControls: []
+    });
+  }
+
+  console.log(`✅ CSV parsing complete: ${requirements.length} requirements found`);
+
+  return {
+    stigId: fileName.replace(/\.csv$/i, ''),
+    stigName,
+    version,
+    releaseDate: new Date().toISOString().split('T')[0],
+    requirements,
+    totalRequirements: requirements.length
+  };
+}
+
+/**
+ * POST - Manual STIG upload (XML or CSV file)
+ * Body: FormData with 'file' field containing XCCDF XML or DISA CSV
  */
 export async function POST(request: NextRequest) {
   try {
@@ -175,9 +450,12 @@ export async function POST(request: NextRequest) {
 
     // Validate file type
     const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('.xml') && !fileName.endsWith('.xccdf')) {
+    const isXml = fileName.endsWith('.xml') || fileName.endsWith('.xccdf');
+    const isCsv = fileName.endsWith('.csv');
+    
+    if (!isXml && !isCsv) {
       return NextResponse.json(
-        { error: 'Invalid file type. Please upload an XCCDF XML file.' },
+        { error: 'Invalid file type. Please upload an XCCDF XML file or DISA CSV file.' },
         { status: 400 }
       );
     }
@@ -185,13 +463,20 @@ export async function POST(request: NextRequest) {
     console.log(`📁 Processing manual STIG upload: ${file.name}`);
 
     // Read file content
-    const xmlContent = await file.text();
+    const fileContent = await file.text();
 
-    // Parse XCCDF XML
-    const stigData = parseXccdfXml(xmlContent, file.name);
+    let stigData;
+    
+    if (isCsv) {
+      // Parse CSV file
+      stigData = parseStigCsv(fileContent, fileName);
+    } else {
+      // Parse XCCDF XML
+      stigData = parseXccdfXml(fileContent, fileName);
+    }
 
     if (stigData.requirements.length === 0) {
-      throw new Error('No requirements found in XML file. Please ensure this is a valid XCCDF STIG file.');
+      throw new Error(`No requirements found in ${isCsv ? 'CSV' : 'XML'} file. Please ensure this is a valid DISA STIG file.`);
     }
 
     console.log(`✅ Successfully parsed ${stigData.requirements.length} requirements from manual upload`);

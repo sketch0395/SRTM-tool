@@ -1,3 +1,4 @@
 {
+  "/api/import-stig/route": "app/api/import-stig/route.js",
   "/page": "app/page.js"
 }

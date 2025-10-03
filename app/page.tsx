@@ -10,6 +10,7 @@ import StigManagement from '../components/StigManagement';
 import SystemCategorization from '../components/SystemCategorization';
 import StigFamilyRecommendations from '../components/StigFamilyRecommendations';
 import { convertToStigRequirements, fetchAndConvertStigRequirementsToMatrix } from '../utils/detailedStigRequirements';
+import { NIST_CONTROL_BASELINES } from '../utils/nistBaselines';
 
 export default function Home() {
   // Track CSV fetch failures for STIG families
@@ -119,11 +120,39 @@ export default function Home() {
       try {
         const workflowData: WorkflowData = JSON.parse(e.target?.result as string);
         
-        // Update the data with uploaded workflow
+        // Auto-generate requirements from categorizations if they exist
+        let generatedRequirements: SecurityRequirement[] = [];
+        if (workflowData.systemCategorizations && workflowData.systemCategorizations.length > 0) {
+          workflowData.systemCategorizations.forEach(categorization => {
+            const highestImpact = getHighestOverallImpact(categorization.overallCategorization);
+            const controlIds = NIST_CONTROL_BASELINES[highestImpact] || NIST_CONTROL_BASELINES.Low;
+            
+            const requirements: SecurityRequirement[] = controlIds.map((controlId: string) => ({
+              id: `${categorization.id}-${controlId}-${Date.now()}`,
+              title: `${controlId} - Security Control`,
+              description: `Implementation of NIST SP 800-53 control ${controlId}`,
+              source: `NIST SP 800-53 (${highestImpact} Baseline)`,
+              category: getControlCategory(controlId.split('-')[0]),
+              priority: 'Medium' as const,
+              status: 'Draft' as const,
+              nistFunction: 'Protect' as const,
+              rmfStep: 'Select' as const,
+              controlFamily: controlId.split('-')[0],
+              controlIdentifier: controlId,
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }));
+            
+            generatedRequirements = [...generatedRequirements, ...requirements];
+          });
+        }
+        
+        // Update the data with uploaded workflow and generated requirements
         setData(prev => ({
           ...prev,
           systemCategorizations: workflowData.systemCategorizations,
-          designElements: workflowData.designElements
+          designElements: workflowData.designElements,
+          requirements: generatedRequirements
         }));
 
         // Follow the correct workflow: Design > Categorization > Requirements
@@ -145,6 +174,38 @@ export default function Home() {
       }
     };
     reader.readAsText(file);
+  };
+
+  // Helper function to determine highest impact level
+  const getHighestOverallImpact = (categorization: { confidentiality: string; integrity: string; availability: string }) => {
+    const impacts = [categorization.confidentiality, categorization.integrity, categorization.availability];
+    if (impacts.includes('High')) return 'High';
+    if (impacts.includes('Moderate')) return 'Moderate';
+    return 'Low';
+  };
+
+  // Helper function to map control family to category
+  const getControlCategory = (family: string): SecurityRequirement['category'] => {
+    const familyMap: { [key: string]: SecurityRequirement['category'] } = {
+      'AC': 'Access Control',
+      'AT': 'Authentication',
+      'AU': 'Audit',
+      'CA': 'Authorization',
+      'CM': 'System Integrity',
+      'CP': 'Incident Response',
+      'IA': 'Authentication',
+      'IR': 'Incident Response',
+      'MA': 'System Integrity',
+      'MP': 'Data Protection',
+      'PE': 'Access Control',
+      'PL': 'System Integrity',
+      'PS': 'Access Control',
+      'RA': 'System Integrity',
+      'SA': 'System Integrity',
+      'SC': 'Network Security',
+      'SI': 'System Integrity'
+    };
+    return familyMap[family] || 'Other';
   };
 
   const handleClearWorkflow = () => {

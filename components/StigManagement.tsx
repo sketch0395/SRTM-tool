@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { StigRequirement, GroupedStigRequirement } from '../types/srtm';
 import { STIG_FAMILIES } from '../utils/stigFamilyRecommendations';
 import { groupStigRequirementsByTitle } from '../utils/detailedStigRequirements';
-import { ChevronDown, ChevronRight, Trash2, Hash, Eye, EyeOff } from 'lucide-react';
+import { ChevronDown, ChevronRight, Trash2, Hash, Eye, EyeOff, Upload } from 'lucide-react';
 
 interface StigManagementProps {
   stigRequirements: StigRequirement[];
@@ -15,10 +15,68 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
   const [expandedFamilies, setExpandedFamilies] = useState<Set<string>>(new Set());
   const [expandedRequirements, setExpandedRequirements] = useState<Set<string>>(new Set());
   const [showIndividualRequirements, setShowIndividualRequirements] = useState<Set<string>>(new Set());
+  const [isUploading, setIsUploading] = useState(false);
 
   const clearAllStigs = () => {
     if (window.confirm('Are you sure you want to clear all STIG requirements?')) {
       onUpdate([]);
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/import-stig', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Convert the imported requirements to match our format
+        const newRequirements: StigRequirement[] = result.requirements.map((req: any) => ({
+          id: req.vulnId || req.id,
+          stigId: req.vulnId || req.stigId || req.id, // Use vulnId as stigId
+          stigRef: result.stigId || req.stigRef || 'uploaded',
+          family: result.stigName || req.family || 'Uploaded STIG',
+          vulnId: req.vulnId,
+          ruleId: req.ruleId,
+          severity: req.severity === 'high' ? 'CAT I' : req.severity === 'low' ? 'CAT III' : 'CAT II',
+          title: req.title,
+          description: req.description,
+          checkText: req.checkText,
+          fixText: req.fixText,
+          cci: req.cci || [],
+          nistControls: req.nistControls || [],
+          applicability: 'Not Reviewed' as const,
+          status: 'Not Started' as const,
+          implementationStatus: 'Open' as const,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }));
+
+        // Add to existing requirements
+        onUpdate([...stigRequirements, ...newRequirements]);
+        
+        alert(`✅ Successfully imported ${newRequirements.length} requirements from ${file.name}`);
+      } else {
+        alert(`❌ Failed to import STIG: ${result.message || result.error}`);
+      }
+    } catch (error) {
+      console.error('Error uploading STIG:', error);
+      alert('❌ Error uploading STIG file. Please ensure it\'s a valid CSV or XML file.');
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      event.target.value = '';
     }
   };
 
@@ -92,17 +150,40 @@ export default function StigManagement({ stigRequirements, onUpdate }: StigManag
             {totalUniqueRequirements} unique requirements ({totalIndividualRequirements} total instances)
           </p>
         </div>
-        <button
-          onClick={clearAllStigs}
-          disabled={stigRequirements.length === 0}
-          className="px-3 py-1 bg-red-100 text-red-600 rounded disabled:opacity-50 hover:bg-red-200 transition-colors"
-        >
-          <Trash2 className="inline-block mr-1 h-4 w-4" /> Clear All
-        </button>
+        <div className="flex items-center space-x-3">
+          <label className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer flex items-center space-x-2">
+            <Upload className="h-4 w-4" />
+            <span>{isUploading ? 'Uploading...' : 'Upload STIG'}</span>
+            <input
+              type="file"
+              accept=".csv,.xml"
+              onChange={handleFileUpload}
+              className="hidden"
+              disabled={isUploading}
+            />
+          </label>
+          <button
+            onClick={clearAllStigs}
+            disabled={stigRequirements.length === 0}
+            className="px-4 py-2 bg-red-100 text-red-600 rounded-lg disabled:opacity-50 hover:bg-red-200 transition-colors flex items-center space-x-2"
+          >
+            <Trash2 className="h-4 w-4" />
+            <span>Clear All</span>
+          </button>
+        </div>
       </div>
       
       {stigRequirements.length === 0 && (
-        <p className="text-gray-500">No STIG requirements loaded. Please select STIG families first.</p>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+          <p className="text-gray-700 mb-2">No STIG requirements loaded.</p>
+          <p className="text-sm text-gray-600">
+            You can either:
+          </p>
+          <ul className="text-sm text-gray-600 mt-2 space-y-1">
+            <li>• Go to the <strong>STIG Recommendations</strong> tab to select from available STIGs</li>
+            <li>• Or use the <strong>Upload STIG</strong> button above to import a CSV or XML file</li>
+          </ul>
+        </div>
       )}
       
       {Object.entries(familyGroupedByTitle).map(([familyKey, groupedReqs]) => {
