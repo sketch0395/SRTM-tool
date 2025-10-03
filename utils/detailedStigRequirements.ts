@@ -10,6 +10,61 @@ export interface DetailedStigRequirement extends Omit<StigRequirement, 'id' | 'c
   family?: string; // Add family tracking
 }
 
+/**
+ * Mapping of internal STIG family IDs to stigviewer.com STIG IDs
+ * Note: stigviewer.com uses different naming conventions
+ * Format: stigviewer.com/stig/{stigviewerId}/
+ */
+const STIG_ID_MAPPING: Record<string, string> = {
+  // Application & Web
+  'application-security-dev': 'application_security_and_development',
+  'web-server-srg': 'web_server',
+  'application-server-srg': 'application_server',
+  
+  // Database
+  'postgresql': 'postgresql_9-x',
+  'mysql': 'mysql',
+  'oracle': 'oracle_database_12c',
+  'mssql': 'ms_sql_server_2016',
+  'mongodb': 'mongodb',
+  
+  // Operating Systems
+  'rhel-8': 'red_hat_enterprise_linux_8',
+  'rhel-9': 'red_hat_enterprise_linux_9', 
+  'ubuntu': 'canonical_ubuntu_20.04_lts',
+  'windows-server-2019': 'windows_server_2019',
+  'windows-server-2022': 'windows_server_2022',
+  'windows-10': 'windows_10',
+  'windows-11': 'windows_11',
+  
+  // Web Servers
+  'apache-2.4': 'apache_server_2.4_unix',
+  'nginx': 'nginx',
+  'iis-10': 'iis_10.0_server',
+  'iis-8.5': 'iis_8.5_server',
+  
+  // Middleware
+  'docker': 'docker_enterprise',
+  'kubernetes': 'kubernetes',
+  
+  // Network/Infrastructure
+  'firewall-srg': 'firewall',
+  'router-srg': 'router',
+  'switch-srg': 'network_switch',
+  
+  // Cloud
+  'aws': 'amazon_web_services',
+  'azure': 'microsoft_azure',
+  'gcp': 'google_cloud_platform',
+};
+
+/**
+ * Convert internal STIG family ID to stigviewer.com STIG ID
+ */
+function mapToStigViewerId(internalId: string): string {
+  return STIG_ID_MAPPING[internalId] || internalId;
+}
+
 // CSV Upload Support for STIG Requirements
 export interface CsvStigRequirement {
   benchmarkName?: string;
@@ -278,33 +333,106 @@ export function convertStigRequirementsToMatrix(stigFamilyIds: string[]): StigRe
   return allRequirements;
 }
 
-// New: Fetch STIG CSV from stigviewer and convert to requirements
+// New: Fetch STIG from stigviewer and convert to requirements
 export async function fetchAndConvertStigRequirements(familyIds: string[]): Promise<DetailedStigRequirement[]> {
-  // Use internal API route to fetch multiple STIG CSVs (avoids CORS/network errors)
+  // Use internal API route to fetch STIG data (avoids CORS/network errors)
   const allRequirements: DetailedStigRequirement[] = [];
-  const param = encodeURIComponent(familyIds.join(','));
-  const apiUrl = (typeof window !== 'undefined'
-    ? `${window.location.origin}/api/fetch-stig-csv?familyIds=${param}`
-    : `/api/fetch-stig-csv?familyIds=${param}`);
-  try {
-    const apiRes = await fetch(apiUrl);
-    if (!apiRes.ok) {
-      console.error(`Failed to fetch STIG CSVs from API: ${apiRes.status}`);
-      return allRequirements;
-    }
-    const csvResults: Record<string, string> = await apiRes.json();
-    for (const familyId of familyIds) {
-      const csvText = csvResults[familyId];
-      if (csvText) {
-        const detailed = parseStigCsv(csvText, familyId);
-        allRequirements.push(...detailed);
-      } else {
-        console.warn(`No CSV data returned for ${familyId}`);
+  const failedFetches: string[] = [];
+  
+  for (const familyId of familyIds) {
+    // Map internal ID to stigviewer.com ID
+    const stigviewerId = mapToStigViewerId(familyId);
+    
+    const apiUrl = (typeof window !== 'undefined'
+      ? `${window.location.origin}/api/import-stig?stigId=${encodeURIComponent(stigviewerId)}`
+      : `/api/import-stig?stigId=${encodeURIComponent(stigviewerId)}`);
+    
+    console.log(`🔍 Fetching STIG: ${familyId} → ${stigviewerId}`);
+    
+    try {
+      const apiRes = await fetch(apiUrl);
+      const result = await apiRes.json();
+      
+      if (!apiRes.ok || !result.success) {
+        // API returned error (503 = stigviewer.com unavailable)
+        console.warn(`⚠️ Could not fetch ${familyId} (${stigviewerId}): ${result.error || result.message}`);
+        failedFetches.push(`${familyId} → ${stigviewerId}`);
+        continue;
       }
+      
+      if (result.success && result.requirements) {
+        console.log(`📊 API returned ${result.requirements.length} requirements`);
+        
+        // Log severity distribution from API
+        const severityCounts: Record<string, number> = {};
+        result.requirements.forEach((req: any) => {
+          const sev = req.severity || 'unknown';
+          severityCounts[sev] = (severityCounts[sev] || 0) + 1;
+        });
+        console.log(`📊 Severity distribution from API:`, severityCounts);
+        
+        // Convert the API format to DetailedStigRequirement format
+        const converted = result.requirements.map((req: any) => {
+          // Normalize severity - API returns 'high', 'medium', 'low'
+          let severity: 'CAT I' | 'CAT II' | 'CAT III' = 'CAT II';
+          const sevText = (req.severity || 'medium').toLowerCase();
+          
+          if (sevText === 'high' || sevText === 'cat i' || sevText.includes('cat i')) {
+            severity = 'CAT I';
+          } else if (sevText === 'low' || sevText === 'cat iii' || sevText.includes('cat iii')) {
+            severity = 'CAT III';
+          } else {
+            severity = 'CAT II';
+          }
+          
+          return {
+            stigId: req.vulnId || req.ruleId || 'UNKNOWN',
+            vulnId: req.vulnId,
+            ruleId: req.ruleId,
+            severity,
+            title: req.title || 'Untitled Requirement',
+            description: req.description || 'No description provided',
+            checkText: req.checkText || 'No check procedure provided',
+            fixText: req.fixText || 'No fix procedure provided',
+            applicability: 'Applicable' as const,
+            status: 'Not Started' as const,
+            implementationStatus: 'Open' as const,
+            cciRef: req.cci && req.cci.length > 0 ? req.cci : ['CCI-000366'],
+            family: familyId
+          } as DetailedStigRequirement;
+        });
+        
+        // Log severity distribution after conversion
+        const convertedCounts: Record<string, number> = {};
+        converted.forEach((req: DetailedStigRequirement) => {
+          convertedCounts[req.severity] = (convertedCounts[req.severity] || 0) + 1;
+        });
+        console.log(`📊 Severity distribution after conversion:`, convertedCounts);
+        
+        allRequirements.push(...converted);
+        console.log(`✅ Successfully loaded ${converted.length} requirements for ${familyId}`);
+      }
+    } catch (err) {
+      console.error(`❌ Error fetching STIG for ${familyId}:`, err);
+      failedFetches.push(`${familyId} → ${stigviewerId}`);
     }
-  } catch (err) {
-    console.error('Error fetching STIG CSVs via API:', err);
   }
+  
+  // Show user-friendly message if fetches failed
+  if (failedFetches.length > 0 && typeof window !== 'undefined') {
+    console.warn(`\n⚠️ STIG IMPORT ISSUE\n` +
+      `Failed to automatically fetch ${failedFetches.length} STIG(s):\n` +
+      failedFetches.map(f => `  • ${f}`).join('\n') + '\n\n' +
+      `Possible reasons:\n` +
+      `  • STIG ID mapping may be incorrect for stigviewer.com\n` +
+      `  • STIG may not be available on stigviewer.com\n` +
+      `  • Network connectivity issues\n\n` +
+      `MANUAL UPLOAD OPTIONS:\n` +
+      `  1. Download STIG XML from DISA: https://public.cyber.mil/stigs/downloads/\n` +
+      `  2. Or browse STIGs: https://stigviewer.com/stigs\n` +
+      `  3. Use the STIG Import component to upload the XCCDF XML file\n`);
+  }
+  
   return allRequirements;
 }
 // New: Fetch and convert STIG CSVs directly to the matrix format (StigRequirement[])
