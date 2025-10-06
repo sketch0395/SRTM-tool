@@ -17,71 +17,71 @@ interface CategorizationProps {
 const NIST_INFORMATION_TYPES = [
   // C.2.1 Controls and Oversight
   { category: "C.2.1", name: "Controls and Oversight", description: "Management controls and oversight activities", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.1.1", name: "Corrective Action Information Type", description: "Information supporting corrective action processes", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.1.2", name: "Program Evaluation Information Type", description: "Information supporting program evaluation activities", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.1.3", name: "Program Monitoring Information Type", description: "Information supporting program monitoring activities", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+      confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.2.2 Regulatory Development
   { category: "C.2.2", name: "Regulatory Development", description: "Development and management of regulations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.2.1", name: "Policy and Guidance Development Information Type", description: "Information supporting policy and guidance development", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.2.2", name: "Public Comment Tracking Information Type", description: "Information supporting public comment tracking", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.2.3", name: "Regulatory Creation Information Type", description: "Information supporting regulatory creation processes", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.2.4", name: "Rule Publication Information Type", description: "Information supporting rule publication processes", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+      confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.2.3 Planning and Budgeting
   { category: "C.2.3", name: "Planning and Budgeting", description: "Strategic planning and budget management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.3.1", name: "Budget Formulation Information Type", description: "Information supporting budget formulation processes", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.2", name: "Capital Planning Information Type", description: "Information supporting capital planning activities", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.3", name: "Enterprise Architecture Information Type", description: "Information supporting enterprise architecture management", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.4", name: "Strategic Planning Information Type", description: "Information supporting strategic planning activities", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.5", name: "Budget Execution Information Type", description: "Information supporting budget execution processes", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.6", name: "Workforce Planning Information Type", description: "Information supporting workforce planning activities", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.7", name: "Management Improvement Information Type", description: "Information supporting management improvement initiatives", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.8", name: "Budget and Performance Integration Information Type", description: "Information supporting budget and performance integration", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.3.9", name: "Tax and Fiscal Policy Information Type", description: "Information supporting tax and fiscal policy development", 
-      confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+      confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.2.4 Internal Risk Management and Mitigation
   { category: "C.2.4", name: "Internal Risk Management and Mitigation", description: "Risk management and business continuity", 
-    confidentiality: "Moderate", integrity: "High", availability: "Moderate", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.4.1", name: "Contingency Planning Information Type", description: "Information supporting contingency planning activities", 
-      confidentiality: "Moderate", integrity: "High", availability: "High" },
+      confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.4.2", name: "Continuity of Operations Information Type", description: "Information supporting continuity of operations planning", 
-      confidentiality: "Moderate", integrity: "High", availability: "High" },
+      confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.4.3", name: "Service Recovery Information Type", description: "Information supporting service recovery processes", 
-      confidentiality: "Low", integrity: "High", availability: "High" }
+      confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.2.5 Revenue Collection
   { category: "C.2.5", name: "Revenue Collection", description: "Government revenue collection activities", 
-    confidentiality: "Moderate", integrity: "High", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.5.1", name: "Debt Collection Information Type", description: "Information supporting debt collection activities", 
-      confidentiality: "Moderate", integrity: "High", availability: "Low" },
+      confidentiality: "Moderate", integrity: "Low", availability: "Low" },
     { category: "C.2.5.2", name: "User Fee Collection Information Type", description: "Information supporting user fee collection processes", 
-      confidentiality: "Moderate", integrity: "High", availability: "Low" },
+      confidentiality: "Low", integrity: "Low", availability: "Moderate" },
     { category: "C.2.5.3", name: "Federal Asset Sales Information Type", description: "Information supporting federal asset sales", 
-      confidentiality: "Low", integrity: "High", availability: "Low" }
+      confidentiality: "Low", integrity: "Moderate", availability: "Low" }
   ]},
   
   // C.2.6 Public Affairs
@@ -99,70 +99,70 @@ const NIST_INFORMATION_TYPES = [
   
   // C.2.7 Legislative Relations
   { category: "C.2.7", name: "Legislative Relations", description: "Congressional and legislative affairs", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.7.1", name: "Legislation Tracking Information Type", description: "Information supporting legislation tracking activities", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.7.2", name: "Legislation Testimony Information Type", description: "Information supporting legislative testimony", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.7.3", name: "Proposal Development Information Type", description: "Information supporting legislative proposal development", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.7.4", name: "Congressional Liaison Operations Information Type", description: "Information supporting congressional liaison operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.2.8 General Government
   { category: "C.2.8", name: "General Government", description: "General government operations and services", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.2.8.1", name: "Central Fiscal Operations Information Type", description: "Information supporting central fiscal operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Low", availability: "Low" },
     { category: "C.2.8.2", name: "Legislative Functions Information Type", description: "Information supporting legislative functions", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.8.3", name: "Executive Functions Information Type", description: "Information supporting executive functions", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.8.4", name: "Central Property Management Information Type", description: "Information supporting central property management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.8.5", name: "Central Personnel Management Information Type", description: "Information supporting central personnel management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.2.8.6", name: "Taxation Management Information Type", description: "Information supporting taxation management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Low" },
     { category: "C.2.8.7", name: "Central Records and Statistics Management Information Type", description: "Information supporting central records and statistics management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Low" },
     { category: "C.2.8.8", name: "Income Information Information Type", description: "Information supporting income information management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.8.9", name: "Personal Identity and Authentication Information Information Type", description: "Information supporting personal identity and authentication", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.8.10", name: "Entitlement Event Information Information Type", description: "Information supporting entitlement event processing", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.8.11", name: "Representative Payee Information Information Type", description: "Information supporting representative payee operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "C.2.8.12", name: "General Information Information Type", description: "General information supporting government operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.3.1 Administrative Management
   { category: "C.3.1", name: "Administrative Management", description: "General administrative management functions", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.3.1.1", name: "Facilities, Fleet, and Equipment Management Information Type", description: "Information supporting facilities, fleet, and equipment management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.1.2", name: "Help Desk Services Information Type", description: "Information supporting help desk services", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.1.3", name: "Security Management Information Type", description: "Information supporting security management operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Low" },
     { category: "C.3.1.4", name: "Travel Information Type", description: "Information supporting travel management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.1.5", name: "Workplace Policy Development and Management Information Type", description: "Information supporting workplace policy development and management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.3.2 Financial Management
   { category: "C.3.2", name: "Financial Management", description: "Financial management and accounting operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.3.2.1", name: "Assets and Liability Management Information Type", description: "Information supporting assets and liability management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.2.2", name: "Reporting and Information Information Type", description: "Information supporting financial reporting", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.2.3", name: "Funds Control Information Type", description: "Information supporting funds control operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Low" },
     { category: "C.3.2.4", name: "Accounting Information Type", description: "Information supporting accounting operations", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.2.5", name: "Payments Information Type", description: "Information supporting payment processing", 
@@ -175,45 +175,45 @@ const NIST_INFORMATION_TYPES = [
   
   // C.3.3 Human Resource Management
   { category: "C.3.3", name: "Human Resource Management", description: "Human resources management and personnel operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.3.3.1", name: "HR Strategy Information Type", description: "Information supporting HR strategy development", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.2", name: "Staff Acquisition Information Type", description: "Information supporting staff acquisition processes", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.3", name: "Organization & Position Management Information Type", description: "Information supporting organization and position management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.4", name: "Compensation Management Information Type", description: "Information supporting compensation management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.5", name: "Benefits Management Information Type", description: "Information supporting benefits management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.6", name: "Employee Performance Management Information Type", description: "Information supporting employee performance management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.7", name: "Employee Relations Information Type", description: "Information supporting employee relations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.8", name: "Labor Relations Information Type", description: "Information supporting labor relations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.9", name: "Separation Management Information Type", description: "Information supporting separation management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.3.10", name: "Human Resources Development Information Type", description: "Information supporting human resources development", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.3.4 Supply Chain Management
   { category: "C.3.4", name: "Supply Chain Management", description: "Supply chain and procurement operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.3.4.1", name: "Goods Acquisition Information Type", description: "Information supporting goods acquisition", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.4.2", name: "Inventory Control Information Type", description: "Information supporting inventory control operations", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.4.3", name: "Logistics Management Information Type", description: "Information supporting logistics management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.4.4", name: "Services Acquisition Information Type", description: "Information supporting services acquisition", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
   ]},
   
   // C.3.5 Information and Technology Management
   { category: "C.3.5", name: "Information and Technology Management", description: "Information technology and systems management", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "C.3.5.1", name: "System Development Information Type", description: "Information supporting system development activities", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.5.2", name: "Lifecycle/Change Management Information Type", description: "Information supporting lifecycle and change management", 
@@ -221,66 +221,76 @@ const NIST_INFORMATION_TYPES = [
     { category: "C.3.5.3", name: "System Maintenance Information Type", description: "Information supporting system maintenance operations", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.5.4", name: "IT Infrastructure Maintenance Information Type", description: "Information supporting IT infrastructure maintenance", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.5.5", name: "Information Security Information Type", description: "Information supporting information security operations", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.5.6", name: "Record Retention Information Type", description: "Information supporting record retention processes", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "C.3.5.7", name: "Information Management Information Type", description: "Information supporting information management activities", 
     confidentiality: "Low", integrity: "Moderate", availability: "Low" },
     { category: "C.3.5.8", name: "System and Network Monitoring Information Type", description: "Information supporting system and network monitoring", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" },
+    confidentiality: "Moderate", integrity: "Moderate", availability: "Low" },
     { category: "C.3.5.9", name: "Information Sharing Information Type", description: "Information supporting information sharing activities", 
-    confidentiality: "Low", integrity: "Moderate", availability: "Low" }
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A" }
   ]},
   
   // D.1 Defense and National Security
   { category: "D.1", name: "Defense and National Security", description: "Information supporting defense and national security operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A" },
   
   // D.2 Homeland Security
   { category: "D.2", name: "Homeland Security", description: "Information supporting homeland security operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "D.2.1", name: "Border and Transportation Security Information Type", description: "Information supporting border and transportation security", 
     confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
     { category: "D.2.2", name: "Key Asset and Critical Infrastructure Protection Information Type", description: "Information supporting key asset and critical infrastructure protection", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "High", integrity: "High", availability: "High" },
     { category: "D.2.3", name: "Catastrophic Defense Information Type", description: "Information supporting catastrophic defense operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "High", integrity: "High", availability: "High" },
     { category: "D.2.4", name: "Executive Functions of the Executive Office of the President Information Type", description: "Information supporting EOP executive functions", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" }
+    confidentiality: "High", integrity: "Moderate", availability: "High" }
   ]},
   
   // D.3 Intelligence Operations
   { category: "D.3", name: "Intelligence Operations", description: "Information supporting intelligence operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "High", integrity: "High", availability: "High" },
   
   // D.4 Disaster Management
   { category: "D.4", name: "Disaster Management", description: "Information supporting disaster management operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "D.4.1", name: "Disaster Monitoring and Prediction Information Type", description: "Information supporting disaster monitoring and prediction", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "Low", integrity: "High", availability: "High" },
     { category: "D.4.2", name: "Disaster Preparedness and Planning Information Type", description: "Information supporting disaster preparedness and planning", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "D.4.3", name: "Disaster Repair and Restoration Information Type", description: "Information supporting disaster repair and restoration", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
     { category: "D.4.4", name: "Emergency Response Information Type", description: "Information supporting emergency response operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" }
+    confidentiality: "Low", integrity: "High", availability: "High" }
   ]},
   
   // Additional D categories (abbreviated for space - would include full structure)
   { category: "D.5", name: "International Affairs and Commerce", description: "Information supporting international affairs and commerce", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate", subtypes: [
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
     { category: "D.5.1", name: "Foreign Affairs Information Type", description: "Information supporting foreign affairs operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "High", integrity: "High", availability: "Moderate" },
     { category: "D.5.2", name: "International Development and Humanitarian Aid Information Type", description: "Information supporting international development and humanitarian aid", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "Moderate", integrity: "Low", availability: "Low" },
     { category: "D.5.3", name: "Global Trade Information Type", description: "Information supporting global trade operations", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" }
+    confidentiality: "High", integrity: "High", availability: "High" }
   ]},
   
   { category: "D.6", name: "Natural Resources", description: "Information supporting natural resources management", 
-    confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
+    confidentiality: "N/A", integrity: "N/A", availability: "N/A", subtypes: [
+    { category: "D.6.1", name: "Water Resources Management Information Type", description: "Information supporting water resources management", 
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
+    { category: "D.6.2", name: "Conservation, Marine and Land Management Information Type", description: "Information supporting conservation, marine and land management operations", 
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
+    { category: "D.6.3", name: "Recreational Resource Management and Tourism Information Type", description: "Information supporting recreational resource management and tourism operations", 
+    confidentiality: "Low", integrity: "Low", availability: "Low" },
+    { category: "D.6.4", name: "Agricultural Innovation and Services Information Type", description: "Information supporting agricultural innovation and services", 
+    confidentiality: "Low", integrity: "Low", availability: "Low" }
+  ]},
+
   { category: "D.7", name: "Energy", description: "Information supporting energy operations", 
     confidentiality: "Moderate", integrity: "Moderate", availability: "Moderate" },
   { category: "D.8", name: "Environmental Management", description: "Information supporting environmental management", 
