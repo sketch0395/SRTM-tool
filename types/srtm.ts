@@ -119,6 +119,10 @@ export interface InformationType {
   integrityImpact: 'Low' | 'Moderate' | 'High';
   availabilityImpact: 'Low' | 'Moderate' | 'High';
   rationale?: string;
+  // Track original NIST recommended values for comparison
+  nistRecommendedConfidentiality?: 'Low' | 'Moderate' | 'High';
+  nistRecommendedIntegrity?: 'Low' | 'Moderate' | 'High';
+  nistRecommendedAvailability?: 'Low' | 'Moderate' | 'High';
 }
 
 export interface NISTInformationTypeStructure {
