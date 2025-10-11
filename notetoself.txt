@@ -1,0 +1,7 @@
+
+sonar-scanner -D"sonar.host.url=http://localhost:9000" `
+              -D"sonar.token=sqa_1bd75af1c91437b363d194acaa075d1e83313f05" `
+              -D"sonar.projectKey=srtm-tool "
+              -D"sonar.coverage=
+
+```

@@ -2,5 +2,5 @@ projectKey=srtm-tool
 serverUrl=http://localhost:9000
 serverVersion=25.9.0.112764
 dashboardUrl=http://localhost:9000/dashboard?id=srtm-tool
-ceTaskId=bc76816b-439a-4c77-a591-b6629f946ab1
-ceTaskUrl=http://localhost:9000/api/ce/task?id=bc76816b-439a-4c77-a591-b6629f946ab1
+ceTaskId=ce789fc4-2f79-4520-9883-39c3e0efee73
+ceTaskUrl=http://localhost:9000/api/ce/task?id=ce789fc4-2f79-4520-9883-39c3e0efee73
